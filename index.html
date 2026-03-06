@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DeepSeek Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #f9f6f1;
+      --bg2:          #f0ebe3;
+      --bg3:          #e8e2d8;
+      --border:       #ddd7cc;
+      --border2:      #c8c0b4;
+      --text:         #1c1917;
+      --text2:        #57534e;
+      --text3:        #a8a29e;
+      --user-bg:      #eae4db;
+      --user-border:  #d9d1c5;
+      --accent:       #c96b3a;
+      --accent2:      #a8552b;
+      --think-bg:     #f5f1eb;
+      --think-border: #ccc5b8;
+      --think-text:   #78716c;
+      --code-bg:      #f0ece6;
+      --shadow:       0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+      --shadow-md:    0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+      --font:  'DM Sans', system-ui, sans-serif;
+      --mono:  'DM Mono', 'Fira Code', monospace;
+      --header-h: 56px;
+    }
+
+    html, body { height:100%; width:100%; overflow:hidden;
+      font-family:var(--font); background:var(--bg); color:var(--text);
+      -webkit-font-smoothing:antialiased; }
+
+    /* LAYOUT */
+    #app { display:flex; flex-direction:column; height:100dvh; width:100%; }
+
+    /* HEADER */
+    #header {
+      position:sticky; top:0; z-index:100; height:var(--header-h);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 16px; background:var(--bg); border-bottom:1px solid var(--border);
+      flex-shrink:0;
+    }
+    #header-left { display:flex; align-items:center; gap:10px; }
+    #logo {
+      width:28px; height:28px;
+      background:linear-gradient(135deg,#4a6cf7,#2744d1);
+      border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    }
+    #logo svg { width:16px; height:16px; }
+
+    /* Model dropdown */
+    #model-selector-wrap { position:relative; }
+    #model-btn {
+      display:flex; align-items:center; gap:6px;
+      padding:6px 10px 6px 12px;
+      background:var(--bg2); border:1px solid var(--border); border-radius:20px;
+      font-family:var(--font); font-size:13.5px; font-weight:500; color:var(--text);
+      cursor:pointer; transition:all .15s; white-space:nowrap;
+    }
+    #model-btn:hover { background:var(--bg3); border-color:var(--border2); }
+    #model-btn .chevron { transition:transform .2s; }
+    #model-btn.open .chevron { transform:rotate(180deg); }
+
+    #model-dropdown {
+      display:none; position:absolute; top:calc(100% + 6px); left:0;
+      min-width:230px; background:var(--bg); border:1px solid var(--border);
+      border-radius:14px; box-shadow:var(--shadow-md); overflow:hidden; z-index:200;
+      animation:dropIn .18s ease;
+    }
+    #model-dropdown.open { display:block; }
+    @keyframes dropIn {
+      from{opacity:0;transform:translateY(-6px) scale(.97)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+    .model-option {
+      padding:12px 14px; cursor:pointer; display:flex; flex-direction:column; gap:2px;
+      border-bottom:1px solid var(--border); transition:background .1s;
+    }
+    .model-option:last-child { border-bottom:none; }
+    .model-option:hover, .model-option.selected { background:var(--bg2); }
+    .model-option-name {
+      font-size:13.5px; font-weight:500; color:var(--text);
+      display:flex; align-items:center; gap:6px;
+    }
+    .model-option-desc { font-size:11.5px; color:var(--text3); }
+    .think-badge {
+      font-size:9.5px; font-weight:600; letter-spacing:.04em;
+      padding:1px 5px; border-radius:3px;
+      background:linear-gradient(135deg,#9168e2,#6b44d4); color:#fff;
+    }
+    .checkmark { color:var(--accent); font-size:13px; margin-left:auto; }
+
+    #header-right { display:flex; align-items:center; gap:8px; }
+    .icon-btn {
+      width:36px; height:36px; border:none; background:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      border-radius:10px; color:var(--text2); transition:background .15s;
+    }
+    .icon-btn:hover { background:var(--bg2); color:var(--text); }
+    .icon-btn svg { width:18px; height:18px; }
+
+    /* MESSAGES */
+    #messages-wrap {
+      flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      overscroll-behavior:contain;
+    }
+    #messages-wrap::-webkit-scrollbar { width:4px; }
+    #messages-wrap::-webkit-scrollbar-track { background:transparent; }
+    #messages-wrap::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+    #messages { padding:16px 0 28px; display:flex; flex-direction:column; gap:4px; }
+
+    /* MSG ROWS */
+    .msg-row { display:flex; padding:4px 16px; animation:fadeUp .28s ease; }
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateY(8px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    /* user */
+    .msg-row.user { justify-content:flex-end; margin-top:8px; }
+    .msg-row.user .bubble {
+      max-width:82%;
+      background:var(--user-bg); border:1px solid var(--user-border);
+      border-radius:18px 18px 4px 18px;
+      padding:10px 14px; font-size:15px; line-height:1.55;
+      color:var(--text); word-break:break-word; white-space:pre-wrap;
+    }
+
+    /* assistant */
+    .msg-row.assistant { justify-content:flex-start; gap:10px; align-items:flex-start; margin-top:6px; }
+    .assistant-avatar {
+      width:28px; height:28px; flex-shrink:0; margin-top:2px;
+      background:linear-gradient(135deg,#4a6cf7,#2744d1);
+      border-radius:8px; display:flex; align-items:center; justify-content:center;
+    }
+    .assistant-avatar svg { width:14px; height:14px; }
+    .assistant-content {
+      flex:1; min-width:0; max-width:calc(100% - 38px);
+      display:flex; flex-direction:column; gap:8px;
+    }
+
+    /* THINK BLOCK */
+    .think-block {
+      border:1px solid var(--think-border); border-radius:12px;
+      background:var(--think-bg); overflow:hidden;
+    }
+    .think-header {
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px; cursor:pointer;
+      user-select:none; -webkit-user-select:none;
+    }
+    .think-spinner {
+      width:14px; height:14px; flex-shrink:0;
+      border:2px solid var(--think-border);
+      border-top-color:var(--accent);
+      border-radius:50%; animation:spin .8s linear infinite;
+    }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .think-done-icon { width:14px; height:14px; flex-shrink:0; color:var(--text3); display:flex; }
+    .think-done-icon svg { width:14px; height:14px; }
+    .think-label {
+      flex:1; font-size:12.5px; font-weight:500; color:var(--think-text);
+      display:flex; align-items:center; gap:6px;
+    }
+    .think-dots span {
+      display:inline-block; width:3px; height:3px;
+      background:var(--think-text); border-radius:50%;
+      animation:dotPulse 1.4s ease infinite;
+    }
+    .think-dots span:nth-child(2){animation-delay:.2s}
+    .think-dots span:nth-child(3){animation-delay:.4s}
+    @keyframes dotPulse {
+      0%,80%,100%{opacity:.3;transform:scale(.8)}
+      40%{opacity:1;transform:scale(1.1)}
+    }
+    .think-chevron { color:var(--text3); transition:transform .22s ease; flex-shrink:0; }
+
+    /* Body: hidden unless .open */
+    .think-body {
+      overflow:hidden;
+      max-height:0;
+      transition:max-height .32s cubic-bezier(.4,0,.2,1), padding .22s;
+      padding:0 12px;
+    }
+    .think-block.open .think-body {
+      max-height:380px; overflow-y:auto;
+      padding:0 12px 12px;
+    }
+    .think-block.open .think-chevron { transform:rotate(180deg); }
+    .think-body::-webkit-scrollbar { width:3px; }
+    .think-body::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+    /* Think markdown */
+    .think-md {
+      font-size:12.5px; line-height:1.65; color:var(--think-text); word-break:break-word;
+    }
+    .think-md p { margin-bottom:8px; font-style:italic; }
+    .think-md p:last-child { margin-bottom:0; }
+    .think-md strong { font-weight:600; font-style:normal; color:var(--text2); }
+    .think-md em { font-style:italic; }
+    .think-md code {
+      font-family:var(--mono); font-size:11.5px;
+      background:var(--bg3); border-radius:4px; padding:1px 4px;
+    }
+    .think-md ul,.think-md ol { padding-left:18px; margin-bottom:8px; }
+    .think-md li { margin-bottom:3px; font-style:italic; }
+    .think-md h1,.think-md h2,.think-md h3 { font-size:13px; font-weight:600; margin:8px 0 4px; font-style:normal; }
+
+    /* MARKDOWN CONTENT */
+    .md-content { font-size:15px; line-height:1.65; color:var(--text); word-break:break-word; }
+    .md-content p { margin-bottom:12px; }
+    .md-content p:last-child { margin-bottom:0; }
+    .md-content h1,.md-content h2,.md-content h3,
+    .md-content h4,.md-content h5,.md-content h6 {
+      font-weight:600; margin:18px 0 8px; line-height:1.3;
+    }
+    .md-content h1{font-size:20px} .md-content h2{font-size:17px} .md-content h3{font-size:15.5px}
+    .md-content ul,.md-content ol { padding-left:22px; margin-bottom:12px; }
+    .md-content li { margin-bottom:4px; }
+    .md-content blockquote {
+      border-left:3px solid var(--border2); padding:8px 12px; margin:10px 0;
+      color:var(--text2); font-style:italic; background:var(--bg2); border-radius:0 6px 6px 0;
+    }
+    .md-content code:not(pre code) {
+      font-family:var(--mono); font-size:12.5px;
+      background:var(--code-bg); border:1px solid var(--border);
+      border-radius:5px; padding:1px 5px; color:var(--accent2);
+    }
+    .md-content pre {
+      background:var(--code-bg); border:1px solid var(--border);
+      border-radius:10px; overflow:hidden; margin:12px 0;
+    }
+    .code-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:7px 12px; background:var(--bg3); border-bottom:1px solid var(--border);
+    }
+    .code-lang { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--text2); }
+    .copy-btn {
+      font-family:var(--font); font-size:11px; font-weight:500; color:var(--text3);
+      background:none; border:none; cursor:pointer;
+      display:flex; align-items:center; gap:4px;
+      padding:2px 6px; border-radius:5px; transition:all .15s;
+    }
+    .copy-btn:hover { background:var(--bg2); color:var(--text2); }
+    .copy-btn.copied { color:var(--accent); }
+    .md-content pre code {
+      font-family:var(--mono); font-size:12.5px; display:block;
+      padding:12px 14px; overflow-x:auto; background:none !important; line-height:1.55;
+    }
+    .md-content table { width:100%; border-collapse:collapse; font-size:13.5px; margin:12px 0; display:block; overflow-x:auto; }
+    .md-content th,.md-content td { border:1px solid var(--border); padding:7px 10px; text-align:left; }
+    .md-content th { background:var(--bg2); font-weight:600; }
+    .md-content a { color:var(--accent); text-decoration:underline; text-decoration-thickness:1px; }
+    .md-content hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
+    .md-content strong { font-weight:600; }
+
+    /* CURSOR */
+    .cursor {
+      display:inline-block; width:2px; height:1em;
+      background:var(--text); vertical-align:text-bottom;
+      animation:blink .9s step-start infinite;
+      border-radius:1px; margin-left:1px;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* WELCOME */
+    #welcome {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:60px 24px 40px; text-align:center; gap:16px;
+      min-height:calc(100dvh - var(--header-h) - 90px);
+    }
+    #welcome-logo {
+      width:56px; height:56px;
+      background:linear-gradient(135deg,#4a6cf7,#2744d1);
+      border-radius:16px; display:flex; align-items:center; justify-content:center;
+      box-shadow:0 6px 20px rgba(74,108,247,.25);
+    }
+    #welcome-logo svg { width:28px; height:28px; }
+    #welcome h1 { font-size:21px; font-weight:600; }
+    #welcome p { font-size:14px; color:var(--text3); line-height:1.6; max-width:280px; }
+    .welcome-chips { display:flex; flex-direction:column; gap:8px; width:100%; max-width:340px; margin-top:8px; }
+    .chip {
+      padding:11px 16px; background:var(--bg2); border:1px solid var(--border);
+      border-radius:12px; font-size:13.5px; color:var(--text2);
+      cursor:pointer; text-align:left; transition:all .15s; font-family:var(--font);
+    }
+    .chip:hover { background:var(--bg3); border-color:var(--border2); color:var(--text); }
+
+    /* INPUT */
+    #input-area {
+      flex-shrink:0; padding:8px 12px 12px;
+      background:var(--bg); border-top:1px solid var(--border);
+    }
+    #input-bar {
+      display:flex; align-items:flex-end; gap:8px;
+      background:#fff; border:1.5px solid var(--border); border-radius:20px;
+      padding:6px 6px 6px 14px; transition:border-color .15s, box-shadow .15s;
+      box-shadow:var(--shadow);
+    }
+    #input-bar:focus-within {
+      border-color:var(--border2);
+      box-shadow:0 0 0 3px rgba(196,149,110,.1), var(--shadow);
+    }
+    #textarea {
+      flex:1; font-family:var(--font); font-size:15px; line-height:1.5;
+      color:var(--text); background:transparent; border:none; outline:none;
+      resize:none; min-height:24px; max-height:140px; padding:5px 0; overflow-y:auto;
+    }
+    #textarea::placeholder { color:var(--text3); }
+    #send-btn {
+      width:36px; height:36px; flex-shrink:0; border:none;
+      background:var(--text); color:#fff; border-radius:14px; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; transition:all .15s;
+    }
+    #send-btn:hover:not(:disabled){background:#000;transform:scale(1.03)}
+    #send-btn:active:not(:disabled){transform:scale(.97)}
+    #send-btn:disabled{background:var(--bg3);cursor:not-allowed}
+    #send-btn svg { width:16px; height:16px; }
+    #stop-btn {
+      width:36px; height:36px; flex-shrink:0;
+      border:1.5px solid var(--border2); background:transparent; color:var(--text2);
+      border-radius:14px; cursor:pointer;
+      display:none; align-items:center; justify-content:center; transition:all .15s;
+    }
+    #stop-btn.visible { display:flex; }
+    #stop-btn:hover { background:var(--bg2); color:var(--text); }
+    #stop-btn svg { width:14px; height:14px; }
+
+    /* SETTINGS */
+    #settings-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,.3); z-index:300;
+      backdrop-filter:blur(2px); animation:fadeIn .2s ease;
+    }
+    #settings-overlay.open { display:flex; align-items:flex-end; }
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    #settings-sheet {
+      width:100%; background:var(--bg);
+      border-radius:20px 20px 0 0; padding:20px 20px 40px;
+      animation:slideUp .28s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .sheet-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:0 auto 20px; }
+    .sheet-title { font-size:17px; font-weight:600; margin-bottom:18px; }
+    .field-label { font-size:12px; font-weight:500; color:var(--text2); letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px; display:block; }
+    .field-input {
+      width:100%; font-family:var(--mono); font-size:13px; padding:10px 13px;
+      border:1.5px solid var(--border); border-radius:10px; background:#fff;
+      color:var(--text); outline:none; transition:border-color .15s; margin-bottom:16px;
+    }
+    .field-input:focus { border-color:var(--border2); }
+    .field-hint { font-size:11.5px; color:var(--text3); margin-top:-12px; margin-bottom:16px; line-height:1.5; }
+    .save-btn {
+      width:100%; padding:13px; background:var(--text); color:#fff; border:none;
+      border-radius:13px; font-family:var(--font); font-size:15px; font-weight:500;
+      cursor:pointer; transition:all .15s; margin-top:4px;
+    }
+    .save-btn:hover { background:#000; }
+
+    /* SCROLL DOWN */
+    #scroll-down {
+      position:fixed; bottom:90px; right:16px;
+      width:36px; height:36px;
+      background:var(--bg); border:1px solid var(--border2);
+      border-radius:50%; box-shadow:var(--shadow-md);
+      display:none; align-items:center; justify-content:center;
+      cursor:pointer; z-index:50; color:var(--text2); transition:all .2s;
+    }
+    #scroll-down.visible { display:flex; }
+    #scroll-down:hover { background:var(--bg2); }
+    #scroll-down svg { width:16px; height:16px; }
+
+    /* TOAST */
+    #toast {
+      position:fixed; bottom:100px; left:50%;
+      transform:translateX(-50%) translateY(20px);
+      background:var(--text); color:#fff; font-size:13px; font-weight:500;
+      padding:9px 18px; border-radius:20px; opacity:0; pointer-events:none;
+      transition:all .3s; z-index:500; white-space:nowrap;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    .hljs { background:transparent !important; padding:0 !important; }
+
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      #input-area { padding-bottom:calc(12px + env(safe-area-inset-bottom)); }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div id="header">
+    <div id="header-left">
+      <div id="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div id="model-selector-wrap">
+        <button id="model-btn" onclick="toggleModelDropdown()">
+          <span id="model-label">DeepSeek V3.2</span>
+          <svg class="chevron" viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 10.5L3 5.5h10L8 10.5z"/></svg>
+        </button>
+        <div id="model-dropdown">
+          <div class="model-option selected" data-model="deepseek-chat" onclick="selectModel(this)">
+            <div class="model-option-name">DeepSeek V3.2<span class="checkmark" id="check-deepseek-chat">✓</span></div>
+            <div class="model-option-desc">通用对话 · 快速高效</div>
+          </div>
+          <div class="model-option" data-model="deepseek-reasoner" onclick="selectModel(this)">
+            <div class="model-option-name">DeepSeek R1<span class="think-badge">思维链</span><span class="checkmark" id="check-deepseek-reasoner" style="display:none">✓</span></div>
+            <div class="model-option-desc">深度推理 · 逐步思考</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="header-right">
+      <button class="icon-btn" onclick="newChat()" title="新对话">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openSettings()" title="设置">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="messages-wrap">
+    <div id="messages">
+      <div id="welcome">
+        <div id="welcome-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h1>你好，我是 DeepSeek</h1>
+        <p>强大的 AI 助手，支持多模型切换与深度推理思维链</p>
+        <div class="welcome-chips">
+          <button class="chip" onclick="sendChip(this)">✦ 用 R1 推理：9.11 和 9.8 哪个大？</button>
+          <button class="chip" onclick="sendChip(this)">📝 帮我写 Python 快速排序代码</button>
+          <button class="chip" onclick="sendChip(this)">🌐 解释一下量子纠缠</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="scroll-down" onclick="scrollToBottom()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </button>
+
+  <div id="input-area">
+    <div id="input-bar">
+      <textarea id="textarea" placeholder="给 DeepSeek 发送消息…" rows="1"
+        onkeydown="handleKeydown(event)" oninput="autoResize()"></textarea>
+      <button id="stop-btn" onclick="stopStream()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+      </button>
+      <button id="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="settings-overlay" onclick="handleOverlayClick(event)">
+  <div id="settings-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">⚙️ 设置</div>
+    <label class="field-label">API Key</label>
+    <input class="field-input" id="api-key-input" type="password" placeholder="sk-...">
+    <div class="field-hint">DeepSeek API Key，在 platform.deepseek.com 获取</div>
+    <label class="field-label">Base URL（可选）</label>
+    <input class="field-input" id="base-url-input" type="text" placeholder="https://api.deepseek.com">
+    <div class="field-hint">反向代理或自定义端点，留空使用官方 API。</div>
+    <label class="field-label">系统提示词（可选）</label>
+    <textarea class="field-input" id="system-prompt-input" rows="3" placeholder="You are a helpful assistant." style="resize:vertical;font-family:var(--font);font-size:13px;"></textarea>
+    <button class="save-btn" onclick="saveSettings()">保存</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const state = {
+  model: 'deepseek-chat',
+  apiKey: '',
+  baseUrl: 'https://api.deepseek.com',
+  systemPrompt: '',
+  history: [],          // [{role, content}]  persists across turns
+  isStreaming: false,
+  abortController: null,
+};
+
+// ══════════════════════════════════════════
+// MARKED — custom code renderer
+// ══════════════════════════════════════════
+const myRenderer = new marked.Renderer();
+myRenderer.code = (code, lang) => {
+  const language = lang || 'plaintext';
+  let hi;
+  try {
+    hi = lang && hljs.getLanguage(lang)
+      ? hljs.highlight(code, { language: lang }).value
+      : hljs.highlightAuto(code).value;
+  } catch { hi = esc(code); }
+  const uid = 'c' + Math.random().toString(36).slice(2, 9);
+  return `<pre><div class="code-header"><span class="code-lang">${language}</span>`
+    + `<button class="copy-btn" data-target="${uid}">`
+    + `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`
+    + `<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制`
+    + `</button></div><code id="${uid}">${hi}</code></pre>`;
+};
+marked.use({ renderer: myRenderer, breaks: true, gfm: true });
+
+function esc(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Delegate copy clicks
+document.getElementById('messages').addEventListener('click', e => {
+  const btn = e.target.closest('.copy-btn');
+  if (!btn) return;
+  const code = document.getElementById(btn.dataset.target);
+  if (!code) return;
+  navigator.clipboard.writeText(code.innerText).then(() => {
+    const orig = btn.innerHTML;
+    btn.textContent = '✓ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+});
+
+// ══════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════
+(function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem('ds_cfg') || '{}');
+    state.apiKey       = s.apiKey       || '';
+    state.baseUrl      = s.baseUrl      || 'https://api.deepseek.com';
+    state.systemPrompt = s.systemPrompt || '';
+  } catch {}
+})();
+
+function openSettings() {
+  document.getElementById('api-key-input').value       = state.apiKey;
+  document.getElementById('base-url-input').value      = state.baseUrl === 'https://api.deepseek.com' ? '' : state.baseUrl;
+  document.getElementById('system-prompt-input').value = state.systemPrompt;
+  document.getElementById('settings-overlay').classList.add('open');
+}
+function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
+function handleOverlayClick(e) { if (e.target.id === 'settings-overlay') closeSettings(); }
+function saveSettings() {
+  state.apiKey       = document.getElementById('api-key-input').value.trim();
+  const bu           = document.getElementById('base-url-input').value.trim();
+  state.baseUrl      = bu || 'https://api.deepseek.com';
+  state.systemPrompt = document.getElementById('system-prompt-input').value.trim();
+  localStorage.setItem('ds_cfg', JSON.stringify({ apiKey: state.apiKey, baseUrl: state.baseUrl, systemPrompt: state.systemPrompt }));
+  closeSettings();
+  showToast('✓ 设置已保存');
+}
+
+// ══════════════════════════════════════════
+// MODEL SELECTOR
+// ══════════════════════════════════════════
+function toggleModelDropdown() {
+  const open = document.getElementById('model-dropdown').classList.toggle('open');
+  document.getElementById('model-btn').classList.toggle('open', open);
+  if (open) setTimeout(() => document.addEventListener('click', outsideClose, true), 0);
+}
+function outsideClose(e) {
+  if (!document.getElementById('model-selector-wrap').contains(e.target)) {
+    document.getElementById('model-dropdown').classList.remove('open');
+    document.getElementById('model-btn').classList.remove('open');
+    document.removeEventListener('click', outsideClose, true);
+  }
+}
+function selectModel(el) {
+  state.model = el.dataset.model;
+  document.querySelectorAll('.model-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('check-deepseek-chat').style.display     = 'none';
+  document.getElementById('check-deepseek-reasoner').style.display = 'none';
+  document.getElementById('check-' + state.model).style.display    = 'inline';
+  document.getElementById('model-label').textContent =
+    { 'deepseek-chat': 'DeepSeek V3.2', 'deepseek-reasoner': 'DeepSeek R1' }[state.model];
+  document.getElementById('model-dropdown').classList.remove('open');
+  document.getElementById('model-btn').classList.remove('open');
+  document.removeEventListener('click', outsideClose, true);
+}
+
+// ══════════════════════════════════════════
+// TEXTAREA
+// ══════════════════════════════════════════
+function autoResize() {
+  const ta = document.getElementById('textarea');
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 140) + 'px';
+}
+function handleKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+// ══════════════════════════════════════════
+// SCROLL
+// ══════════════════════════════════════════
+const msgsWrap = document.getElementById('messages-wrap');
+msgsWrap.addEventListener('scroll', () => {
+  const atBottom = msgsWrap.scrollHeight - msgsWrap.scrollTop - msgsWrap.clientHeight < 100;
+  document.getElementById('scroll-down').classList.toggle('visible', !atBottom);
+});
+function scrollToBottom(smooth = true) {
+  msgsWrap.scrollTo({ top: msgsWrap.scrollHeight, behavior: smooth ? 'smooth' : 'instant' });
+}
+function nearBottom() {
+  return msgsWrap.scrollHeight - msgsWrap.scrollTop - msgsWrap.clientHeight < 140;
+}
+
+// ══════════════════════════════════════════
+// WELCOME
+// ══════════════════════════════════════════
+function hideWelcome() {
+  const w = document.getElementById('welcome');
+  if (w) w.remove();
+}
+function newChat() {
+  if (state.isStreaming) stopStream();
+  state.history = [];
+  document.getElementById('messages').innerHTML = `
+    <div id="welcome">
+      <div id="welcome-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <h1>你好，我是 DeepSeek</h1>
+      <p>强大的 AI 助手，支持多模型切换与深度推理思维链</p>
+      <div class="welcome-chips">
+        <button class="chip" onclick="sendChip(this)">✦ 用 R1 推理：9.11 和 9.8 哪个大？</button>
+        <button class="chip" onclick="sendChip(this)">📝 帮我写 Python 快速排序代码</button>
+        <button class="chip" onclick="sendChip(this)">🌐 解释一下量子纠缠</button>
+      </div>
+    </div>`;
+}
+function sendChip(btn) {
+  const text = btn.textContent.replace(/^.\s/, '').trim();
+  if (btn.textContent.includes('R1')) selectModel(document.querySelector('[data-model="deepseek-reasoner"]'));
+  document.getElementById('textarea').value = text;
+  autoResize();
+  sendMessage();
+}
+
+// ══════════════════════════════════════════
+// BUILD DOM — returns direct element refs
+// NO getElementById used here or in stream
+// ══════════════════════════════════════════
+function buildUserRow(text) {
+  hideWelcome();
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  document.getElementById('messages').appendChild(row);
+  scrollToBottom(false);
+}
+
+function buildAssistantRow() {
+  const isReasoner = state.model === 'deepseek-reasoner';
+  const row = document.createElement('div');
+  row.className = 'msg-row assistant';
+
+  // Avatar
+  const avatar = document.createElement('div');
+  avatar.className = 'assistant-avatar';
+  avatar.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
+
+  // Content column
+  const col = document.createElement('div');
+  col.className = 'assistant-content';
+
+  // Think block (only for reasoner)
+  let thinkRefs = null;
+  if (isReasoner) {
+    const block   = document.createElement('div');
+    block.className = 'think-block open'; // open by default
+
+    const header  = document.createElement('div');
+    header.className = 'think-header';
+
+    const spinner = document.createElement('div');
+    spinner.className = 'think-spinner';
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'think-label';
+    labelEl.innerHTML = `正在深度思考<div class="think-dots"><span></span><span></span><span></span></div>`;
+
+    const chevron = document.createElement('svg');
+    chevron.classList.add('think-chevron');
+    chevron.setAttribute('viewBox','0 0 16 16');
+    chevron.setAttribute('width','14'); chevron.setAttribute('height','14');
+    chevron.setAttribute('fill','currentColor');
+    chevron.innerHTML = '<path d="M8 10.5L3 5.5h10L8 10.5z"/>';
+
+    header.append(spinner, labelEl, chevron);
+
+    const body   = document.createElement('div');
+    body.className = 'think-body';
+    const mdDiv  = document.createElement('div');
+    mdDiv.className = 'think-md';
+    body.appendChild(mdDiv);
+
+    block.append(header, body);
+
+    // ── FIX #2: toggle is always clickable — no streaming lock ──
+    header.addEventListener('click', () => block.classList.toggle('open'));
+
+    col.appendChild(block);
+    thinkRefs = { block, spinner, labelEl, mdDiv, body };
+  }
+
+  // Answer area
+  const mdEl = document.createElement('div');
+  mdEl.className = 'md-content';
+  mdEl.innerHTML = '<span class="cursor"></span>';
+  col.appendChild(mdEl);
+
+  row.append(avatar, col);
+  document.getElementById('messages').appendChild(row);
+  scrollToBottom(false);
+
+  return { mdEl, thinkRefs };
+}
+
+// ══════════════════════════════════════════
+// SEND
+// ══════════════════════════════════════════
+async function sendMessage() {
+  if (state.isStreaming) return;
+  const ta   = document.getElementById('textarea');
+  const text = ta.value.trim();
+  if (!text) return;
+  if (!state.apiKey) { openSettings(); showToast('请先设置 API Key'); return; }
+
+  ta.value = '';
+  autoResize();
+
+  // Add to history BEFORE building DOM
+  state.history.push({ role: 'user', content: text });
+
+  buildUserRow(text);
+
+  // ── FIX #1: capture fresh element refs for THIS response ──
+  const refs = buildAssistantRow();
+
+  setUI(true);
+  await stream(refs);
+  setUI(false);
+}
+
+function setUI(streaming) {
+  state.isStreaming = streaming;
+  document.getElementById('send-btn').disabled = streaming;
+  document.getElementById('stop-btn').classList.toggle('visible', streaming);
+}
+
+function stopStream() { state.abortController?.abort(); }
+
+// ══════════════════════════════════════════
+// STREAM — only touches refs passed in
+// ══════════════════════════════════════════
+async function stream({ mdEl, thinkRefs }) {
+  state.abortController = new AbortController();
+  let thinking  = '';
+  let answer    = '';
+  let thinkDone = false;
+  const t0      = Date.now();
+
+  const msgs = [];
+  if (state.systemPrompt) msgs.push({ role: 'system', content: state.systemPrompt });
+  msgs.push(...state.history);
+
+  try {
+    const res = await fetch(`${state.baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${state.apiKey}`,
+      },
+      body: JSON.stringify({ model: state.model, messages: msgs, stream: true, max_tokens: 8192 }),
+      signal: state.abortController.signal,
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${res.status}`);
+    }
+
+    const reader  = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+
+      const lines = buf.split('\n');
+      buf = lines.pop(); // keep incomplete line
+
+      for (const line of lines) {
+        const t = line.trim();
+        if (!t || t === 'data: [DONE]') continue;
+        if (!t.startsWith('data: ')) continue;
+        let json; try { json = JSON.parse(t.slice(6)); } catch { continue; }
+        const delta = json.choices?.[0]?.delta;
+        if (!delta) continue;
+
+        // Reasoning (R1 only)
+        if (delta.reasoning_content && thinkRefs) {
+          thinking += delta.reasoning_content;
+          // ── FIX #3: render markdown inside think block ──
+          thinkRefs.mdDiv.innerHTML = marked.parse(thinking);
+          // Auto-scroll body if currently open
+          if (thinkRefs.block.classList.contains('open')) {
+            thinkRefs.body.scrollTop = thinkRefs.body.scrollHeight;
+          }
+        }
+
+        // Regular content
+        if (delta.content) {
+          // First content token → thinking finished
+          if (!thinkDone && thinkRefs) {
+            thinkDone = true;
+            const secs = Math.round((Date.now() - t0) / 1000);
+            // Swap spinner → checkmark (modify DOM directly on the ref)
+            const check = document.createElement('div');
+            check.className = 'think-done-icon';
+            check.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+            thinkRefs.spinner.replaceWith(check);
+            thinkRefs.labelEl.innerHTML = `已思考 ${secs} 秒`;
+            // Auto-collapse (like Claude)
+            thinkRefs.block.classList.remove('open');
+          }
+
+          answer += delta.content;
+          mdEl.innerHTML = marked.parse(answer) + '<span class="cursor"></span>';
+        }
+      }
+
+      if (nearBottom()) scrollToBottom(false);
+    }
+
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      mdEl.innerHTML = `<span style="color:#c0392b;font-size:14px">⚠ 错误：${esc(err.message)}</span>`;
+      showToast('请求失败，请检查 API Key 和网络');
+      state.history.pop(); // remove the user msg we just added
+    }
+  } finally {
+    mdEl.querySelector('.cursor')?.remove();
+
+    // Finalize think block if aborted while still thinking
+    if (thinkRefs && !thinkDone) {
+      const secs = Math.round((Date.now() - t0) / 1000);
+      const check = document.createElement('div');
+      check.className = 'think-done-icon';
+      check.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      thinkRefs.spinner.replaceWith(check);
+      thinkRefs.labelEl.innerHTML = secs > 0 ? `已思考 ${secs} 秒` : '思考完成';
+    }
+
+    // Push assistant reply into history for multi-turn context
+    if (answer) state.history.push({ role: 'assistant', content: answer });
+
+    state.abortController = null;
+    scrollToBottom();
+  }
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+let _toastTmr;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTmr);
+  _toastTmr = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+document.getElementById('textarea').focus();
+</script>
+</body>
+</html>
