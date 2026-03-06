@@ -1,0 +1,17 @@
+{
+  "name": "DeepSeek Chat",
+  "short_name": "DeepSeek",
+  "description": "轻量级高性能 AI 助手",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fdfbf7",
+  "theme_color": "#fdfbf7",
+  "icons":[
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
