@@ -4,37 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>DeepSeek Chat</title>
-  
-  <!-- === PWA 与移动端增强标签 开始 === -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#fdfbf7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="DeepSeek">
   <link rel="apple-touch-icon" href="icon.svg">
-  <!-- === PWA 标签 结束 === -->
 
-  <!-- 字体与基础样式 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  
-  <!-- 代码高亮 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  
-  <!-- Markdown解析 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-  
-  <!-- Math公式渲染 (KaTeX核心) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
   <style>
-    /* （此处保留你原有的全部 CSS，未做任何更改，为节省篇幅略过重复内容...）*/
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg:           #fdfbf7; 
+      --bg:           #fdfbf7;
       --bg2:          #f5f2ec;
       --bg3:          #ebe6dd;
       --sidebar-bg:   #f4f0ea;
@@ -61,186 +51,383 @@
       --header-h: 56px;
       --sidebar-w: 260px;
     }
-    html, body { height:100%; width:100%; overflow:hidden; font-family:var(--font); background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
-    #root-layout { display: flex; height: 100dvh; width: 100%; position: relative; }
-    /* ... 紧接原有剩余 CSS ... */
-    #sidebar { width: var(--sidebar-w); background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200; }
-    .sidebar-header { padding: 16px 16px 8px; flex-shrink: 0; }
-    .new-chat-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow-sm); }
-    .new-chat-btn:hover { background: #fff; border-color: var(--border2); }
-    .new-chat-btn svg { width: 16px; height: 16px; color: var(--text2); }
-    #session-list { flex: 1; overflow-y: auto; padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; }
-    #session-list::-webkit-scrollbar { width: 4px; }
-    #session-list::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; }
-    #session-list:hover::-webkit-scrollbar-thumb { background: var(--border2); }
-    .session-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: background 0.15s; color: var(--text2); group; }
-    .session-item:hover { background: var(--sidebar-hover); color: var(--text); }
-    .session-item.active { background: var(--sidebar-act); color: var(--text); font-weight: 500; }
-    .session-title { flex: 1; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; }
-    .delete-session-btn { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; color: var(--text3); border-radius: 4px; cursor: pointer; opacity: 0; transition: all 0.15s; }
-    .session-item:hover .delete-session-btn { opacity: 1; }
-    .delete-session-btn:hover { background: rgba(0,0,0,.08); color: #d93025; }
-    .sidebar-footer { padding: 12px 16px 16px; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 6px; }
-    .tool-btn { display: flex; align-items: center; gap: 10px; width: 100%; background: transparent; border: none; padding: 10px 12px; border-radius: 8px; font-family: var(--font); font-size: 13.5px; font-weight: 500; color: var(--text2); cursor: pointer; transition: background 0.1s; text-align: left; }
-    .tool-btn:hover { background: var(--sidebar-hover); color: var(--text); }
-    .tool-btn svg { width: 16px; height: 16px; }
-    #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.2); backdrop-filter: blur(2px); z-index: 199; opacity: 0; transition: opacity 0.3s; }
-    #app { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
-    #header { position: sticky; top: 0; z-index: 100; height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(253, 251, 247, 0.85); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    #header-left { display: flex; align-items: center; gap: 10px; }
-    .menu-toggle { display: none; width: 34px; height: 34px; border: none; background: transparent; border-radius: 8px; color: var(--text2); cursor: pointer; align-items: center; justify-content: center; }
-    .menu-toggle:hover { background: var(--bg2); }
-    #logo { width: 26px; height: 26px; background: linear-gradient(135deg,#e38959,#c96b3a); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    #logo svg { width: 14px; height: 14px; }
+
+    html, body { height:100%; width:100%; overflow:hidden;
+      font-family:var(--font); background:var(--bg); color:var(--text);
+      -webkit-font-smoothing:antialiased; }
+
+    #root-layout { display:flex; height:100dvh; width:100%; position:relative; }
+
+    /* SIDEBAR */
+    #sidebar {
+      width:var(--sidebar-w); background:var(--sidebar-bg);
+      border-right:1px solid var(--border); display:flex; flex-direction:column;
+      flex-shrink:0; transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      z-index:200;
+    }
+    .sidebar-header { padding:16px 16px 8px; flex-shrink:0; }
+    .new-chat-btn {
+      width:100%; display:flex; align-items:center; justify-content:space-between;
+      background:var(--bg); border:1px solid var(--border); border-radius:10px;
+      padding:10px 14px; font-family:var(--font); font-size:14px; font-weight:500;
+      color:var(--text); cursor:pointer; transition:all 0.15s; box-shadow:var(--shadow-sm);
+    }
+    .new-chat-btn:hover { background:#fff; border-color:var(--border2); }
+    .new-chat-btn svg { width:16px; height:16px; color:var(--text2); }
+
+    #session-list {
+      flex:1; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column; gap:2px;
+    }
+    #session-list::-webkit-scrollbar { width:4px; }
+    #session-list::-webkit-scrollbar-thumb { background:transparent; border-radius:2px; }
+    #session-list:hover::-webkit-scrollbar-thumb { background:var(--border2); }
+
+    /* Session group headers */
+    .session-group-label {
+      font-size:11px; font-weight:600; color:var(--text3); letter-spacing:.06em;
+      text-transform:uppercase; padding:10px 12px 4px; user-select:none;
+    }
+
+    .session-item {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:9px 12px; border-radius:8px; cursor:pointer; transition:background 0.12s;
+      color:var(--text2); position:relative;
+    }
+    .session-item:hover { background:var(--sidebar-hover); color:var(--text); }
+    .session-item.active { background:var(--sidebar-act); color:var(--text); font-weight:500; }
+    .session-title { flex:1; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:8px; line-height:1.4; }
+    .session-meta { font-size:11px; color:var(--text3); white-space:nowrap; }
+    .session-item-inner { flex:1; min-width:0; display:flex; flex-direction:column; gap:1px; }
+
+    .delete-session-btn {
+      width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+      border:none; background:transparent; color:var(--text3); border-radius:4px; cursor:pointer;
+      opacity:0; transition:all 0.12s; flex-shrink:0;
+    }
+    .session-item:hover .delete-session-btn { opacity:1; }
+    .delete-session-btn:hover { background:rgba(0,0,0,.08); color:#d93025; }
+
+    .sidebar-footer {
+      padding:12px 16px 16px; border-top:1px solid var(--border); flex-shrink:0;
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .tool-btn {
+      display:flex; align-items:center; gap:10px; width:100%; background:transparent; border:none;
+      padding:9px 12px; border-radius:8px; font-family:var(--font); font-size:13.5px; font-weight:500;
+      color:var(--text2); cursor:pointer; transition:background 0.1s; text-align:left;
+    }
+    .tool-btn:hover { background:var(--sidebar-hover); color:var(--text); }
+    .tool-btn svg { width:16px; height:16px; flex-shrink:0; }
+
+    /* OVERLAY FOR MOBILE */
+    #sidebar-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,.25);
+      backdrop-filter:blur(2px); z-index:199;
+    }
+    #sidebar-overlay.open { display:block; }
+
+    /* APP */
+    #app { flex:1; display:flex; flex-direction:column; min-width:0; position:relative; }
+
+    /* HEADER */
+    #header {
+      position:sticky; top:0; z-index:100; height:var(--header-h);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 16px; background:rgba(253,251,247,0.9); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border); flex-shrink:0;
+    }
+    #header-left { display:flex; align-items:center; gap:10px; }
+
+    .menu-toggle {
+      display:none; width:34px; height:34px; border:none; background:transparent;
+      border-radius:8px; color:var(--text2); cursor:pointer; align-items:center; justify-content:center;
+    }
+    .menu-toggle:hover { background:var(--bg2); }
+
+    #logo {
+      width:26px; height:26px; background:linear-gradient(135deg,#e38959,#c96b3a);
+      border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    }
+    #logo svg { width:14px; height:14px; }
+
+    /* Model dropdown */
     #model-selector-wrap { position:relative; }
-    #model-btn { display:flex; align-items:center; gap:6px; padding:6px 10px 6px 12px; background:transparent; border:1px solid transparent; border-radius:20px; font-family:var(--font); font-size:14px; font-weight:600; color:var(--text); cursor:pointer; transition:all .15s; white-space:nowrap; }
+    #model-btn {
+      display:flex; align-items:center; gap:6px; padding:6px 10px 6px 12px;
+      background:transparent; border:1px solid transparent; border-radius:20px;
+      font-family:var(--font); font-size:14px; font-weight:600; color:var(--text);
+      cursor:pointer; transition:all .15s; white-space:nowrap;
+    }
     #model-btn:hover { background:var(--bg2); border-color:var(--border); }
     #model-btn .chevron { transition:transform .2s; }
     #model-btn.open .chevron { transform:rotate(180deg); }
-    #model-dropdown { display:none; position:absolute; top:calc(100% + 6px); left:0; min-width:230px; background:var(--bg); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow-md); overflow:hidden; z-index:200; animation:dropIn .18s ease; }
+
+    #model-dropdown {
+      display:none; position:absolute; top:calc(100% + 6px); left:0;
+      min-width:230px; background:var(--bg); border:1px solid var(--border);
+      border-radius:14px; box-shadow:var(--shadow-md); overflow:hidden; z-index:300;
+      animation:dropIn .18s ease;
+    }
     #model-dropdown.open { display:block; }
     @keyframes dropIn { from{opacity:0;transform:translateY(-6px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
-    .model-option { padding:12px 14px; cursor:pointer; display:flex; flex-direction:column; gap:2px; border-bottom:1px solid var(--border); transition:background .1s; }
+    .model-option {
+      padding:12px 14px; cursor:pointer; display:flex; flex-direction:column; gap:2px;
+      border-bottom:1px solid var(--border); transition:background .1s;
+    }
     .model-option:last-child { border-bottom:none; }
-    .model-option:hover, .model-option.selected { background:var(--bg2); }
+    .model-option:hover,.model-option.selected { background:var(--bg2); }
     .model-option-name { font-size:13.5px; font-weight:600; color:var(--text); display:flex; align-items:center; gap:6px; }
     .model-option-desc { font-size:11.5px; color:var(--text3); }
-    .think-badge { font-size:9px; font-weight:600; letter-spacing:.04em; padding:1px 5px; border-radius:4px; background:linear-gradient(135deg,#9168e2,#6b44d4); color:#fff; }
+    .think-badge {
+      font-size:9px; font-weight:600; letter-spacing:.04em; padding:1px 5px; border-radius:4px;
+      background:linear-gradient(135deg,#9168e2,#6b44d4); color:#fff;
+    }
     .checkmark { color:var(--accent); font-size:13px; margin-left:auto; }
-    #header-right { display: flex; align-items: center; gap: 8px; }
-    #messages-wrap { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; scroll-behavior: smooth; display: flex; justify-content: center; }
-    #messages-wrap::-webkit-scrollbar { width: 4px; }
-    #messages-wrap::-webkit-scrollbar-track { background: transparent; }
-    #messages-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-    #messages { width: 100%; max-width: 840px; padding: 24px 16px 40px; display: flex; flex-direction: column; gap: 24px; }
-    .msg-row { display:flex; animation:fadeUp .28s ease; width: 100%; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    .msg-row.user { justify-content: flex-end; }
-    .msg-row.user .bubble { max-width: 85%; background: var(--user-bg); border: 1px solid var(--user-border); border-radius: 20px 20px 4px 20px; padding: 12px 16px; font-size: 15px; line-height: 1.6; color: var(--text); word-break: break-word; white-space: pre-wrap; }
-    .msg-row.assistant { justify-content: flex-start; gap: 14px; align-items: flex-start; }
-    .assistant-avatar { width: 30px; height: 30px; flex-shrink: 0; margin-top: 2px; background: linear-gradient(135deg,#e38959,#c96b3a); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-    .assistant-avatar svg { width: 16px; height: 16px; }
-    .assistant-content { flex: 1; min-width: 0; max-width: calc(100% - 44px); display: flex; flex-direction: column; gap: 10px; }
-    .think-block { border: 1px solid var(--think-border); border-radius: 14px; background: var(--think-bg); overflow: hidden; }
-    .think-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; cursor: pointer; user-select: none; }
-    .think-spinner { width: 14px; height: 14px; flex-shrink: 0; border: 2px solid var(--think-border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+
+    #header-right { display:flex; align-items:center; gap:8px; }
+
+    /* MESSAGES */
+    #messages-wrap {
+      flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      overscroll-behavior:contain; display:flex; justify-content:center;
+    }
+    #messages-wrap::-webkit-scrollbar { width:4px; }
+    #messages-wrap::-webkit-scrollbar-track { background:transparent; }
+    #messages-wrap::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+    #messages { width:100%; max-width:840px; padding:24px 16px 40px; display:flex; flex-direction:column; gap:24px; }
+
+    .msg-row { display:flex; animation:fadeUp .26s ease; width:100%; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+    /* user */
+    .msg-row.user { justify-content:flex-end; }
+    .msg-row.user .bubble {
+      max-width:85%; background:var(--user-bg); border:1px solid var(--user-border);
+      border-radius:20px 20px 4px 20px; padding:12px 16px; font-size:15px; line-height:1.65;
+      color:var(--text); word-break:break-word; white-space:pre-wrap;
+    }
+
+    /* assistant */
+    .msg-row.assistant { justify-content:flex-start; gap:14px; align-items:flex-start; }
+    .assistant-avatar {
+      width:30px; height:30px; flex-shrink:0; margin-top:2px;
+      background:linear-gradient(135deg,#e38959,#c96b3a);
+      border-radius:10px; display:flex; align-items:center; justify-content:center;
+    }
+    .assistant-avatar svg { width:16px; height:16px; }
+    .assistant-content { flex:1; min-width:0; max-width:calc(100% - 44px); display:flex; flex-direction:column; gap:10px; }
+
+    /* THINK BLOCK */
+    .think-block { border:1px solid var(--think-border); border-radius:14px; background:var(--think-bg); overflow:hidden; }
+    .think-header { display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer; user-select:none; }
+    .think-spinner { width:14px; height:14px; flex-shrink:0; border:2px solid var(--think-border); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite; }
     @keyframes spin { to{transform:rotate(360deg)} }
-    .think-done-icon { width: 14px; height: 14px; flex-shrink: 0; color: var(--text3); display: flex; }
-    .think-done-icon svg { width: 14px; height: 14px; }
-    .think-label { flex: 1; font-size: 13px; font-weight: 500; color: var(--think-text); display: flex; align-items: center; gap: 6px; }
-    .think-dots span { display: inline-block; width: 3px; height: 3px; background: var(--think-text); border-radius: 50%; animation: dotPulse 1.4s ease infinite; }
+    .think-done-icon { width:14px; height:14px; flex-shrink:0; color:var(--text3); display:flex; }
+    .think-done-icon svg { width:14px; height:14px; }
+    .think-label { flex:1; font-size:13px; font-weight:500; color:var(--think-text); display:flex; align-items:center; gap:6px; }
+    .think-dots span { display:inline-block; width:3px; height:3px; background:var(--think-text); border-radius:50%; animation:dotPulse 1.4s ease infinite; }
     .think-dots span:nth-child(2){animation-delay:.2s}
     .think-dots span:nth-child(3){animation-delay:.4s}
     @keyframes dotPulse { 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1.1)} }
-    .think-chevron { color: var(--text3); transition: transform .22s ease; flex-shrink: 0; }
-    .think-body { overflow: hidden; max-height: 0; transition: max-height .32s cubic-bezier(.4,0,.2,1), padding .22s; padding: 0 14px; }
-    .think-block.open .think-body { max-height: 1200px; overflow-y: auto; padding: 0 14px 14px; }
-    .think-block.open .think-chevron { transform: rotate(180deg); }
-    .think-body::-webkit-scrollbar { width: 3px; }
-    .think-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-    .think-md { font-size: 13.5px; line-height: 1.65; color: var(--think-text); word-break: break-word; }
-    .think-md p { margin-bottom: 8px; }
-    .think-md p:last-child { margin-bottom: 0; }
-    .katex-display { overflow-x: auto; overflow-y: hidden; padding-bottom: 2px; margin: 12px 0; }
-    .katex-mathml { display: none !important; }
-    .md-content { font-size: 15.5px; line-height: 1.7; color: var(--text); word-break: break-word; }
-    .md-content p { margin-bottom: 14px; }
-    .md-content p:last-child { margin-bottom: 0; }
-    .md-content h1,.md-content h2,.md-content h3,.md-content h4 { font-weight: 600; margin: 20px 0 10px; line-height: 1.3; color: #111; }
+    .think-chevron { color:var(--text3); transition:transform .22s ease; flex-shrink:0; }
+
+    .think-body { overflow:hidden; max-height:0; transition:max-height .3s cubic-bezier(.4,0,.2,1), padding .22s; padding:0 14px; }
+    .think-block.open .think-body { max-height:1400px; overflow-y:auto; padding:0 14px 14px; }
+    .think-block.open .think-chevron { transform:rotate(180deg); }
+    .think-body::-webkit-scrollbar { width:3px; }
+    .think-body::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+    .think-md { font-size:13.5px; line-height:1.65; color:var(--think-text); word-break:break-word; }
+    .think-md p { margin-bottom:8px; }
+    .think-md p:last-child { margin-bottom:0; }
+
+    .katex-display { overflow-x:auto; overflow-y:hidden; padding-bottom:2px; margin:12px 0; }
+    .katex-mathml { display:none !important; }
+
+    .md-content { font-size:15.5px; line-height:1.7; color:var(--text); word-break:break-word; }
+    .md-content p { margin-bottom:14px; }
+    .md-content p:last-child { margin-bottom:0; }
+    .md-content h1,.md-content h2,.md-content h3,.md-content h4 { font-weight:600; margin:20px 0 10px; line-height:1.3; color:#111; }
     .md-content h1{font-size:20px} .md-content h2{font-size:18px} .md-content h3{font-size:16px}
-    .md-content ul,.md-content ol { padding-left: 24px; margin-bottom: 14px; }
-    .md-content li { margin-bottom: 4px; }
-    .md-content blockquote { border-left: 3px solid var(--border2); padding: 8px 14px; margin: 12px 0; color: var(--text2); font-style: italic; background: var(--bg2); border-radius: 0 8px 8px 0; }
-    .md-content code:not(pre code) { font-family: var(--mono); font-size: 13.5px; background: var(--code-bg); border: 1px solid var(--border); border-radius: 5px; padding: 2px 6px; color: var(--accent2); }
-    .md-content pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 14px 0; }
-    .code-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; background: var(--bg3); border-bottom: 1px solid var(--border); }
-    .code-lang { font-family: var(--mono); font-size: 11.5px; font-weight: 600; color: var(--text2); }
-    .copy-btn { font-family: var(--font); font-size: 11.5px; font-weight: 600; color: var(--text3); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; transition: all .15s; }
-    .copy-btn:hover { background: var(--bg2); color: var(--text2); }
-    .copy-btn.copied { color: var(--accent); }
-    .md-content pre code { font-family: var(--mono); font-size: 13px; display: block; padding: 14px 16px; overflow-x: auto; background: none !important; line-height: 1.6; }
-    .md-content table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; display: block; overflow-x: auto; }
-    .md-content th,.md-content td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
-    .md-content th { background: var(--bg2); font-weight: 600; }
-    .md-content a { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; }
-    .cursor { display: inline-block; width: 2px; height: 1em; background: var(--text); vertical-align: text-bottom; animation: blink .9s step-start infinite; border-radius: 1px; margin-left: 2px; }
+    .md-content ul,.md-content ol { padding-left:24px; margin-bottom:14px; }
+    .md-content li { margin-bottom:4px; }
+    .md-content blockquote { border-left:3px solid var(--border2); padding:8px 14px; margin:12px 0; color:var(--text2); font-style:italic; background:var(--bg2); border-radius:0 8px 8px 0; }
+    .md-content code:not(pre code) { font-family:var(--mono); font-size:13.5px; background:var(--code-bg); border:1px solid var(--border); border-radius:5px; padding:2px 6px; color:var(--accent2); }
+    .md-content pre { background:var(--code-bg); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:14px 0; }
+    .code-header { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; background:var(--bg3); border-bottom:1px solid var(--border); }
+    .code-lang { font-family:var(--mono); font-size:11.5px; font-weight:600; color:var(--text2); }
+    .copy-btn { font-family:var(--font); font-size:11.5px; font-weight:600; color:var(--text3); background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:4px; padding:3px 8px; border-radius:6px; transition:all .15s; }
+    .copy-btn:hover { background:var(--bg2); color:var(--text2); }
+    .copy-btn.copied { color:var(--accent); }
+    .md-content pre code { font-family:var(--mono); font-size:13px; display:block; padding:14px 16px; overflow-x:auto; background:none !important; line-height:1.6; }
+    .md-content table { width:100%; border-collapse:collapse; font-size:14px; margin:14px 0; display:block; overflow-x:auto; }
+    .md-content th,.md-content td { border:1px solid var(--border); padding:8px 12px; text-align:left; }
+    .md-content th { background:var(--bg2); font-weight:600; }
+    .md-content a { color:var(--accent); text-decoration:underline; text-decoration-thickness:1px; }
+
+    .cursor { display:inline-block; width:2px; height:1em; background:var(--text); vertical-align:text-bottom; animation:blink .9s step-start infinite; border-radius:1px; margin-left:2px; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    #welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px 40px; text-align: center; gap: 16px; min-height: calc(100dvh - var(--header-h) - 100px); }
-    #welcome-logo { width: 64px; height: 64px; background: linear-gradient(135deg,#e38959,#c96b3a); border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(201,107,58,.25); }
-    #welcome-logo svg { width: 32px; height: 32px; }
-    #welcome h1 { font-size: 24px; font-weight: 600; color: var(--text); margin-top: 4px; }
-    #welcome p { font-size: 15px; color: var(--text3); line-height: 1.6; max-width: 300px; }
-    .welcome-chips { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 380px; margin-top: 12px; }
-    .chip { padding: 12px 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; font-size: 14px; color: var(--text2); cursor: pointer; text-align: left; transition: all .15s; font-family: var(--font); box-shadow: var(--shadow-sm); }
-    .chip:hover { background: #fff; border-color: var(--border2); color: var(--text); transform: translateY(-1px); box-shadow: var(--shadow); }
-    #input-area { flex-shrink: 0; padding: 0 16px 16px; background: var(--bg); display: flex; justify-content: center; }
-    #input-bar { width: 100%; max-width: 840px; display: flex; align-items: flex-end; gap: 8px; background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 8px 8px 8px 16px; transition: border-color .15s, box-shadow .15s; box-shadow: var(--shadow); }
-    #input-bar:focus-within { border-color: var(--border2); box-shadow: 0 0 0 3px rgba(201,107,58,.1), var(--shadow); }
-    #textarea { flex: 1; font-family: var(--font); font-size: 15.5px; line-height: 1.5; color: var(--text); background: transparent; border: none; outline: none; resize: none; min-height: 24px; max-height: 160px; padding: 6px 0; overflow-y: auto; }
-    #textarea::placeholder { color: var(--text3); }
-    #send-btn { width: 36px; height: 36px; flex-shrink: 0; border: none; background: var(--text); color: #fff; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-    #send-btn:hover:not(:disabled){background: #000; transform: scale(1.03)}
-    #send-btn:active:not(:disabled){transform: scale(.97)}
-    #send-btn:disabled { background: var(--bg3); cursor: not-allowed; }
-    #send-btn.empty:not(:disabled) { background: var(--bg2); color: var(--text3); cursor: default; transform: none; }
-    #send-btn svg { width: 16px; height: 16px; }
-    #stop-btn { width: 36px; height: 36px; flex-shrink: 0; border: 1.5px solid var(--border2); background: transparent; color: var(--text2); border-radius: 14px; cursor: pointer; display: none; align-items: center; justify-content: center; transition: all .15s; }
-    #stop-btn.visible { display: flex; }
-    #stop-btn:hover { background: var(--bg2); color: var(--text); }
-    #stop-btn svg { width: 14px; height: 14px; }
-    #settings-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); backdrop-filter: blur(2px); z-index: 300; opacity: 0; transition: opacity 0.2s; }
-    #settings-overlay.open { display: flex; align-items: flex-end; justify-content: center; opacity: 1; }
-    #settings-sheet { width: 100%; max-width: 520px; background: var(--bg); border-radius: 20px 20px 0 0; padding: 16px 20px 30px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); display: flex; flex-direction: column; max-height: 90dvh; box-shadow: 0 -4px 20px rgba(0,0,0,.1); }
-    #settings-overlay.open #settings-sheet { transform: translateY(0); }
-    .sheet-handle { width: 40px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 16px; }
-    .sheet-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text); }
-    .settings-scroll-area { overflow-y: auto; overflow-x: hidden; margin: 0 -20px; padding: 0 20px 20px; flex: 1; }
-    .settings-scroll-area::-webkit-scrollbar { width: 4px; }
-    .settings-scroll-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-    .setting-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
-    .card-title { font-size: 14.5px; font-weight: 600; margin-bottom: 14px; color: var(--text); display: flex; align-items: center; gap: 6px; }
-    .field-label { font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: .02em; margin-bottom: 6px; display: block; }
-    .field-input { width: 100%; font-family: var(--mono); font-size: 13.5px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); outline: none; transition: all .15s; margin-bottom: 6px; }
-    .field-input:focus { border-color: var(--border2); background: #fff; box-shadow: 0 0 0 3px rgba(201,107,58,.08); }
-    .field-hint { font-size: 11.5px; color: var(--text3); line-height: 1.5; margin-bottom: 14px; }
-    .field-hint:last-child { margin-bottom: 0; }
-    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 6px; border-top: 1px solid var(--border); margin-top: 12px; }
-    .toggle-info { flex: 1; padding-right: 16px; }
-    .toggle-label { font-size: 14px; font-weight: 600; color: var(--text); }
-    .toggle-desc { font-size: 11.5px; color: var(--text3); margin-top: 4px; line-height: 1.4; }
-    .switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border2); transition: .25s; border-radius: 24px; }
-    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .25s cubic-bezier(.4,0,.2,1); border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
-    input:checked + .slider { background-color: var(--accent); }
-    input:checked + .slider:before { transform: translateX(20px); }
-    #max-context-wrap { margin-top: 12px; padding-top: 14px; border-top: 1px dashed var(--border); overflow: hidden; transition: all .25s ease; }
-    #max-context-wrap.hidden { display: none; }
-    .save-btn { width: 100%; padding: 14px; background: var(--text); color: #fff; border: none; border-radius: 14px; font-family: var(--font); font-size: 15px; font-weight: 600; cursor: pointer; transition: all .15s; margin-top: 6px; flex-shrink: 0; }
-    .save-btn:hover { background: #000; transform: translateY(-1px); }
-    .save-btn:active { transform: translateY(1px); }
+
+    /* WELCOME */
+    #welcome { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px 40px; text-align:center; gap:16px; min-height:calc(100dvh - var(--header-h) - 120px); }
+    #welcome-logo { width:64px; height:64px; background:linear-gradient(135deg,#e38959,#c96b3a); border-radius:18px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(201,107,58,.25); }
+    #welcome-logo svg { width:32px; height:32px; }
+    #welcome h1 { font-size:24px; font-weight:600; color:var(--text); margin-top:4px; }
+    #welcome p { font-size:15px; color:var(--text3); line-height:1.6; max-width:300px; }
+    .welcome-chips { display:flex; flex-direction:column; gap:10px; width:100%; max-width:380px; margin-top:12px; }
+    .chip { padding:12px 18px; background:var(--bg2); border:1px solid var(--border); border-radius:14px; font-size:14px; color:var(--text2); cursor:pointer; text-align:left; transition:all .15s; font-family:var(--font); box-shadow:var(--shadow-sm); }
+    .chip:hover { background:#fff; border-color:var(--border2); color:var(--text); transform:translateY(-1px); box-shadow:var(--shadow); }
+
+    /* INPUT */
+    #input-area { flex-shrink:0; padding:0 16px 16px; background:var(--bg); display:flex; justify-content:center; }
+    #input-bar { width:100%; max-width:840px; display:flex; align-items:flex-end; gap:8px; background:#fff; border:1px solid var(--border); border-radius:20px; padding:8px 8px 8px 16px; transition:border-color .15s,box-shadow .15s; box-shadow:var(--shadow); }
+    #input-bar:focus-within { border-color:var(--border2); box-shadow:0 0 0 3px rgba(201,107,58,.1),var(--shadow); }
+    #textarea { flex:1; font-family:var(--font); font-size:15.5px; line-height:1.5; color:var(--text); background:transparent; border:none; outline:none; resize:none; min-height:24px; max-height:160px; padding:6px 0; overflow-y:auto; }
+    #textarea::placeholder { color:var(--text3); }
+
+    #send-btn { width:36px; height:36px; flex-shrink:0; border:none; background:var(--text); color:#fff; border-radius:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+    #send-btn:hover:not(:disabled){background:#000;transform:scale(1.03)}
+    #send-btn:active:not(:disabled){transform:scale(.97)}
+    #send-btn:disabled { background:var(--bg3); cursor:not-allowed; }
+    #send-btn.empty:not(:disabled) { background:var(--bg2); color:var(--text3); cursor:default; transform:none; }
+    #send-btn svg { width:16px; height:16px; }
+
+    #stop-btn { width:36px; height:36px; flex-shrink:0; border:1.5px solid var(--border2); background:transparent; color:var(--text2); border-radius:14px; cursor:pointer; display:none; align-items:center; justify-content:center; transition:all .15s; }
+    #stop-btn.visible { display:flex; }
+    #stop-btn:hover { background:var(--bg2); color:var(--text); }
+    #stop-btn svg { width:14px; height:14px; }
+
+    /* SETTINGS OVERLAY - fixed transition with visibility trick */
+    #settings-overlay {
+      visibility:hidden; opacity:0;
+      position:fixed; inset:0; background:rgba(0,0,0,.3); backdrop-filter:blur(3px);
+      z-index:400; transition:opacity .25s ease, visibility .25s ease;
+      display:flex; align-items:flex-end; justify-content:center;
+    }
+    #settings-overlay.open { visibility:visible; opacity:1; }
+
+    #settings-sheet {
+      width:100%; max-width:520px; background:var(--bg); border-radius:20px 20px 0 0;
+      padding:16px 20px 30px; transform:translateY(100%);
+      transition:transform .32s cubic-bezier(0.34,1.2,0.64,1);
+      display:flex; flex-direction:column; max-height:92dvh;
+      box-shadow:0 -4px 20px rgba(0,0,0,.12);
+    }
+    #settings-overlay.open #settings-sheet { transform:translateY(0); }
+
+    .sheet-handle { width:40px; height:4px; background:var(--border2); border-radius:2px; margin:0 auto 16px; }
+    .sheet-title { font-size:18px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; color:var(--text); }
+
+    .settings-scroll-area { overflow-y:auto; overflow-x:hidden; margin:0 -20px; padding:0 20px 20px; flex:1; }
+    .settings-scroll-area::-webkit-scrollbar { width:4px; }
+    .settings-scroll-area::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+    .setting-card { background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:16px; box-shadow:var(--shadow-sm); }
+    .card-title { font-size:14.5px; font-weight:600; margin-bottom:14px; color:var(--text); display:flex; align-items:center; gap:6px; }
+    .field-label { font-size:12px; font-weight:600; color:var(--text2); letter-spacing:.02em; margin-bottom:6px; display:block; }
+    .field-input { width:100%; font-family:var(--mono); font-size:13.5px; padding:10px 14px; border:1px solid var(--border); border-radius:10px; background:var(--bg); color:var(--text); outline:none; transition:all .15s; margin-bottom:6px; }
+    .field-input:focus { border-color:var(--border2); background:#fff; box-shadow:0 0 0 3px rgba(201,107,58,.08); }
+    .field-hint { font-size:11.5px; color:var(--text3); line-height:1.5; margin-bottom:14px; }
+    .field-hint:last-child { margin-bottom:0; }
+
+    .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:16px 0 6px; border-top:1px solid var(--border); margin-top:12px; }
+    .toggle-info { flex:1; padding-right:16px; }
+    .toggle-label { font-size:14px; font-weight:600; color:var(--text); }
+    .toggle-desc { font-size:11.5px; color:var(--text3); margin-top:4px; line-height:1.4; }
+
+    .switch { position:relative; display:inline-block; width:44px; height:24px; flex-shrink:0; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:var(--border2); transition:.25s; border-radius:24px; }
+    .slider:before { position:absolute; content:""; height:18px; width:18px; left:3px; bottom:3px; background-color:white; transition:.25s cubic-bezier(.4,0,.2,1); border-radius:50%; box-shadow:0 1px 2px rgba(0,0,0,.15); }
+    input:checked + .slider { background-color:var(--accent); }
+    input:checked + .slider:before { transform:translateX(20px); }
+
+    #max-context-wrap { margin-top:12px; padding-top:14px; border-top:1px dashed var(--border); }
+    #max-context-wrap.hidden { display:none; }
+
+    /* Storage warning banner */
+    #storage-warning {
+      display:none; background:#fff3cd; border:1px solid #ffc107; border-radius:10px;
+      padding:10px 14px; font-size:13px; color:#856404; margin-bottom:14px;
+      align-items:center; gap:8px;
+    }
+    #storage-warning.visible { display:flex; }
+
+    .save-btn { width:100%; padding:14px; background:var(--text); color:#fff; border:none; border-radius:14px; font-family:var(--font); font-size:15px; font-weight:600; cursor:pointer; transition:all .15s; margin-top:6px; flex-shrink:0; }
+    .save-btn:hover { background:#000; transform:translateY(-1px); }
+    .save-btn:active { transform:translateY(1px); }
+
+    /* SCROLL DOWN */
     #scroll-down { position:fixed; bottom:90px; right:16px; width:36px; height:36px; background:var(--bg); border:1px solid var(--border2); border-radius:50%; box-shadow:var(--shadow-md); display:none; align-items:center; justify-content:center; cursor:pointer; z-index:50; color:var(--text2); transition:all .2s; }
     #scroll-down.visible { display:flex; }
     #scroll-down:hover { background:var(--bg2); }
     #scroll-down svg { width:16px; height:16px; }
-    #toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--text); color:#fff; font-size:13.5px; font-weight:500; padding:10px 20px; border-radius:24px; opacity:0; pointer-events:none; transition:all .3s cubic-bezier(0.2,0.8,0.2,1); z-index:500; white-space:nowrap; box-shadow: var(--shadow-md); }
+
+    /* TOAST */
+    #toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--text); color:#fff; font-size:13.5px; font-weight:500; padding:10px 20px; border-radius:24px; opacity:0; pointer-events:none; transition:all .3s cubic-bezier(0.2,0.8,0.2,1); z-index:500; white-space:nowrap; box-shadow:var(--shadow-md); }
     #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* Error message in chat */
+    .error-msg { color:#d93025; font-size:14px; display:flex; align-items:center; gap:6px; padding:10px 0; }
+    .error-msg svg { width:16px; height:16px; flex-shrink:0; }
+
     .hljs { background:transparent !important; padding:0 !important; }
-    @media (max-width: 768px) {
-      .menu-toggle { display: flex; }
-      #sidebar { position: fixed; height: 100%; transform: translateX(-100%); }
-      #sidebar.open { transform: translateX(0); }
-      #sidebar-overlay.open { display: block; opacity: 1; }
-      #messages { padding: 16px 16px 30px; }
-      .msg-row.user .bubble { max-width: 90%; }
-      #input-area { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
-      #settings-sheet { border-radius: 20px 20px 0 0; }
+
+    @media (max-width:768px) {
+      .menu-toggle { display:flex; }
+      #sidebar { position:fixed; height:100%; transform:translateX(-100%); }
+      #sidebar.open { transform:translateX(0); }
+      #messages { padding:16px 16px 30px; }
+      .msg-row.user .bubble { max-width:90%; }
+      #input-area { padding-bottom:calc(16px + env(safe-area-inset-bottom)); }
+      #scroll-down { bottom:calc(90px + env(safe-area-inset-bottom)); }
+
+      /* Bigger touch targets on mobile */
+      .delete-session-btn { opacity:1; width:28px; height:28px; }
+      .session-item { padding:11px 12px; }
+      .copy-btn { padding:5px 10px; }
+
+      /* iOS tap highlight removal */
+      button, a, .session-item, .chip { -webkit-tap-highlight-color:transparent; }
+
+      /* Active state feedback for touch */
+      .chip:active { transform:scale(.97); background:var(--bg3); }
+      .new-chat-btn:active { background:var(--bg2); }
+      .session-item:active { background:var(--sidebar-act); }
+      .tool-btn:active { background:var(--sidebar-hover); }
+      #send-btn:active:not(:disabled) { transform:scale(.93); }
+      #stop-btn:active { background:var(--bg3); }
+      .model-option:active { background:var(--bg3); }
+
+      /* Improve think block max-height on mobile */
+      .think-block.open .think-body { max-height:60dvh; }
+
+      /* Slightly larger message font on mobile for readability */
+      .md-content { font-size:15px; }
+      .msg-row.user .bubble { font-size:15px; }
     }
+
+    /* Flash animation for sidebar active item */
+    @keyframes sessionFlash {
+      0%   { background: var(--sidebar-act); }
+      40%  { background: var(--accent); color: #fff; }
+      100% { background: var(--sidebar-act); }
+    }
+    .session-item.flash { animation: sessionFlash 0.55s ease; }
+
+    /* Slide-up animation for action sheet */
+    @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+    /* Prevent text selection during long press on messages (mobile) */
+    .msg-row { -webkit-user-select:none; user-select:none; }
+    .msg-row.user .bubble { -webkit-user-select:text; user-select:text; }
+    .md-content { -webkit-user-select:text; user-select:text; }
+    .think-md { -webkit-user-select:text; user-select:text; }
   </style>
 </head>
 <body>
 
-<!-- HTML 主体结构不变 -->
 <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
 <div id="root-layout">
   <div id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
@@ -248,7 +435,7 @@
     <div class="sidebar-header">
       <button class="new-chat-btn" onclick="createNewSession()">
         <span>新建对话</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </button>
     </div>
     <div id="session-list"></div>
@@ -273,14 +460,17 @@
         <button class="menu-toggle" onclick="toggleSidebar(true)">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
+        <div id="logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
         <div id="model-selector-wrap">
           <button id="model-btn" onclick="toggleModelDropdown()">
-            <span id="model-label">DeepSeek V3.2</span>
+            <span id="model-label">DeepSeek V3</span>
             <svg class="chevron" viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 10.5L3 5.5h10L8 10.5z"/></svg>
           </button>
           <div id="model-dropdown">
             <div class="model-option selected" data-model="deepseek-chat" onclick="selectModel(this)">
-              <div class="model-option-name">DeepSeek V3.2<span class="checkmark" id="check-deepseek-chat">✓</span></div>
+              <div class="model-option-name">DeepSeek V3<span class="checkmark" id="check-deepseek-chat">✓</span></div>
               <div class="model-option-desc">通用对话 · 快速高效</div>
             </div>
             <div class="model-option" data-model="deepseek-reasoner" onclick="selectModel(this)">
@@ -311,11 +501,15 @@
     </div>
   </div>
 </div>
+
 <div id="settings-overlay" onclick="handleOverlayClick(event)">
   <div id="settings-sheet" onclick="event.stopPropagation()">
     <div class="sheet-handle"></div>
     <div class="sheet-title">⚙️ 偏好设置</div>
     <div class="settings-scroll-area">
+      <div id="storage-warning" class="setting-card" style="background:#fff8e6;border-color:#f0c040;">
+        ⚠️ <span id="storage-warning-text">存储空间接近上限，建议导出备份并清理旧对话。</span>
+      </div>
       <div class="setting-card">
         <div class="card-title">🔌 接口连接</div>
         <label class="field-label">API Key</label>
@@ -328,11 +522,11 @@
       <div class="setting-card">
         <div class="card-title">🧠 模型与上下文</div>
         <label class="field-label">系统提示词 (System Prompt)</label>
-        <textarea class="field-input" id="system-prompt-input" rows="2" placeholder="例如：你是一个幽默的助手。" style="resize:vertical;"></textarea>
+        <textarea class="field-input" id="system-prompt-input" rows="2" placeholder="例如：你是一个幽默的助手。" style="resize:vertical;font-family:var(--font);"></textarea>
         <div class="toggle-row">
           <div class="toggle-info">
             <div class="toggle-label">滑动上下文限制</div>
-            <div class="toggle-desc">开启后自动在请求中截断较老的聊天记录，大幅节省 API Token 消耗（界面依然会展示所有记录）。</div>
+            <div class="toggle-desc">开启后自动截断较老记录，节省 Token 消耗（界面依然展示全部记录）。</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="sliding-context-input" onchange="toggleContextSizeUI()">
@@ -341,274 +535,1162 @@
         </div>
         <div id="max-context-wrap">
           <label class="field-label">最大保留历史消息数</label>
-          <input class="field-input" id="max-context-input" type="number" min="1" max="999" placeholder="例如：20">
-          <div class="field-hint">每次对话最多携带最新几条聊天记录发送给模型。</div>
+          <input class="field-input" id="max-context-input" type="number" min="2" max="200" placeholder="例如：20">
+          <div class="field-hint">每次对话最多携带最新几条记录发送给模型。</div>
         </div>
+      </div>
+      <div class="setting-card">
+        <div class="card-title">🗄️ 存储状态</div>
+        <div style="font-size:13.5px;color:var(--text2);line-height:1.6;" id="storage-info-text">正在计算…</div>
+        <button class="tool-btn" style="margin-top:10px;padding-left:0;" onclick="trimOldSessions()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          清理30天前的旧对话
+        </button>
       </div>
     </div>
     <button class="save-btn" onclick="saveSettings()">保存并生效</button>
   </div>
 </div>
+
 <div id="toast"></div>
 
 <script>
-/* （此处保留原有全部 JS 逻辑...）*/
-const SESSIONS_KEY = 'ds_sessions_v2';
+// ============================================================
+//  CONSTANTS
+// ============================================================
+const SESSIONS_KEY  = 'ds_sessions_v3';
 const ACTIVE_ID_KEY = 'ds_active_session_id';
-const CFG_KEY = 'ds_cfg';
-const state = { model: 'deepseek-chat', apiKey: '', baseUrl: 'https://api.deepseek.com', systemPrompt: '', enableSliding: true, maxContextSize: 20, sessions:[], currentSessionId: null, isStreaming: false, abortController: null };
-function genId() { return Math.random().toString(36).substr(2, 9); }
-function saveSessionsLocally() { localStorage.setItem(SESSIONS_KEY, JSON.stringify(state.sessions)); if (state.currentSessionId) localStorage.setItem(ACTIVE_ID_KEY, state.currentSessionId); }
+const CFG_KEY       = 'ds_cfg_v2';
+const MAX_SESSIONS  = 200;        // hard cap on number of sessions
+const MAX_HISTORY   = 500;        // hard cap on messages per session
+const STORAGE_WARN_BYTES = 4 * 1024 * 1024; // warn at 4 MB
+
+// ============================================================
+//  APP STATE
+// ============================================================
+const state = {
+  model: 'deepseek-chat',
+  apiKey: '',
+  baseUrl: 'https://api.deepseek.com',
+  systemPrompt: '',
+  enableSliding: true,
+  maxContextSize: 20,
+  sessions: [],
+  currentSessionId: null,
+  isStreaming: false,
+  abortController: null,
+  streamingSessionId: null,   // track which session is streaming
+};
+
+// ============================================================
+//  STORAGE MANAGER  ← core fix for disappearing conversations
+// ============================================================
+const StorageManager = {
+  /** Robustly save sessions. Returns true on success. */
+  saveSessions() {
+    try {
+      const serialized = JSON.stringify(state.sessions);
+      localStorage.setItem(SESSIONS_KEY, serialized);
+      if (state.currentSessionId) {
+        localStorage.setItem(ACTIVE_ID_KEY, state.currentSessionId);
+      }
+      return true;
+    } catch (e) {
+      if (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014) {
+        // Emergency: trim oldest sessions and retry
+        console.warn('[Storage] Quota exceeded, trimming…');
+        this._emergencyTrim();
+        try {
+          localStorage.setItem(SESSIONS_KEY, JSON.stringify(state.sessions));
+          showToast('⚠ 存储空间不足，已自动清理旧对话');
+          return true;
+        } catch (e2) {
+          showToast('❌ 存储失败，请导出备份后清理对话');
+          console.error('[Storage] Save failed even after trim:', e2);
+          return false;
+        }
+      }
+      console.error('[Storage] Unexpected save error:', e);
+      return false;
+    }
+  },
+
+  /** Load and VALIDATE sessions from localStorage. */
+  loadSessions() {
+    try {
+      const raw = localStorage.getItem(SESSIONS_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed
+        .filter(s => s && typeof s.id === 'string' && Array.isArray(s.history))
+        .map(s => ({
+          id: s.id,
+          title: typeof s.title === 'string' && s.title.trim() ? s.title.trim() : '新对话',
+          model: typeof s.model === 'string' ? s.model : 'deepseek-chat',
+          history: s.history
+            .filter(m => m && (m.role === 'user' || m.role === 'assistant'))
+            .map(m => ({
+              role: m.role,
+              content: typeof m.content === 'string' ? m.content : '',
+              reasoning: typeof m.reasoning === 'string' ? m.reasoning : '',
+            }))
+            .slice(-MAX_HISTORY),
+          updatedAt: typeof s.updatedAt === 'number' ? s.updatedAt : Date.now(),
+          createdAt: typeof s.createdAt === 'number' ? s.createdAt : Date.now(),
+        }))
+        .slice(0, MAX_SESSIONS);
+    } catch (e) {
+      console.error('[Storage] Load/parse failed, resetting:', e);
+      return [];
+    }
+  },
+
+  loadConfig() {
+    try {
+      return JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+    } catch { return {}; }
+  },
+
+  saveConfig(cfg) {
+    try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch {}
+  },
+
+  getActiveId() {
+    return localStorage.getItem(ACTIVE_ID_KEY) || null;
+  },
+
+  /** Estimate current usage in bytes */
+  getUsageBytes() {
+    try {
+      let total = 0;
+      for (const k of [SESSIONS_KEY, CFG_KEY, ACTIVE_ID_KEY]) {
+        const v = localStorage.getItem(k);
+        if (v) total += v.length * 2; // UTF-16
+      }
+      return total;
+    } catch { return 0; }
+  },
+
+  _emergencyTrim() {
+    // Remove sessions beyond 30, trimming from oldest first
+    state.sessions.sort((a, b) => b.updatedAt - a.updatedAt);
+    state.sessions.splice(30); // keep newest 30
+    // Also trim each session's history
+    state.sessions.forEach(s => {
+      if (s.history.length > 40) s.history = s.history.slice(-40);
+    });
+  },
+
+  /** Migrate old format if present */
+  migrate() {
+    // v2 → v3 key rename
+    const old = localStorage.getItem('ds_sessions_v2');
+    if (old && !localStorage.getItem(SESSIONS_KEY)) {
+      localStorage.setItem(SESSIONS_KEY, old);
+    }
+    // legacy single-session format
+    const oldSession = localStorage.getItem('ds_chat_session');
+    if (oldSession && !localStorage.getItem(SESSIONS_KEY)) {
+      try {
+        const s = JSON.parse(oldSession);
+        const history = Array.isArray(s.history) ? s.history : [];
+        const sessions = [{
+          id: genId(), title: history[0]?.content?.slice(0,15) || '新对话',
+          model: s.model || 'deepseek-chat', history,
+          updatedAt: Date.now(), createdAt: Date.now(),
+        }];
+        localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+        localStorage.removeItem('ds_chat_session');
+      } catch {}
+    }
+  },
+};
+
+// ============================================================
+//  UTILITIES
+// ============================================================
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function esc(t) {
+  return String(t)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function formatRelativeDate(ts) {
+  const now = Date.now();
+  const diff = now - ts;
+  const day = 86400000;
+  if (diff < day) return '今天';
+  if (diff < 2 * day) return '昨天';
+  if (diff < 7 * day) return '本周';
+  if (diff < 30 * day) return '本月';
+  const d = new Date(ts);
+  return `${d.getFullYear()}年${d.getMonth()+1}月`;
+}
+
+// ============================================================
+//  MARKDOWN + MATH RENDERER
+// ============================================================
 function renderMarkdown(text) {
-  if (!text) return ''; let processed = text; const mathBlocks = [], codeBlocks = [], escapedDollars =[];
-  processed = processed.replace(/\\\$/g, () => { escapedDollars.push('\\$'); return `DSESCDOLLAR${escapedDollars.length - 1}DS`; });
-  processed = processed.replace(/(`{3,}[\s\S]*?`{3,}|`[^`\n]+`)/g, (match) => { codeBlocks.push(match); return `DSCODEBLOCK${codeBlocks.length - 1}DS`; });
+  if (!text || typeof text !== 'string') return '';
+  let processed = text;
+  const mathBlocks = [], codeBlocks = [], escapedDollars = [];
+
+  // Protect escaped dollar signs
+  processed = processed.replace(/\\\$/g, () => {
+    escapedDollars.push('\\$');
+    return `DSESCDOLLAR${escapedDollars.length - 1}DS`;
+  });
+  // Protect code blocks
+  processed = processed.replace(/(`{3,}[\s\S]*?`{3,}|`[^`\n]+`)/g, match => {
+    codeBlocks.push(match);
+    return `DSCODEBLOCK${codeBlocks.length - 1}DS`;
+  });
+  // Display math $$ and \[…\]
   processed = processed.replace(/\$\$([\s\S]+?)\$\$|\\\[([\s\S]+?)\\\]/g, (match, p1, p2) => {
-    const math = (p1 !== undefined ? p1 : p2).trim(); if (!math) return match;
-    try { mathBlocks.push(katex.renderToString(math, { displayMode: true, throwOnError: false })); return `\n<div data-ds-math-block="${mathBlocks.length - 1}"></div>\n`; } catch(e) { return match; }
+    const math = (p1 !== undefined ? p1 : p2).trim();
+    if (!math) return match;
+    try {
+      mathBlocks.push(katex.renderToString(math, { displayMode: true, throwOnError: false }));
+      return `\n<div data-ds-math-block="${mathBlocks.length - 1}"></div>\n`;
+    } catch { return match; }
   });
-  processed = processed.replace(/\\begin\{([a-zA-Z*]+)\}([\s\S]*?)\\end\{\1\}/g, (match) => {
-    try { mathBlocks.push(katex.renderToString(match, { displayMode: true, throwOnError: false })); return `\n<div data-ds-math-block="${mathBlocks.length - 1}"></div>\n`; } catch(e) { return match; }
+  // LaTeX environments
+  processed = processed.replace(/\\begin\{([a-zA-Z*]+)\}([\s\S]*?)\\end\{\1\}/g, match => {
+    try {
+      mathBlocks.push(katex.renderToString(match, { displayMode: true, throwOnError: false }));
+      return `\n<div data-ds-math-block="${mathBlocks.length - 1}"></div>\n`;
+    } catch { return match; }
   });
+  // Inline math $…$ and \(…\)
   processed = processed.replace(/\$([^\s$][^$\n]*?[^\s$]|[^\s$])\$|\\\(([\s\S]+?)\\\)/g, (match, p1, p2) => {
-    const math = (p1 !== undefined ? p1 : p2).trim(); if (!math) return match;
-    try { mathBlocks.push(katex.renderToString(math, { displayMode: false, throwOnError: false })); return `DSMATHINLINE${mathBlocks.length - 1}DS`; } catch(e) { return match; }
+    const math = (p1 !== undefined ? p1 : p2).trim();
+    if (!math) return match;
+    try {
+      mathBlocks.push(katex.renderToString(math, { displayMode: false, throwOnError: false }));
+      return `DSMATHINLINE${mathBlocks.length - 1}DS`;
+    } catch { return match; }
   });
-  processed = processed.replace(/DSCODEBLOCK(\d+)DS/g, (match, i) => codeBlocks[i]);
-  processed = processed.replace(/DSESCDOLLAR(\d+)DS/g, (match, i) => escapedDollars[i]);
+  // Restore code blocks and escaped dollars
+  processed = processed.replace(/DSCODEBLOCK(\d+)DS/g, (_, i) => codeBlocks[+i]);
+  processed = processed.replace(/DSESCDOLLAR(\d+)DS/g, (_, i) => escapedDollars[+i]);
+
   let html = marked.parse(processed);
-  html = html.replace(/DSMATHINLINE(\d+)DS/g, (match, i) => mathBlocks[i]);
-  html = html.replace(/<div data-ds-math-block="(\d+)"><\/div>/g, (match, i) => mathBlocks[i]);
+  html = html.replace(/DSMATHINLINE(\d+)DS/g, (_, i) => mathBlocks[+i] || '');
+  html = html.replace(/<div data-ds-math-block="(\d+)"><\/div>/g, (_, i) => mathBlocks[+i] || '');
   return html;
 }
+
 const myRenderer = new marked.Renderer();
 myRenderer.code = (code, lang) => {
-  const language = lang || 'plaintext'; let hi;
-  try { hi = lang && hljs.getLanguage(lang) ? hljs.highlight(code, { language: lang }).value : hljs.highlightAuto(code).value; } catch { hi = esc(code); }
+  const language = lang || 'plaintext';
+  let hi;
+  try {
+    hi = lang && hljs.getLanguage(lang)
+      ? hljs.highlight(code, { language: lang }).value
+      : hljs.highlightAuto(code).value;
+  } catch { hi = esc(code); }
   const uid = 'c' + Math.random().toString(36).slice(2, 9);
-  return `<pre><div class="code-header"><span class="code-lang">${language}</span><button class="copy-btn" data-target="${uid}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><code id="${uid}">${hi}</code></pre>`;
+  return `<pre><div class="code-header"><span class="code-lang">${esc(language)}</span><button class="copy-btn" data-target="${uid}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><code id="${uid}" class="hljs">${hi}</code></pre>`;
 };
 marked.use({ renderer: myRenderer, breaks: true, gfm: true });
-function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-document.getElementById('messages').addEventListener('click', e => {
-  const btn = e.target.closest('.copy-btn'); if (!btn) return;
-  const code = document.getElementById(btn.dataset.target); if (!code) return;
-  navigator.clipboard.writeText(code.innerText).then(() => {
-    const orig = btn.innerHTML; btn.textContent = '✓ 已复制'; btn.classList.add('copied');
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
-  });
-});
-(function init() {
-  try {
-    const s = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
-    state.apiKey = s.apiKey || ''; state.baseUrl = s.baseUrl || 'https://api.deepseek.com';
-    state.systemPrompt = s.systemPrompt || ''; state.enableSliding = s.enableSliding !== false;
-    state.maxContextSize = s.maxContextSize || 20;
-  } catch {}
-  const oldSession = JSON.parse(localStorage.getItem('ds_chat_session'));
-  if (oldSession && !localStorage.getItem(SESSIONS_KEY)) {
-    const history = oldSession.history || [];
-    state.sessions =[{ id: genId(), title: history.length > 0 ? history[0].content.slice(0, 15) : '新对话', model: oldSession.model || 'deepseek-chat', history: history, updatedAt: Date.now() }];
-    localStorage.removeItem('ds_chat_session');
-  } else { try { state.sessions = JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]'); } catch {} }
-  const activeId = localStorage.getItem(ACTIVE_ID_KEY);
-  if (state.sessions.length === 0) { createNewSession(false); } else {
-    const target = state.sessions.find(s => s.id === activeId) || state.sessions[0];
-    switchSession(target.id);
+
+// ============================================================
+//  ROBUST COPY  (file://, http://, https:// all supported)
+// ============================================================
+async function copyTextRobust(text) {
+  // Tier 1: Modern Clipboard API (https + focused)
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch { /* fall through */ }
   }
-})();
-function toggleSidebar(forceOpen) {
-  const sb = document.getElementById('sidebar'); const ov = document.getElementById('sidebar-overlay');
-  const isOpen = sb.classList.contains('open');
-  if (forceOpen === true || !isOpen) { sb.classList.add('open'); ov.classList.add('open'); } else { sb.classList.remove('open'); ov.classList.remove('open'); }
+  // Tier 2: execCommand (file:// and old browsers)
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length); // iOS
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (ok) return true;
+  } catch { /* fall through */ }
+  // Tier 3: Show a selectable modal so user can manually copy
+  showCopyFallbackModal(text);
+  return false;
 }
+
+// Minimal copy-fallback modal for iOS file:// edge cases
+function showCopyFallbackModal(text) {
+  const existing = document.getElementById('copy-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'copy-modal';
+  modal.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);`;
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:18px;padding:20px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="font-size:14px;font-weight:600;color:#2d2926;margin-bottom:10px;">全选后复制 (Ctrl+C / ⌘C)</div>
+      <textarea readonly style="width:100%;height:140px;font-size:13px;font-family:var(--mono);border:1px solid #e4dfd5;border-radius:10px;padding:10px;resize:none;color:#2d2926;background:#f5f2ec;outline:none;">${esc(text)}</textarea>
+      <button onclick="document.getElementById('copy-modal').remove()" style="margin-top:12px;width:100%;padding:12px;background:#2d2926;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;">关闭</button>
+    </div>`;
+  // Auto-select text
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => {
+    const ta = modal.querySelector('textarea');
+    ta.focus(); ta.select(); ta.setSelectionRange(0, text.length);
+  });
+}
+
+// Copy code button (delegated)
+document.getElementById('messages').addEventListener('click', async e => {
+  const btn = e.target.closest('.copy-btn');
+  if (!btn) return;
+  const code = document.getElementById(btn.dataset.target);
+  if (!code) return;
+  const text = code.innerText;
+  const orig = btn.innerHTML;
+  const ok = await copyTextRobust(text);
+  if (ok) {
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>已复制`;
+    btn.classList.add('copied');
+    triggerHaptic('light');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2200);
+  }
+});
+
+// ============================================================
+//  HAPTIC FEEDBACK
+// ============================================================
+function triggerHaptic(type = 'light') {
+  if (!navigator.vibrate) return;
+  const patterns = { light: 8, medium: 18, heavy: 35, success: [8, 50, 8] };
+  navigator.vibrate(patterns[type] || 10);
+}
+
+// ============================================================
+//  LONG-PRESS: copy full message bubble / assistant response
+// ============================================================
+(function setupLongPress() {
+  let timer = null, target = null;
+  const DELAY = 520;
+
+  function getTextFromRow(el) {
+    const bubble = el.closest('.bubble');
+    if (bubble) return bubble.textContent;
+    const mdEl = el.closest('.md-content');
+    if (mdEl) return mdEl.innerText;
+    return null;
+  }
+
+  function showMsgActions(el, text) {
+    const existing = document.getElementById('msg-action-sheet');
+    if (existing) existing.remove();
+    const sheet = document.createElement('div');
+    sheet.id = 'msg-action-sheet';
+    sheet.style.cssText = `position:fixed;bottom:0;left:0;right:0;z-index:550;background:var(--bg);border-radius:20px 20px 0 0;padding:12px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -4px 24px rgba(0,0,0,.12);animation:slideUp .22s ease;`;
+    sheet.innerHTML = `
+      <div style="width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px;"></div>
+      <button id="msg-copy-btn" style="width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg2);border:none;border-radius:14px;font-family:var(--font);font-size:15px;font-weight:500;color:var(--text);cursor:pointer;margin-bottom:10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        复制全文
+      </button>
+      <button onclick="document.getElementById('msg-action-sheet').remove()" style="width:100%;padding:14px;background:var(--bg3);border:none;border-radius:14px;font-family:var(--font);font-size:15px;font-weight:500;color:var(--text2);cursor:pointer;">取消</button>`;
+    document.body.appendChild(sheet);
+    sheet.querySelector('#msg-copy-btn').addEventListener('click', async () => {
+      sheet.remove();
+      const ok = await copyTextRobust(text);
+      if (ok) { showToast('✓ 已复制消息'); triggerHaptic('success'); }
+    });
+    sheet.addEventListener('click', e => { if (e.target === sheet) sheet.remove(); });
+    // Dismiss on outside touch
+    setTimeout(() => document.addEventListener('touchstart', function dismiss(ev) {
+      if (!sheet.contains(ev.target)) { sheet.remove(); document.removeEventListener('touchstart', dismiss); }
+    }, { passive: true }), 100);
+  }
+
+  document.getElementById('messages').addEventListener('touchstart', e => {
+    const text = getTextFromRow(e.target);
+    if (!text) return;
+    target = e.target;
+    timer = setTimeout(() => {
+      triggerHaptic('medium');
+      showMsgActions(target, text.trim());
+      timer = null;
+    }, DELAY);
+  }, { passive: true });
+
+  ['touchend','touchcancel','touchmove'].forEach(evt => {
+    document.getElementById('messages').addEventListener(evt, () => {
+      if (timer) { clearTimeout(timer); timer = null; }
+    }, { passive: true });
+  });
+})();
+
+
+// ============================================================
+//  INPUT / UI HELPERS
+// ============================================================
+function handleInput() {
+  const ta = document.getElementById('textarea');
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
+  const btn = document.getElementById('send-btn');
+  btn.classList.toggle('empty', !ta.value.trim());
+}
+
+function handleKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (!document.getElementById('send-btn').disabled) sendMessage();
+  }
+}
+
+// Mobile keyboard detection via VisualViewport API
+if (window.visualViewport) {
+  let lastVpH = window.visualViewport.height;
+  window.visualViewport.addEventListener('resize', () => {
+    const h = window.visualViewport.height;
+    if (h < lastVpH - 80) {
+      // Keyboard appeared — scroll down so latest message is visible
+      setTimeout(() => scrollToBottom(false), 100);
+    }
+    lastVpH = h;
+  });
+}
+
+const msgsWrap = document.getElementById('messages-wrap');
+let isUserScrolledUp = false;
+msgsWrap.addEventListener('scroll', () => {
+  isUserScrolledUp = (msgsWrap.scrollHeight - msgsWrap.scrollTop - msgsWrap.clientHeight) > 80;
+  document.getElementById('scroll-down').classList.toggle('visible', isUserScrolledUp);
+}, { passive: true });
+
+function scrollToBottom(force = false) {
+  if (!force && isUserScrolledUp) return;
+  msgsWrap.scrollTo({ top: msgsWrap.scrollHeight, behavior: force ? 'smooth' : 'instant' });
+}
+
+// ============================================================
+//  WELCOME SCREEN
+// ============================================================
+function renderWelcome() {
+  document.getElementById('messages').innerHTML = `
+    <div id="welcome">
+      <div id="welcome-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <h1>你好，我是 DeepSeek</h1>
+      <p>强大的 AI 助手，支持多模型切换与深度推理思维链</p>
+      <div class="welcome-chips">
+        <button class="chip" onclick="sendChip(this)">✦ 用 R1 推理：9.11 和 9.8 哪个大？</button>
+        <button class="chip" onclick="sendChip(this)">📝 帮我写 Python 快速排序代码</button>
+        <button class="chip" onclick="sendChip(this)">🌐 解释一下量子纠缠</button>
+      </div>
+    </div>`;
+}
+
+function hideWelcome() {
+  const w = document.getElementById('welcome');
+  if (w) w.remove();
+}
+
+function sendChip(btn) {
+  const text = btn.textContent.replace(/^.\s/, '').trim();
+  if (btn.textContent.includes('R1')) {
+    selectModel(document.querySelector('[data-model="deepseek-reasoner"]'));
+  }
+  const ta = document.getElementById('textarea');
+  ta.value = text;
+  handleInput();
+  sendMessage();
+}
+
+// ============================================================
+//  MESSAGE RENDERING
+// ============================================================
+function buildUserRow(text) {
+  hideWelcome();
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text || '';
+  row.appendChild(bubble);
+  document.getElementById('messages').appendChild(row);
+  scrollToBottom(false);
+  return row;
+}
+
+function buildAssistantRow(initContent = '', initReasoning = '', isHistory = false) {
+  const isReasoner = state.model === 'deepseek-reasoner' || !!initReasoning;
+  const row = document.createElement('div');
+  row.className = 'msg-row assistant';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'assistant-avatar';
+  avatar.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
+
+  const col = document.createElement('div');
+  col.className = 'assistant-content';
+
+  let thinkRefs = null;
+  if (isReasoner) {
+    const block = document.createElement('div');
+    block.className = 'think-block ' + (isHistory ? '' : 'open');
+    const header = document.createElement('div');
+    header.className = 'think-header';
+    header.addEventListener('click', () => block.classList.toggle('open'));
+
+    const spinner = document.createElement('div');
+    const labelEl = document.createElement('div');
+    labelEl.className = 'think-label';
+
+    if (isHistory) {
+      spinner.className = 'think-done-icon';
+      spinner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      labelEl.textContent = '已思考';
+    } else {
+      spinner.className = 'think-spinner';
+      labelEl.innerHTML = `正在深度思考<div class="think-dots"><span></span><span></span><span></span></div>`;
+    }
+
+    const chevron = document.createElement('svg');
+    chevron.classList.add('think-chevron');
+    chevron.setAttribute('viewBox','0 0 16 16');
+    chevron.setAttribute('width','14');
+    chevron.setAttribute('height','14');
+    chevron.setAttribute('fill','currentColor');
+    chevron.innerHTML = '<path d="M8 10.5L3 5.5h10L8 10.5z"/>';
+
+    header.append(spinner, labelEl, chevron);
+    const body = document.createElement('div');
+    body.className = 'think-body';
+    const mdDiv = document.createElement('div');
+    mdDiv.className = 'think-md';
+    if (initReasoning) mdDiv.innerHTML = renderMarkdown(initReasoning);
+    body.appendChild(mdDiv);
+    block.append(header, body);
+    col.appendChild(block);
+    thinkRefs = { block, spinner, labelEl, mdDiv, body };
+  }
+
+  const mdEl = document.createElement('div');
+  mdEl.className = 'md-content';
+  if (initContent) {
+    mdEl.innerHTML = renderMarkdown(initContent);
+  } else if (!isHistory) {
+    mdEl.innerHTML = '<span class="cursor"></span>';
+  }
+
+  col.appendChild(mdEl);
+  row.append(avatar, col);
+  document.getElementById('messages').appendChild(row);
+  scrollToBottom(false);
+  return { mdEl, thinkRefs, row };
+}
+
+function renderErrorInRow(mdEl, message) {
+  mdEl.innerHTML = `<div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${esc(message)}</div>`;
+}
+
+// ============================================================
+//  SESSION MANAGEMENT
+// ============================================================
+function getSessionById(id) {
+  return state.sessions.find(s => s.id === id) || null;
+}
+
 function createNewSession(switchNow = true) {
+  // ── Guard: already on a pristine empty session ──────────────────────────
+  if (switchNow) {
+    const cur = getSessionById(state.currentSessionId);
+    if (cur && cur.history.length === 0) {
+      // Already on a blank new chat — just highlight & focus
+      showToast('已在新对话，直接开始输入吧 ✨');
+      const ta = document.getElementById('textarea');
+      ta.focus();
+      // Briefly flash the active item in sidebar for visual feedback
+      const activeItem = document.querySelector('.session-item.active');
+      if (activeItem) {
+        activeItem.classList.add('flash');
+        setTimeout(() => activeItem.classList.remove('flash'), 600);
+      }
+      if (window.innerWidth <= 768) toggleSidebar(false);
+      return;
+    }
+  }
+  // ── Normal: create fresh session ────────────────────────────────────────
   if (state.isStreaming) stopStream();
   const newId = genId();
-  state.sessions.unshift({ id: newId, title: '新对话', model: 'deepseek-chat', history:[], updatedAt: Date.now() });
-  saveSessionsLocally(); if (switchNow) switchSession(newId); renderSessionList();
+  const newSession = {
+    id: newId,
+    title: '新对话',
+    model: state.model,
+    history: [],
+    updatedAt: Date.now(),
+    createdAt: Date.now(),
+  };
+  state.sessions.unshift(newSession);
+  StorageManager.saveSessions();
+  if (switchNow) switchSession(newId);
+  else renderSessionList();
 }
+
 function switchSession(id) {
-  if (state.isStreaming) stopStream();
-  state.currentSessionId = id; const session = state.sessions.find(s => s.id === id); if (!session) return;
-  const targetModelOpt = document.querySelector(`.model-option[data-model="${session.model}"]`);
-  if (targetModelOpt) selectModel(targetModelOpt, false);
-  document.getElementById('messages').innerHTML = '';
-  if (session.history.length === 0) { renderWelcome(); } else { session.history.forEach(m => { if (m.role === 'user') buildUserRow(m.content); else buildAssistantRow(m.content, m.reasoning, true); }); setTimeout(() => scrollToBottom(false), 50); }
-  saveSessionsLocally(); renderSessionList();
-  if(window.innerWidth <= 768) toggleSidebar(false);
+  if (state.isStreaming && state.streamingSessionId !== id) stopStream();
+  const session = getSessionById(id);
+  if (!session) {
+    // Session not found — fallback to first available
+    if (state.sessions.length > 0) switchSession(state.sessions[0].id);
+    else createNewSession(true);
+    return;
+  }
+  state.currentSessionId = id;
+
+  // Restore the model for this session
+  const modelEl = document.querySelector(`.model-option[data-model="${session.model}"]`);
+  if (modelEl) selectModel(modelEl, false);
+
+  // Render messages
+  const msgContainer = document.getElementById('messages');
+  msgContainer.innerHTML = '';
+
+  if (session.history.length === 0) {
+    renderWelcome();
+  } else {
+    // Render validated history
+    session.history.forEach(m => {
+      if (m.role === 'user') {
+        buildUserRow(m.content);
+      } else if (m.role === 'assistant') {
+        buildAssistantRow(m.content, m.reasoning || '', true);
+      }
+    });
+    // Scroll after images/content settle
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => scrollToBottom(false));
+    });
+  }
+
+  StorageManager.saveSessions();
+  renderSessionList();
+  if (window.innerWidth <= 768) toggleSidebar(false);
 }
+
 function deleteSession(e, id) {
-  e.stopPropagation(); if (state.isStreaming && state.currentSessionId === id) stopStream();
+  e.stopPropagation();
+  if (state.isStreaming && state.streamingSessionId === id) stopStream();
   state.sessions = state.sessions.filter(s => s.id !== id);
-  if (state.sessions.length === 0) { createNewSession(true); } else if (state.currentSessionId === id) { switchSession(state.sessions[0].id); } else { saveSessionsLocally(); renderSessionList(); }
+  if (state.sessions.length === 0) {
+    createNewSession(true);
+  } else if (state.currentSessionId === id) {
+    switchSession(state.sessions[0].id);
+  } else {
+    StorageManager.saveSessions();
+    renderSessionList();
+  }
 }
+
 function updateSessionTitleIfNew(text) {
-  const session = state.sessions.find(s => s.id === state.currentSessionId);
-  if (session && session.history.length === 1 && session.title === '新对话') { session.title = text.slice(0, 15) + (text.length > 15 ? '...' : ''); renderSessionList(); }
+  const session = getSessionById(state.currentSessionId);
+  if (session && session.history.length === 1 && session.title === '新对话') {
+    session.title = text.slice(0, 20) + (text.length > 20 ? '…' : '');
+    renderSessionList();
+  }
 }
+
 function renderSessionList() {
-  const list = document.getElementById('session-list'); list.innerHTML = '';
-  state.sessions.sort((a,b) => b.updatedAt - a.updatedAt).forEach(s => {
-    const el = document.createElement('div'); el.className = `session-item ${s.id === state.currentSessionId ? 'active' : ''}`; el.onclick = () => switchSession(s.id);
-    const safeTitle = esc(s.title);
-    el.innerHTML = `<div class="session-title">${safeTitle}</div><button class="delete-session-btn" onclick="deleteSession(event, '${s.id}')" title="删除"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>`;
+  const list = document.getElementById('session-list');
+  list.innerHTML = '';
+
+  // Sort by updated time (newest first) and group
+  const sorted = [...state.sessions].sort((a, b) => b.updatedAt - a.updatedAt);
+  let lastGroup = null;
+
+  sorted.forEach(s => {
+    const group = formatRelativeDate(s.updatedAt);
+    if (group !== lastGroup) {
+      const label = document.createElement('div');
+      label.className = 'session-group-label';
+      label.textContent = group;
+      list.appendChild(label);
+      lastGroup = group;
+    }
+
+    const el = document.createElement('div');
+    el.className = `session-item ${s.id === state.currentSessionId ? 'active' : ''}`;
+    el.onclick = () => switchSession(s.id);
+
+    const inner = document.createElement('div');
+    inner.className = 'session-item-inner';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'session-title';
+    titleEl.textContent = s.title;
+    inner.appendChild(titleEl);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'delete-session-btn';
+    delBtn.title = '删除';
+    delBtn.onclick = (e) => deleteSession(e, s.id);
+    delBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>`;
+
+    el.append(inner, delBtn);
     list.appendChild(el);
   });
 }
-function exportData() {
-  const data = { config: JSON.parse(localStorage.getItem(CFG_KEY) || '{}'), sessions: state.sessions, activeId: state.currentSessionId, exportDate: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'}); const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = `DeepSeek-Chat-Backup-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url); showToast('✓ 导出成功');
-}
-function triggerImport() { document.getElementById('import-file').click(); }
-function handleImport(e) {
-  const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
-  reader.onload = (evt) => {
-    try {
-      const data = JSON.parse(evt.target.result);
-      if (data.config) localStorage.setItem(CFG_KEY, JSON.stringify(data.config));
-      if (data.sessions && Array.isArray(data.sessions)) { state.sessions = data.sessions; saveSessionsLocally(); }
-      if (data.activeId && data.sessions.find(s => s.id === data.activeId)) { localStorage.setItem(ACTIVE_ID_KEY, data.activeId); }
-      showToast('✓ 导入成功，正在刷新...'); setTimeout(() => location.reload(), 800);
-    } catch(err) { showToast('❌ 解析失败: 无效的备份文件'); }
-  };
-  reader.readAsText(file); e.target.value = '';
-}
-function openSettings() {
-  document.getElementById('api-key-input').value = state.apiKey; document.getElementById('base-url-input').value = state.baseUrl === 'https://api.deepseek.com' ? '' : state.baseUrl;
-  document.getElementById('system-prompt-input').value = state.systemPrompt; document.getElementById('sliding-context-input').checked = state.enableSliding;
-  document.getElementById('max-context-input').value = state.maxContextSize; toggleContextSizeUI();
-  document.getElementById('settings-overlay').classList.add('open'); if(window.innerWidth <= 768) toggleSidebar(false);
-}
-function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
-function handleOverlayClick(e) { if (e.target.id === 'settings-overlay') closeSettings(); }
-function toggleContextSizeUI() { const enabled = document.getElementById('sliding-context-input').checked; const wrap = document.getElementById('max-context-wrap'); if (enabled) wrap.classList.remove('hidden'); else wrap.classList.add('hidden'); }
-function saveSettings() {
-  state.apiKey = document.getElementById('api-key-input').value.trim(); const bu = document.getElementById('base-url-input').value.trim();
-  state.baseUrl = bu || 'https://api.deepseek.com'; state.systemPrompt = document.getElementById('system-prompt-input').value.trim();
-  state.enableSliding = document.getElementById('sliding-context-input').checked; state.maxContextSize = parseInt(document.getElementById('max-context-input').value, 10) || 20;
-  localStorage.setItem(CFG_KEY, JSON.stringify({ apiKey: state.apiKey, baseUrl: state.baseUrl, systemPrompt: state.systemPrompt, enableSliding: state.enableSliding, maxContextSize: state.maxContextSize }));
-  closeSettings(); showToast('✓ 设置已保存');
-}
-function toggleModelDropdown() { const open = document.getElementById('model-dropdown').classList.toggle('open'); document.getElementById('model-btn').classList.toggle('open', open); if (open) setTimeout(() => document.addEventListener('click', outsideClose, true), 0); }
-function outsideClose(e) { if (!document.getElementById('model-selector-wrap').contains(e.target)) { document.getElementById('model-dropdown').classList.remove('open'); document.getElementById('model-btn').classList.remove('open'); document.removeEventListener('click', outsideClose, true); } }
-function selectModel(el, save = true) {
-  state.model = el.dataset.model; document.querySelectorAll('.model-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected');
-  document.getElementById('check-deepseek-chat').style.display = 'none'; document.getElementById('check-deepseek-reasoner').style.display = 'none'; document.getElementById('check-' + state.model).style.display = 'inline';
-  document.getElementById('model-label').textContent = { 'deepseek-chat': 'DeepSeek V3.2', 'deepseek-reasoner': 'DeepSeek R1' }[state.model];
-  document.getElementById('model-dropdown').classList.remove('open'); document.getElementById('model-btn').classList.remove('open'); document.removeEventListener('click', outsideClose, true);
-  if (save && state.currentSessionId) { const s = state.sessions.find(x => x.id === state.currentSessionId); if (s) { s.model = state.model; saveSessionsLocally(); } }
-}
-function handleInput() { const ta = document.getElementById('textarea'); ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 160) + 'px'; const btn = document.getElementById('send-btn'); if (!ta.value.trim()) btn.classList.add('empty'); else btn.classList.remove('empty'); }
-function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!document.getElementById('send-btn').disabled) sendMessage(); } }
-const msgsWrap = document.getElementById('messages-wrap'); let isUserScrolledUp = false;
-msgsWrap.addEventListener('scroll', () => { isUserScrolledUp = (msgsWrap.scrollHeight - msgsWrap.scrollTop - msgsWrap.clientHeight) > 60; document.getElementById('scroll-down').classList.toggle('visible', isUserScrolledUp); });
-function scrollToBottom(force = false) { if (!force && isUserScrolledUp) return; msgsWrap.scrollTo({ top: msgsWrap.scrollHeight, behavior: force ? 'smooth' : 'instant' }); }
-function renderWelcome() {
-  document.getElementById('messages').innerHTML = `<div id="welcome"><div id="welcome-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><h1>你好，我是 DeepSeek</h1><p>强大的 AI 助手，支持多模型切换与深度推理思维链</p><div class="welcome-chips"><button class="chip" onclick="sendChip(this)">✦ 用 R1 推理：9.11 和 9.8 哪个大？</button><button class="chip" onclick="sendChip(this)">📝 帮我写 Python 快速排序代码</button><button class="chip" onclick="sendChip(this)">🌐 解释一下量子纠缠</button></div></div>`;
-}
-function hideWelcome() { const w = document.getElementById('welcome'); if (w) w.remove(); }
-function sendChip(btn) { const text = btn.textContent.replace(/^.\s/, '').trim(); if (btn.textContent.includes('R1')) selectModel(document.querySelector('[data-model="deepseek-reasoner"]')); const ta = document.getElementById('textarea'); ta.value = text; handleInput(); sendMessage(); }
-function buildUserRow(text) { hideWelcome(); const row = document.createElement('div'); row.className = 'msg-row user'; const bubble = document.createElement('div'); bubble.className = 'bubble'; bubble.textContent = text; row.appendChild(bubble); document.getElementById('messages').appendChild(row); scrollToBottom(false); }
-function buildAssistantRow(initContent = '', initReasoning = '', isHistory = false) {
-  const isReasoner = state.model === 'deepseek-reasoner' || initReasoning;
-  const row = document.createElement('div'); row.className = 'msg-row assistant';
-  const avatar = document.createElement('div'); avatar.className = 'assistant-avatar';
-  avatar.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
-  const col = document.createElement('div'); col.className = 'assistant-content';
-  let thinkRefs = null;
-  if (isReasoner) {
-    const block = document.createElement('div'); block.className = 'think-block ' + (isHistory ? '' : 'open');
-    const header = document.createElement('div'); header.className = 'think-header'; header.addEventListener('click', () => block.classList.toggle('open'));
-    const spinner = document.createElement('div'); spinner.className = 'think-spinner';
-    const labelEl = document.createElement('div'); labelEl.className = 'think-label';
-    if (isHistory) { spinner.className = 'think-done-icon'; spinner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`; labelEl.innerHTML = `已思考`; } 
-    else { labelEl.innerHTML = `正在深度思考<div class="think-dots"><span></span><span></span><span></span></div>`; }
-    const chevron = document.createElement('svg'); chevron.classList.add('think-chevron'); chevron.setAttribute('viewBox','0 0 16 16'); chevron.setAttribute('width','14'); chevron.setAttribute('height','14'); chevron.setAttribute('fill','currentColor'); chevron.innerHTML = '<path d="M8 10.5L3 5.5h10L8 10.5z"/>';
-    header.append(spinner, labelEl, chevron);
-    const body = document.createElement('div'); body.className = 'think-body';
-    const mdDiv = document.createElement('div'); mdDiv.className = 'think-md';
-    if (initReasoning) mdDiv.innerHTML = renderMarkdown(initReasoning);
-    body.appendChild(mdDiv); block.append(header, body); col.appendChild(block);
-    thinkRefs = { block, spinner, labelEl, mdDiv, body };
-  }
-  const mdEl = document.createElement('div'); mdEl.className = 'md-content';
-  if (initContent) mdEl.innerHTML = renderMarkdown(initContent); else mdEl.innerHTML = '<span class="cursor"></span>';
-  col.appendChild(mdEl); row.append(avatar, col); document.getElementById('messages').appendChild(row); scrollToBottom(false);
-  return { mdEl, thinkRefs };
-}
+
+// ============================================================
+//  SEND MESSAGE + STREAMING
+// ============================================================
 async function sendMessage() {
   if (state.isStreaming) return;
-  const ta = document.getElementById('textarea'); const text = ta.value.trim(); if (!text) return;
-  if (!state.apiKey) { openSettings(); showToast('请先设置 API Key'); return; }
-  ta.value = ''; handleInput();
-  const session = state.sessions.find(s => s.id === state.currentSessionId); if (!session) return;
-  const messagesToSend =[]; if (state.systemPrompt) messagesToSend.push({ role: 'system', content: state.systemPrompt });
-  let recentHistory = session.history; if (state.enableSliding && state.maxContextSize > 0) recentHistory = session.history.slice(-state.maxContextSize);
-  recentHistory.forEach(m => messagesToSend.push({ role: m.role, content: m.content })); messagesToSend.push({ role: 'user', content: text });
-  buildUserRow(text); session.history.push({ role: 'user', content: text }); session.updatedAt = Date.now(); updateSessionTitleIfNew(text); saveSessionsLocally();
-  const refs = buildAssistantRow(); setUI(true); await stream(refs, messagesToSend, session); setUI(false);
+  const ta = document.getElementById('textarea');
+  const text = ta.value.trim();
+  if (!text) return;
+
+  if (!state.apiKey) {
+    openSettings();
+    showToast('请先设置 API Key');
+    return;
+  }
+
+  const session = getSessionById(state.currentSessionId);
+  if (!session) { showToast('无效的对话，请新建对话'); return; }
+
+  ta.value = '';
+  handleInput();
+  triggerHaptic('light');
+  const messagesToSend = [];
+  if (state.systemPrompt) messagesToSend.push({ role: 'system', content: state.systemPrompt });
+
+  let historyToSend = session.history;
+  if (state.enableSliding && state.maxContextSize > 0) {
+    historyToSend = session.history.slice(-state.maxContextSize);
+  }
+  historyToSend.forEach(m => messagesToSend.push({ role: m.role, content: m.content }));
+  messagesToSend.push({ role: 'user', content: text });
+
+  // Add user message to state immediately
+  session.history.push({ role: 'user', content: text, reasoning: '' });
+  session.updatedAt = Date.now();
+  updateSessionTitleIfNew(text);
+  StorageManager.saveSessions();
+
+  buildUserRow(text);
+  const refs = buildAssistantRow('', '', false);
+  setUI(true);
+  // Re-focus for quick follow-up (desktop); on mobile keyboard stays up naturally
+  if (window.innerWidth > 768) document.getElementById('textarea').focus();
+  await stream(refs, messagesToSend, session);
+  setUI(false);
 }
+
 function setUI(streaming) {
-  state.isStreaming = streaming; const btn = document.getElementById('send-btn'); btn.disabled = streaming;
-  btn.classList.toggle('empty', streaming || document.getElementById('textarea').value.trim() === '');
+  state.isStreaming = streaming;
+  const btn = document.getElementById('send-btn');
+  btn.disabled = streaming;
+  btn.classList.toggle('empty', streaming || !document.getElementById('textarea').value.trim());
   document.getElementById('stop-btn').classList.toggle('visible', streaming);
 }
-function stopStream() { state.abortController?.abort(); }
-async function stream({ mdEl, thinkRefs }, messagesToSend, session) {
-  state.abortController = new AbortController(); let thinking = '', answer = '', thinkDone = false; const t0 = Date.now();
+
+function stopStream() {
+  state.abortController?.abort();
+}
+
+async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
+  state.abortController = new AbortController();
+  state.streamingSessionId = session.id;
+
+  let thinking = '', answer = '', thinkDone = false;
+  const t0 = Date.now();
   let renderTimer = null, lastRenderTime = 0;
+
   const updateDOM = () => {
-    if (thinking && thinkRefs) { thinkRefs.mdDiv.innerHTML = renderMarkdown(thinking); if (thinkRefs.block.classList.contains('open') && !isUserScrolledUp) thinkRefs.body.scrollTop = thinkRefs.body.scrollHeight; }
-    if (answer) mdEl.innerHTML = renderMarkdown(answer) + '<span class="cursor"></span>'; scrollToBottom(false);
+    // Guard: check session still exists (might have been deleted)
+    if (!getSessionById(session.id)) return;
+
+    if (thinking && thinkRefs) {
+      thinkRefs.mdDiv.innerHTML = renderMarkdown(thinking);
+      if (thinkRefs.block.classList.contains('open') && !isUserScrolledUp) {
+        thinkRefs.body.scrollTop = thinkRefs.body.scrollHeight;
+      }
+    }
+    if (answer) {
+      mdEl.innerHTML = renderMarkdown(answer) + '<span class="cursor"></span>';
+    }
+    scrollToBottom(false);
   };
+
   const scheduleRender = () => {
     const now = Date.now();
-    if (now - lastRenderTime > 80) { updateDOM(); lastRenderTime = now; } 
-    else if (!renderTimer) { renderTimer = setTimeout(() => { updateDOM(); lastRenderTime = Date.now(); renderTimer = null; }, 80); }
+    if (now - lastRenderTime > 80) {
+      updateDOM();
+      lastRenderTime = now;
+    } else if (!renderTimer) {
+      renderTimer = setTimeout(() => {
+        updateDOM();
+        lastRenderTime = Date.now();
+        renderTimer = null;
+      }, 80);
+    }
   };
+
   try {
-    const res = await fetch(`${state.baseUrl}/chat/completions`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${state.apiKey}` }, body: JSON.stringify({ model: state.model, messages: messagesToSend, stream: true, max_tokens: 8192 }), signal: state.abortController.signal, });
-    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || `HTTP ${res.status}`); }
-    const reader = res.body.getReader(); const decoder = new TextDecoder(); let buf = '';
+    const res = await fetch(`${state.baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.apiKey}`,
+      },
+      body: JSON.stringify({
+        model: state.model,
+        messages: messagesToSend,
+        stream: true,
+        max_tokens: 8192,
+      }),
+      signal: state.abortController.signal,
+    });
+
+    if (!res.ok) {
+      let errMsg = `HTTP ${res.status}`;
+      try { const errJson = await res.json(); errMsg = errJson.error?.message || errMsg; } catch {}
+      throw new Error(errMsg);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
     while (true) {
-      const { done, value } = await reader.read(); if (done) break;
-      buf += decoder.decode(value, { stream: true }); const lines = buf.split('\n'); buf = lines.pop(); 
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop(); // keep incomplete line in buffer
       for (const line of lines) {
-        const t = line.trim(); if (!t || t === 'data: [DONE]') continue;
+        const t = line.trim();
+        if (!t || t === 'data: [DONE]') continue;
         if (!t.startsWith('data: ')) continue;
-        let json; try { json = JSON.parse(t.slice(6)); } catch { continue; }
-        const delta = json.choices?.[0]?.delta; if (!delta) continue;
-        if (delta.reasoning_content && thinkRefs) { thinking += delta.reasoning_content; scheduleRender(); }
+        let json;
+        try { json = JSON.parse(t.slice(6)); } catch { continue; }
+        const delta = json.choices?.[0]?.delta;
+        if (!delta) continue;
+        if (delta.reasoning_content && thinkRefs) {
+          thinking += delta.reasoning_content;
+          scheduleRender();
+        }
         if (delta.content) {
           if (!thinkDone && thinkRefs) {
-            thinkDone = true; const secs = Math.round((Date.now() - t0) / 1000);
-            thinkRefs.spinner.className = 'think-done-icon'; thinkRefs.spinner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
-            thinkRefs.labelEl.innerHTML = `已思考 ${secs} 秒`; thinkRefs.block.classList.remove('open'); thinkRefs.mdDiv.innerHTML = renderMarkdown(thinking);
+            thinkDone = true;
+            const secs = Math.round((Date.now() - t0) / 1000);
+            thinkRefs.spinner.className = 'think-done-icon';
+            thinkRefs.spinner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+            thinkRefs.labelEl.textContent = `已思考 ${secs} 秒`;
+            thinkRefs.block.classList.remove('open');
+            thinkRefs.mdDiv.innerHTML = renderMarkdown(thinking);
           }
-          answer += delta.content; scheduleRender();
+          answer += delta.content;
+          scheduleRender();
         }
       }
     }
+
   } catch (err) {
-    if (err.name !== 'AbortError') { mdEl.innerHTML = `<span style="color:#d93025;font-size:14px">⚠ 错误：${esc(err.message)}</span>`; showToast('请求失败，请检查网络和 API Key'); session.history.pop(); saveSessionsLocally(); }
+    if (err.name === 'AbortError') {
+      // User stopped — partial content is fine, handled in finally
+    } else {
+      renderErrorInRow(mdEl, `请求失败：${err.message}`);
+      showToast('请求失败，请检查网络和 API Key');
+      // Roll back the user message we added
+      const lastIdx = session.history.length - 1;
+      if (session.history[lastIdx]?.role === 'user') {
+        session.history.pop();
+        StorageManager.saveSessions();
+      }
+      return; // skip saving assistant message
+    }
   } finally {
-    if (renderTimer) clearTimeout(renderTimer); updateDOM(); mdEl.querySelector('.cursor')?.remove();
-    if (thinkRefs && !thinkDone && state.abortController?.signal.aborted) { thinkRefs.spinner.className = 'think-done-icon'; thinkRefs.spinner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`; thinkRefs.labelEl.innerHTML = '思考已中止'; }
-    if (answer || thinking) { session.history.push({ role: 'assistant', content: answer, reasoning: thinking }); session.updatedAt = Date.now(); saveSessionsLocally(); renderSessionList(); }
-    state.abortController = null; scrollToBottom(true);
+    if (renderTimer) { clearTimeout(renderTimer); renderTimer = null; }
+    // Final render
+    if (answer) {
+      mdEl.innerHTML = renderMarkdown(answer);
+    }
+    mdEl.querySelector('.cursor')?.remove();
+
+    // Fix think block state on abort/no-answer
+    if (thinkRefs && !thinkDone) {
+      thinkRefs.spinner.className = 'think-done-icon';
+      thinkRefs.spinner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      thinkRefs.labelEl.textContent = thinking ? '思考已中止' : '思考中断';
+      if (thinking) thinkRefs.mdDiv.innerHTML = renderMarkdown(thinking);
+    }
+
+    // Save assistant message if there's content
+    if ((answer || thinking) && getSessionById(session.id)) {
+      session.history.push({ role: 'assistant', content: answer, reasoning: thinking });
+      session.updatedAt = Date.now();
+      StorageManager.saveSessions();
+      renderSessionList();
+    }
+
+    state.abortController = null;
+    state.streamingSessionId = null;
+    scrollToBottom(true);
   }
 }
-let _toastTmr;
-function showToast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(_toastTmr); _toastTmr = setTimeout(() => el.classList.remove('show'), 2600); }
-document.getElementById('textarea').focus();
 
-// === PWA Service Worker 注册逻辑 ===
+// ============================================================
+//  SETTINGS
+// ============================================================
+function openSettings() {
+  document.getElementById('api-key-input').value = state.apiKey;
+  document.getElementById('base-url-input').value =
+    state.baseUrl === 'https://api.deepseek.com' ? '' : state.baseUrl;
+  document.getElementById('system-prompt-input').value = state.systemPrompt;
+  document.getElementById('sliding-context-input').checked = state.enableSliding;
+  document.getElementById('max-context-input').value = state.maxContextSize;
+  toggleContextSizeUI();
+
+  // Show storage info
+  updateStorageInfo();
+
+  document.getElementById('settings-overlay').classList.add('open');
+  if (window.innerWidth <= 768) toggleSidebar(false);
+}
+
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('open');
+}
+
+function handleOverlayClick(e) {
+  if (e.target.id === 'settings-overlay') closeSettings();
+}
+
+function toggleContextSizeUI() {
+  const enabled = document.getElementById('sliding-context-input').checked;
+  document.getElementById('max-context-wrap').classList.toggle('hidden', !enabled);
+}
+
+function saveSettings() {
+  state.apiKey = document.getElementById('api-key-input').value.trim();
+  const bu = document.getElementById('base-url-input').value.trim();
+  state.baseUrl = bu || 'https://api.deepseek.com';
+  state.systemPrompt = document.getElementById('system-prompt-input').value.trim();
+  state.enableSliding = document.getElementById('sliding-context-input').checked;
+  state.maxContextSize = parseInt(document.getElementById('max-context-input').value, 10) || 20;
+  StorageManager.saveConfig({
+    apiKey: state.apiKey, baseUrl: state.baseUrl,
+    systemPrompt: state.systemPrompt, enableSliding: state.enableSliding,
+    maxContextSize: state.maxContextSize,
+  });
+  closeSettings();
+  showToast('✓ 设置已保存');
+}
+
+function updateStorageInfo() {
+  const bytes = StorageManager.getUsageBytes();
+  const kb = (bytes / 1024).toFixed(1);
+  const pct = Math.min(100, (bytes / (5 * 1024 * 1024)) * 100).toFixed(0);
+  document.getElementById('storage-info-text').innerHTML =
+    `已使用约 <strong>${kb} KB</strong>，共 <strong>${state.sessions.length}</strong> 个对话，约占本地存储上限的 <strong>${pct}%</strong>。`;
+  document.getElementById('storage-warning').classList.toggle('visible', bytes >= STORAGE_WARN_BYTES);
+}
+
+function trimOldSessions() {
+  const thirtyDaysAgo = Date.now() - 30 * 86400000;
+  const before = state.sessions.length;
+  state.sessions = state.sessions.filter(s =>
+    s.id === state.currentSessionId || s.updatedAt > thirtyDaysAgo
+  );
+  const removed = before - state.sessions.length;
+  StorageManager.saveSessions();
+  renderSessionList();
+  updateStorageInfo();
+  showToast(removed > 0 ? `✓ 已清理 ${removed} 个旧对话` : '没有超过30天的旧对话');
+}
+
+// ============================================================
+//  MODEL SELECTOR
+// ============================================================
+function toggleModelDropdown() {
+  const open = document.getElementById('model-dropdown').classList.toggle('open');
+  document.getElementById('model-btn').classList.toggle('open', open);
+  if (open) setTimeout(() => document.addEventListener('click', outsideModelClose, true), 0);
+}
+
+function outsideModelClose(e) {
+  if (!document.getElementById('model-selector-wrap').contains(e.target)) {
+    document.getElementById('model-dropdown').classList.remove('open');
+    document.getElementById('model-btn').classList.remove('open');
+    document.removeEventListener('click', outsideModelClose, true);
+  }
+}
+
+function selectModel(el, save = true) {
+  if (!el) return;
+  state.model = el.dataset.model;
+  document.querySelectorAll('.model-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('check-deepseek-chat').style.display = 'none';
+  document.getElementById('check-deepseek-reasoner').style.display = 'none';
+  const checkEl = document.getElementById('check-' + state.model);
+  if (checkEl) checkEl.style.display = 'inline';
+  const labels = { 'deepseek-chat': 'DeepSeek V3', 'deepseek-reasoner': 'DeepSeek R1' };
+  document.getElementById('model-label').textContent = labels[state.model] || state.model;
+  document.getElementById('model-dropdown').classList.remove('open');
+  document.getElementById('model-btn').classList.remove('open');
+  document.removeEventListener('click', outsideModelClose, true);
+  if (save && state.currentSessionId) {
+    const s = getSessionById(state.currentSessionId);
+    if (s) { s.model = state.model; StorageManager.saveSessions(); }
+  }
+}
+
+// ============================================================
+//  SIDEBAR
+// ============================================================
+function toggleSidebar(forceOpen) {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  const isOpen = sb.classList.contains('open');
+  if (forceOpen === true || !isOpen) {
+    sb.classList.add('open');
+    ov.classList.add('open');
+  } else {
+    sb.classList.remove('open');
+    ov.classList.remove('open');
+  }
+}
+
+// ============================================================
+//  EXPORT / IMPORT
+// ============================================================
+function exportData() {
+  const data = {
+    version: 3,
+    config: StorageManager.loadConfig(),
+    sessions: state.sessions,
+    activeId: state.currentSessionId,
+    exportDate: new Date().toISOString(),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `DeepSeek-Backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✓ 导出成功');
+}
+
+function triggerImport() {
+  document.getElementById('import-file').click();
+}
+
+function handleImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const data = JSON.parse(evt.target.result);
+      if (data.config) StorageManager.saveConfig(data.config);
+      if (Array.isArray(data.sessions)) {
+        state.sessions = data.sessions;
+        StorageManager.saveSessions();
+      }
+      if (data.activeId) localStorage.setItem(ACTIVE_ID_KEY, data.activeId);
+      showToast('✓ 导入成功，正在刷新…');
+      setTimeout(() => location.reload(), 900);
+    } catch {
+      showToast('❌ 解析失败：无效的备份文件');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+let _toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ============================================================
+//  INITIALIZATION
+// ============================================================
+(function init() {
+  // 1. Migrate old data formats
+  StorageManager.migrate();
+
+  // 2. Load config
+  const cfg = StorageManager.loadConfig();
+  state.apiKey        = cfg.apiKey        || '';
+  state.baseUrl       = cfg.baseUrl       || 'https://api.deepseek.com';
+  state.systemPrompt  = cfg.systemPrompt  || '';
+  state.enableSliding = cfg.enableSliding !== false;
+  state.maxContextSize= cfg.maxContextSize || 20;
+
+  // 3. Load and validate sessions
+  state.sessions = StorageManager.loadSessions();
+
+  // 4. Determine active session
+  const activeId = StorageManager.getActiveId();
+
+  if (state.sessions.length === 0) {
+    createNewSession(false);
+    switchSession(state.sessions[0].id);
+  } else {
+    const target = state.sessions.find(s => s.id === activeId) || state.sessions[0];
+    switchSession(target.id);
+  }
+
+  // 5. Focus input
+  document.getElementById('textarea').focus();
+})();
+
+// ============================================================
+//  PWA: page visibility — re-check scroll on return to foreground
+// ============================================================
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && !isUserScrolledUp) {
+    scrollToBottom(false);
+  }
+});
+
+// Save on page hide (PWA background)
+window.addEventListener('pagehide', () => {
+  StorageManager.saveSessions();
+});
+
+// ============================================================
+//  PWA: SERVICE WORKER
+// ============================================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('✓ Service Worker 已加载', reg.scope))
+      .then(reg => {
+        console.log('✓ Service Worker 已注册', reg.scope);
+        // Force update check
+        reg.update().catch(() => {});
+      })
       .catch(err => console.warn('⚠ Service Worker 注册失败', err));
   });
 }
