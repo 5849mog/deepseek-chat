@@ -864,8 +864,32 @@ const KATEX_OPTS_DISPLAY = {
 const KATEX_OPTS_INLINE = { ...KATEX_OPTS_DISPLAY, displayMode: false };
 
 function katexRender(src, display) {
+  // ── Sanitize: strip zero-width chars that AI often emits ─────────────
+  let s = src
+    .replace(/[\u200B\u200C\u200D\uFEFF\u00AD]/g, '')   // zero-width / soft-hyphen
+    .replace(/\u00A0/g, ' ');                            // non-breaking space → space
+
+  // ── Unicode subscript/superscript digits → LaTeX equivalents ─────────
+  // e.g. a₁₂ → a_{12},  x² → x^{2}
+  const subMap = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','ₐ':'a','ₑ':'e','ₒ':'o','ₙ':'n','ₚ':'p','ₓ':'x'};
+  const supMap = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ⁿ':'n'};
+  s = s.replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑₒₙₚₓ]+/g, m => '_{' + m.split('').map(c => subMap[c]||c).join('') + '}');
+  s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹ⁿ]+/g, m => '^{' + m.split('').map(c => supMap[c]||c).join('') + '}');
+
+  // ── Environment normalization ─────────────────────────────────────────
+  // 'gathered' is not a valid standalone KaTeX env → use gather*
+  s = s.replace(/\\begin\{gathered\}/g, '\\begin{gather*}')
+       .replace(/\\end\{gathered\}/g,   '\\end{gather*}');
+  // 'aligned' as standalone → align*
+  s = s.replace(/\\begin\{aligned\}(?!\s*\\\\)/g, m => m) // keep if already inside display
+       .replace(/^\\begin\{aligned\}/, '\\begin{align*}')
+       .replace(/\\end\{aligned\}$/, '\\end{align*}');
+  // Single backslash row separator inside matrix/gather: "\ " or "\n" between cells
+  // Only fix lone \ followed by space or end-of-content (not command chars)
+  s = s.replace(/\\ +(?=[^\w\\{])/g, '\\\\ ');
+
   try {
-    return katex.renderToString(src, display ? KATEX_OPTS_DISPLAY : KATEX_OPTS_INLINE);
+    return katex.renderToString(s, display ? KATEX_OPTS_DISPLAY : KATEX_OPTS_INLINE);
   } catch(e) {
     // Fallback: show raw LaTeX in a styled span so user can see what failed
     const delim = display ? ['\\[', '\\]'] : ['\\(', '\\)'];
