@@ -1,4 +1,4 @@
-const CACHE_NAME = 'deepseek-chat-v1';
+const CACHE_NAME = 'deepseek-chat-v2';
 
 // 你想要直接预加载缓存的核心文件
 const CORE_ASSETS =[
