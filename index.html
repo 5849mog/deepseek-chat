@@ -17,58 +17,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-  <!-- MathJax 3 — config MUST appear before the script tag -->
-  <script>
-  window.MathJax = {
-    tex: {
-      packages: {'[+]': [
-        'ams', 'amscd', 'color', 'physics', 'mhchem',
-        'mathtools', 'cancel', 'boldsymbol', 'newcommand',
-        'autoload', 'require', 'cases', 'unicode'
-      ]},
-      inlineMath:  [['\\(', '\\)']],
-      displayMath: [['\\[', '\\]']],
-      processEscapes: false,
-      processEnvironments: true,
-      tags: 'ams',
-      macros: {
-        R: '{\\mathbb{R}}', C: '{\\mathbb{C}}',
-        Z: '{\\mathbb{Z}}', N: '{\\mathbb{N}}',
-        Q: '{\\mathbb{Q}}', H: '{\\mathbb{H}}',
-        F: '{\\mathcal{F}}', L: '{\\mathcal{L}}',
-        d: '{\\mathrm{d}}',
-        eps: '{\\varepsilon}', veps: '{\\varepsilon}'
-      }
-    },
-    chtml: {
-      fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2',
-      scale: 1, minScale: 0.5, mtextInheritFont: true
-    },
-    options: {
-      skipHtmlTags: ['script','noscript','style','textarea','pre','code',
-                     'annotation','annotation-xml'],
-      renderActions: { addMenu: [] }
-    },
-    loader: {
-      load: [
-        '[tex]/amscd','[tex]/color','[tex]/physics',
-        '[tex]/mhchem','[tex]/mathtools','[tex]/cancel',
-        '[tex]/boldsymbol','[tex]/newcommand','[tex]/cases','[tex]/unicode'
-      ]
-    },
-    startup: {
-      typeset: false,
-      ready() {
-        MathJax.startup.defaultReady();
-        window._mjxReady = true;
-        // Dispatch on next tick so listeners registered synchronously can catch it
-        setTimeout(() => document.dispatchEvent(new CustomEvent('mjx-ready')), 0);
-      }
-    }
-  };
-  </script>
-  <!-- async (not defer) so MathJax loads in parallel and fires ready() as soon as possible -->
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+  <!-- KaTeX (synchronous, zero-wait, works in file:// and all environments) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <!-- mhchem: chemical equations  \ce{H2O -> H+ + OH-} -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/mhchem.min.js"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -292,20 +245,22 @@
     .think-md p { margin-bottom:8px; }
     .think-md p:last-child { margin-bottom:0; }
 
-    /* MathJax display math container */
+    /* KaTeX display math */
+    .katex-display { overflow-x: auto; overflow-y: hidden; margin: 14px 0; padding: 4px 0; }
+    .katex-display > .katex { text-align: center; }
+    .katex { font-size: 1.05em; }
+    /* Scrollable display math wrapper */
     .math-display {
-      overflow-x: auto; overflow-y: hidden;
-      padding: 10px 4px; margin: 12px 0;
-      text-align: center; -webkit-overflow-scrolling: touch;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      padding: 6px 0; margin: 10px 0;
     }
-    /* MathJax inline vertical alignment */
-    mjx-container[display="true"] { display: block; overflow-x: auto; padding: 4px 0; }
-    mjx-container { vertical-align: -0.2em; }
-    /* Consistent font size */
-    .md-content mjx-container  { font-size: 1em !important; }
-    .think-md  mjx-container   { font-size: 0.9em !important; }
-    /* MathJax loading placeholder */
-    .mjx-pending { color: var(--text3); font-style: italic; font-size: 13px; }
+    .math-display .katex-display { margin: 0; }
+    /* Render error: show raw LaTeX in orange so it's obvious but not alarming */
+    .katex-err {
+      font-family: var(--mono); font-size: 13px; color: var(--accent2);
+      background: #fff3ed; border: 1px dashed var(--accent);
+      border-radius: 5px; padding: 2px 6px; cursor: help;
+    }
 
     .md-content { font-size:15.5px; line-height:1.7; color:var(--text); word-break:break-word; }
     .md-content p { margin-bottom:14px; }
@@ -542,11 +497,7 @@
           </div>
         </div>
       </div>
-      <div id="header-right">
-        <button id="rerender-btn" onclick="retypesetAll()" title="重新渲染公式" style="display:none;width:34px;height:34px;border:none;background:transparent;border-radius:8px;color:var(--text2);cursor:pointer;align-items:center;justify-content:center;">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        </button>
-      </div>
+      <div id="header-right"></div>
     </div>
     <div id="messages-wrap">
       <div id="messages"></div>
@@ -799,167 +750,194 @@ function formatRelativeDate(ts) {
 }
 
 // ============================================================
-//  MARKDOWN + MATH RENDERER  (MathJax 3 edition)
-//
-//  Strategy:
-//   1. Protect code blocks so marked never sees math inside them
-//   2. Extract ALL math ($$, $, \[, \(, \begin{}) into arrays
-//   3. Run marked on the remaining text
-//   4. Restore math as \(...\) / \[...\] so MathJax can typeset
-//   5. After DOM insertion, call typesetElement(el) to render
+//  MARKDOWN + MATH RENDERER  (KaTeX — synchronous, no async wait)
 // ============================================================
 
-/** HTML-escape only the chars that break innerHTML, so MathJax
- *  can still read the raw LaTeX from the DOM's text nodes.     */
-function mathEsc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const KATEX_OPTS_DISPLAY = {
+  displayMode: true,
+  throwOnError: false,
+  trust: true,
+  strict: false,
+  macros: {
+    // ── Number sets ─────────────────────────────────────────────────────
+    '\\R': '\\mathbb{R}', '\\C': '\\mathbb{C}', '\\Z': '\\mathbb{Z}',
+    '\\N': '\\mathbb{N}', '\\Q': '\\mathbb{Q}', '\\H': '\\mathbb{H}',
+    '\\F': '\\mathbb{F}', '\\K': '\\mathbb{K}',
+    // ── Shorthand ────────────────────────────────────────────────────────
+    '\\eps': '\\varepsilon', '\\veps': '\\varepsilon',
+    '\\phi': '\\varphi',
+    '\\bm': '\\boldsymbol',
+    // ── Calculus / Analysis ──────────────────────────────────────────────
+    // Differential d (upright)
+    '\\d': '\\mathop{}\\!\\mathrm{d}',
+    // Derivatives  \dv{f}{x}  \dv[n]{f}{x}
+    '\\dv': '{\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}}',
+    '\\dvn': '{\\frac{\\mathrm{d}^{#1}#2}{\\mathrm{d}#3^{#1}}}',
+    // Partial derivatives  \pdv{f}{x}  \pdv[n]{f}{x}
+    '\\pdv': '{\\frac{\\partial #1}{\\partial #2}}',
+    '\\pdvn': '{\\frac{\\partial^{#1} #2}{\\partial #3^{#1}}}',
+    // Integral shortcuts
+    '\\intd': '\\int\\!\\mathrm{d}',
+    // ── Vector calculus ──────────────────────────────────────────────────
+    '\\grad': '\\nabla',
+    '\\curl': '\\nabla\\times',
+    '\\div':  '\\nabla\\cdot',
+    '\\lapl': '\\nabla^2',
+    // Vectors
+    '\\vb':  '\\boldsymbol{#1}',
+    '\\vu':  '\\hat{\\boldsymbol{#1}}',
+    '\\va':  '\\vec{#1}',
+    // ── Dirac notation (quantum mechanics) ───────────────────────────────
+    '\\ket':    '{\\left|{#1}\\right\\rangle}',
+    '\\bra':    '{\\left\\langle{#1}\\right|}',
+    '\\braket': '{\\left\\langle{#1}\\middle|{#2}\\right\\rangle}',
+    '\\ketbra': '{\\left|{#1}\\right\\rangle\\!\\left\\langle{#2}\\right|}',
+    '\\expval': '{\\left\\langle{#1}\\right\\rangle}',
+    '\\mel':    '{\\left\\langle{#1}\\middle|{#2}\\middle|{#3}\\right\\rangle}',
+    // ── Linear algebra ───────────────────────────────────────────────────
+    '\\tr':   '\\operatorname{tr}',
+    '\\Tr':   '\\operatorname{Tr}',
+    '\\rank': '\\operatorname{rank}',
+    '\\diag': '\\operatorname{diag}',
+    '\\adj':  '\\operatorname{adj}',
+    '\\eig':  '\\operatorname{eig}',
+    // ── Analysis / Topology ──────────────────────────────────────────────
+    '\\cl':   '\\overline{#1}',
+    '\\intr': '\\operatorname{int}',
+    '\\supp': '\\operatorname{supp}',
+    '\\sgn':  '\\operatorname{sgn}',
+    '\\dist': '\\operatorname{dist}',
+    '\\Res':  '\\operatorname{Res}',
+    '\\pv':   '\\operatorname{P.V.}',
+    // ── Probability / Statistics ─────────────────────────────────────────
+    '\\E':    '\\mathbb{E}',
+    '\\Var':  '\\operatorname{Var}',
+    '\\Cov':  '\\operatorname{Cov}',
+    '\\Prob': '\\mathbb{P}',
+    '\\ind':  '\\mathbf{1}',
+    '\\iid':  '\\overset{\\text{i.i.d.}}{\\sim}',
+    // ── Thermodynamics / Chemistry ───────────────────────────────────────
+    '\\enthalpy':  '\\Delta H',
+    '\\entropy':   '\\Delta S',
+    '\\gibbs':     '\\Delta G',
+    // ── Common physics symbols ───────────────────────────────────────────
+    '\\hbar': '\\hbar',
+    '\\kB':   'k_{\\mathrm{B}}',
+    '\\NA':   'N_{\\mathrm{A}}',
+    // ── siunitx-style unit macros ────────────────────────────────────────
+    // Usage: \SI{value}{unit}  or  \unit{unit}
+    '\\SI':   '{#1\\,\\mathrm{#2}}',
+    '\\unit': '{\\,\\mathrm{#1}}',
+    // Common SI units
+    '\\kg':   '\\mathrm{kg}',   '\\gram': '\\mathrm{g}',
+    '\\meter':'\\mathrm{m}',    '\\m':    '\\mathrm{m}',
+    '\\cm':   '\\mathrm{cm}',   '\\mm':   '\\mathrm{mm}',
+    '\\km':   '\\mathrm{km}',
+    '\\s':    '\\mathrm{s}',    '\\ms':   '\\mathrm{ms}',
+    '\\ns':   '\\mathrm{ns}',
+    '\\Hz':   '\\mathrm{Hz}',   '\\kHz':  '\\mathrm{kHz}',
+    '\\MHz':  '\\mathrm{MHz}',  '\\GHz':  '\\mathrm{GHz}',
+    '\\N':    '\\mathrm{N}',    '\\J':    '\\mathrm{J}',
+    '\\kJ':   '\\mathrm{kJ}',   '\\eV':   '\\mathrm{eV}',
+    '\\keV':  '\\mathrm{keV}',  '\\MeV':  '\\mathrm{MeV}',
+    '\\GeV':  '\\mathrm{GeV}',
+    '\\W':    '\\mathrm{W}',    '\\kW':   '\\mathrm{kW}',
+    '\\V':    '\\mathrm{V}',    '\\mV':   '\\mathrm{mV}',
+    '\\A':    '\\mathrm{A}',    '\\mA':   '\\mathrm{mA}',
+    '\\ohm':  '\\Omega',
+    '\\Pa':   '\\mathrm{Pa}',   '\\kPa':  '\\mathrm{kPa}',
+    '\\mol':  '\\mathrm{mol}',  '\\mmol': '\\mathrm{mmol}',
+    '\\L':    '\\mathrm{L}',    '\\mL':   '\\mathrm{mL}',
+    '\\K':    '\\mathrm{K}',    // Kelvin (capital K without mathrm clash)
+    '\\degC': '{^{\\circ}\\mathrm{C}}',
+    '\\micro':'\\mu',
+    '\\nano': '\\mathrm{n}',
+    '\\pico': '\\mathrm{p}',
+    // ── Arrows / relations ───────────────────────────────────────────────
+    '\\implies':    '\\Rightarrow',
+    '\\iff':        '\\Leftrightarrow',
+    '\\coloneqq':   '\\mathrel{:=}',
+    '\\eqqcolon':   '\\mathrel{=:}',
+    '\\defeq':      '\\mathrel{\\overset{\\mathrm{def}}{=}}',
+  }
+};
+const KATEX_OPTS_INLINE = { ...KATEX_OPTS_DISPLAY, displayMode: false };
+
+function katexRender(src, display) {
+  try {
+    return katex.renderToString(src, display ? KATEX_OPTS_DISPLAY : KATEX_OPTS_INLINE);
+  } catch(e) {
+    // Fallback: show raw LaTeX in a styled span so user can see what failed
+    const delim = display ? ['\\[', '\\]'] : ['\\(', '\\)'];
+    return `<span class="katex-err" title="${esc(String(e))}">${esc(delim[0] + src + delim[1])}</span>`;
+  }
 }
 
 function renderMarkdown(text) {
   if (!text || typeof text !== 'string') return '';
 
-  const codeBlocks   = [];   // protected verbatim code
-  const displayMath  = [];   // \[...\]  and  $$...$$  and \begin{...}
-  const inlineMath   = [];   // \(...\)  and  $...$
+  const saved = [];   // { type:'code'|'display'|'inline', rendered:string }
+
+  const protect = (rendered) => {
+    saved.push(rendered);
+    return `\x02${saved.length - 1}\x03`;
+  };
 
   let s = text;
 
-  // ── 0. Escaped dollar: \$ → sentinel ──────────────────────────────────
+  // 0. Escaped dollar → sentinel
   s = s.replace(/\\\$/g, '\x02ESCD\x03');
 
-  // ── 1. Fenced + inline code (highest priority) ────────────────────────
-  s = s.replace(/(`{3,}[\s\S]*?`{3,}|`[^`\n]+`)/g, m => {
-    codeBlocks.push(m);
-    return `\x02C${codeBlocks.length - 1}\x03`;
-  });
+  // 1. Fenced code blocks & inline code  (highest priority — protect fully)
+  s = s.replace(/(`{3,})([\s\S]*?)\1|(`[^`\n]+`)/g, m => protect(m));
 
-  // ── 2. Display math ───────────────────────────────────────────────────
-  // $$...$$
-  s = s.replace(/\$\$([\s\S]+?)\$\$/g, (_, inner) => {
-    displayMath.push(inner.trim());
-    return `\x02D${displayMath.length - 1}\x03`;
-  });
-  // \[...\]
-  s = s.replace(/\\\[([\s\S]+?)\\\]/g, (_, inner) => {
-    displayMath.push(inner.trim());
-    return `\x02D${displayMath.length - 1}\x03`;
-  });
-  // \begin{env}...\end{env}  (align, equation, matrix, tikzcd, etc.)
-  s = s.replace(/\\begin\{([a-zA-Z*]+)\}([\s\S]*?)\\end\{\1\}/g, fullMatch => {
-    displayMath.push(fullMatch.trim());
-    return `\x02D${displayMath.length - 1}\x03`;
-  });
+  // 2. Display math: $$...$$
+  s = s.replace(/\$\$([\s\S]+?)\$\$/g, (_, inner) =>
+    protect(`<div class="math-display">${katexRender(inner.trim(), true)}</div>`)
+  );
 
-  // ── 3. Inline math ────────────────────────────────────────────────────
-  // \(...\)
-  s = s.replace(/\\\(([\s\S]+?)\\\)/g, (_, inner) => {
-    inlineMath.push(inner.trim());
-    return `\x02I${inlineMath.length - 1}\x03`;
-  });
-  // $...$ — careful not to match $$, and require non-space at edges
-  s = s.replace(/(?<!\$)\$([^\s$\n][^$\n]*?[^\s$\n]|[^\s$\n])\$(?!\$)/g, (_, inner) => {
-    inlineMath.push(inner.trim());
-    return `\x02I${inlineMath.length - 1}\x03`;
-  });
+  // 3. Display math: \[...\]
+  s = s.replace(/\\\[([\s\S]+?)\\\]/g, (_, inner) =>
+    protect(`<div class="math-display">${katexRender(inner.trim(), true)}</div>`)
+  );
 
-  // ── 4. Restore code blocks (marked processes them normally) ───────────
-  s = s.replace(/\x02C(\d+)\x03/g, (_, i) => codeBlocks[+i]);
-  s = s.replace(/\x02ESCD\x03/g, '\\$');
+  // 4. LaTeX environments: \begin{env}...\end{env}
+  //    (align, equation*, matrix, pmatrix, cases, gather, etc.)
+  s = s.replace(/\\begin\{([a-zA-Z*]+)\}([\s\S]*?)\\end\{\1\}/g, fullMatch =>
+    protect(`<div class="math-display">${katexRender(fullMatch.trim(), true)}</div>`)
+  );
 
-  // ── 5. Run marked ─────────────────────────────────────────────────────
+  // 5. Inline math: \(...\)
+  s = s.replace(/\\\(([\s\S]+?)\\\)/g, (_, inner) =>
+    protect(katexRender(inner.trim(), false))
+  );
+
+  // 6. Inline math: $...$ (non-greedy, avoid $$, require non-space at edges)
+  s = s.replace(/(?<!\$)\$([^\s$\n][^$\n]*?[^\s$\n]|[^\s$\n])\$(?!\$)/g, (_, inner) =>
+    protect(katexRender(inner.trim(), false))
+  );
+
+  // 7. Restore code blocks so marked can highlight them
+  s = s.replace(/\x02(\d+)\x03/g, (_, i) => saved[+i]);
+  s = s.replace(/\x02ESCD\x03/g, '$');
+
+  // 8. Run marked
   let html = marked.parse(s);
 
-  // ── 6. Restore inline math as \(...\) — MathJax will typeset ──────────
-  html = html.replace(/\x02I(\d+)\x03/g, (_, i) =>
-    `\\(${mathEsc(inlineMath[+i])}\\)`
-  );
+  // 9. Restore all rendered math + code (they were already converted to HTML)
+  //    marked may have wrapped them in <p>; restore inline without a block wrapper
+  html = html.replace(/\x02(\d+)\x03/g, (_, i) => saved[+i] ?? '');
 
-  // ── 7. Restore display math — each in its own scrollable div ──────────
-  html = html.replace(/\x02D(\d+)\x03/g, (_, i) =>
-    `</p><div class="math-display">\\[${mathEsc(displayMath[+i])}\\]</div><p>`
-  );
-
-  // Clean up empty paragraphs left by the injection above
+  // 10. Clean up empty <p></p> around display math blocks
+  html = html.replace(/<p>\s*(<div class="math-display">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
   html = html.replace(/<p>\s*<\/p>/g, '');
 
   return html;
 }
 
-// ============================================================
-//  MATHJAX ASYNC TYPESET LAYER
-// ============================================================
-
-// ============================================================
-//  MATHJAX ASYNC TYPESET LAYER
-// ============================================================
-
-/**
- * Returns a Promise that resolves when MathJax is ready to typeset.
- * - If already ready: resolves immediately (next microtask)
- * - If not yet ready: waits for the 'mjx-ready' event (max 12s)
- * - If MathJax never loads (e.g. offline): resolves anyway after timeout
- */
-function mjxReady() {
-  return new Promise(resolve => {
-    if (window._mjxReady && window.MathJax?.typesetPromise) {
-      resolve(); return;
-    }
-    const onReady = () => {
-      clearTimeout(fallback);
-      resolve();
-    };
-    // Also poll in case the event was already dispatched before we listened
-    const poll = setInterval(() => {
-      if (window._mjxReady && window.MathJax?.typesetPromise) {
-        clearInterval(poll);
-        clearTimeout(fallback);
-        resolve();
-      }
-    }, 80);
-    document.addEventListener('mjx-ready', () => {
-      clearInterval(poll); onReady();
-    }, { once: true });
-    const fallback = setTimeout(() => { clearInterval(poll); resolve(); }, 12000);
-  });
-}
-
-/**
- * Typeset a single DOM element.
- * Safe to call before MathJax loads — will wait up to 12s.
- */
-async function typesetElement(el) {
-  if (!el) return;
-  await mjxReady();
-  if (!window.MathJax?.typesetPromise) return; // still not available (offline)
-  try {
-    MathJax.typesetClear([el]);
-    await MathJax.typesetPromise([el]);
-  } catch(e) {
-    console.warn('[MathJax]', e);
-  }
-}
-
-/**
- * Debounced typeset during streaming — fires 500ms after last DOM update.
- * Uses a per-element queue so concurrent streams don't interfere.
- */
-const _mjxTimers = new WeakMap();
-function scheduleTypeset(el) {
-  if (!el) return;
-  const existing = _mjxTimers.get(el);
-  if (existing) clearTimeout(existing);
-  const t = setTimeout(async () => {
-    _mjxTimers.delete(el);
-    if (!window._mjxReady || !window.MathJax?.typesetPromise) return;
-    try {
-      MathJax.typesetClear([el]);
-      await MathJax.typesetPromise([el]);
-    } catch {}
-  }, 500);
-  _mjxTimers.set(el, t);
-}
-
-
+// No-op stubs — synchronous KaTeX needs no async typeset pass
+async function typesetElement(_el) {}
+function scheduleTypeset(_el) {}
 
 
 const myRenderer = new marked.Renderer();
@@ -1354,12 +1332,8 @@ function switchSession(id) {
         buildAssistantRow(m.content, m.reasoning || '', true);
       }
     });
-    // Typeset all math in the rendered history, then scroll
-    const msgEl = document.getElementById('messages');
     requestAnimationFrame(() => {
-      typesetElement(msgEl).then(() => {
-        requestAnimationFrame(() => scrollToBottom(false));
-      });
+      requestAnimationFrame(() => scrollToBottom(false));
     });
   }
 
@@ -1606,7 +1580,7 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
   } finally {
     if (renderTimer) { clearTimeout(renderTimer); renderTimer = null; }
 
-    // Final render — clean cursor, set final HTML, then typeset
+    // Final render — remove cursor, set complete HTML (KaTeX already rendered inline)
     if (answer) {
       mdEl.innerHTML = renderMarkdown(answer);
     }
@@ -1618,14 +1592,6 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
       thinkRefs.spinner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
       thinkRefs.labelEl.textContent = thinking ? '思考已中止' : '思考中断';
       if (thinking) thinkRefs.mdDiv.innerHTML = renderMarkdown(thinking);
-    }
-
-    // Full MathJax typeset on completed response (covers answer + think)
-    const colEl = mdEl.closest('.assistant-content');
-    if (colEl) {
-      typesetElement(colEl).then(() => scrollToBottom(false));
-    } else {
-      typesetElement(mdEl).then(() => scrollToBottom(false));
     }
 
     // Save assistant message if there's content
@@ -1857,30 +1823,6 @@ function showToast(msg) {
   // 5. Focus input
   document.getElementById('textarea').focus();
 })();
-
-// ============================================================
-//  RETYPESET ALL — call when MathJax ready or user taps re-render
-// ============================================================
-async function retypesetAll() {
-  const btn = document.getElementById('rerender-btn');
-  if (btn) { btn.style.animation = 'spin .7s linear infinite'; }
-  const msgs = document.getElementById('messages');
-  await typesetElement(msgs);
-  if (btn) { btn.style.animation = ''; }
-  scrollToBottom(false);
-}
-
-// When MathJax becomes ready, typeset any messages already in the DOM
-// (covers the case where messages loaded before MathJax finished)
-document.addEventListener('mjx-ready', () => {
-  const msgs = document.getElementById('messages');
-  if (msgs && msgs.children.length > 0 && !document.getElementById('welcome')) {
-    typesetElement(msgs).then(() => scrollToBottom(false));
-  }
-  // Show re-render button (useful on slow connections)
-  const btn = document.getElementById('rerender-btn');
-  if (btn) btn.style.display = 'flex';
-}, { once: true });
 
 // ============================================================
 //  PWA: page visibility — re-check scroll on return to foreground
