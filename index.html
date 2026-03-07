@@ -482,16 +482,16 @@
         </div>
         <div id="model-selector-wrap">
           <button id="model-btn" onclick="toggleModelDropdown()">
-            <span id="model-label">DeepSeek V3</span>
+            <span id="model-label">DeepSeek-V3.2</span>
             <svg class="chevron" viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 10.5L3 5.5h10L8 10.5z"/></svg>
           </button>
           <div id="model-dropdown">
             <div class="model-option selected" data-model="deepseek-chat" onclick="selectModel(this)">
-              <div class="model-option-name">DeepSeek V3<span class="checkmark" id="check-deepseek-chat">✓</span></div>
+              <div class="model-option-name">DeepSeek-V3.2<span class="checkmark" id="check-deepseek-chat">✓</span></div>
               <div class="model-option-desc">通用对话 · 快速高效</div>
             </div>
             <div class="model-option" data-model="deepseek-reasoner" onclick="selectModel(this)">
-              <div class="model-option-name">DeepSeek R1<span class="think-badge">思维链</span><span class="checkmark" id="check-deepseek-reasoner" style="display:none">✓</span></div>
+              <div class="model-option-name">DeepSeek-V3.2-Thinking<span class="think-badge">思维链</span><span class="checkmark" id="check-deepseek-reasoner" style="display:none">✓</span></div>
               <div class="model-option-desc">深度推理 · 逐步思考</div>
             </div>
           </div>
@@ -1728,7 +1728,7 @@ function selectModel(el, save = true) {
   document.getElementById('check-deepseek-reasoner').style.display = 'none';
   const checkEl = document.getElementById('check-' + state.model);
   if (checkEl) checkEl.style.display = 'inline';
-  const labels = { 'deepseek-chat': 'DeepSeek V3', 'deepseek-reasoner': 'DeepSeek R1' };
+  const labels = { 'deepseek-chat': 'DeepSeek-V3.2', 'deepseek-reasoner': 'DeepSeek-V3.2-Thinking' };
   document.getElementById('model-label').textContent = labels[state.model] || state.model;
   document.getElementById('model-dropdown').classList.remove('open');
   document.getElementById('model-btn').classList.remove('open');
