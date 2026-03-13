@@ -13,7 +13,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
@@ -30,62 +30,69 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* ── Core palette ──────────────────────────────────────────── */
-      --bg:           #faf9f7;
-      --bg2:          #f2f0ec;
-      --bg3:          #e8e4dd;
-      --sidebar-bg:   #f2f0eb;
-      --sidebar-hover:#e9e5de;
-      --sidebar-act:  #e0dbd2;
-      --border:       #e5e1da;
-      --border2:      #cec9be;
-      --text:         #1a1714;
-      --text2:        #56524c;
-      --text3:        #9a948c;
-      --user-bg:      #ede9e2;
-      --user-border:  #dfd9d0;
-      --accent:       #cf6736;
-      --accent2:      #a84f25;
-      --accent-rgb:   207,103,54;
-      /* ── Think block — warm violet (mirrors Anthropic reasoning) ─ */
-      --think-bg:        #f5f3fb;
-      --think-bg-done:   #f8f7fc;
-      --think-border:    #c5bce8;
-      --think-accent:    #7c6fc9;
-      --think-accent-dim:#a89fe0;
-      --think-text:      #5a5270;
-      --think-text-dim:  #8c85a8;
-      /* ── Code ───────────────────────────────────────────────────── */
-      --code-bg:      #f3f1ec;
-      --code-border:  #e2ddd5;
-      /* ── Shadows ─────────────────────────────────────────────────  */
-      --shadow-xs:    0 1px 2px rgba(0,0,0,.03);
-      --shadow-sm:    0 1px 3px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.04);
-      --shadow:       0 2px 8px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
-      --shadow-md:    0 6px 20px rgba(0,0,0,.09), 0 2px 6px rgba(0,0,0,.05);
-      --shadow-lg:    0 16px 48px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
-      /* ── Tokens ──────────────────────────────────────────────────  */
+      /* ── Core palette — warm parchment ────────────────────────── */
+      --bg:           #f7f4ef;
+      --bg2:          #ede9e2;
+      --bg3:          #e3ddd4;
+      --sidebar-bg:   #edeae4;
+      --sidebar-hover:#e4e0d8;
+      --sidebar-act:  #d8d2c8;
+      --border:       #ddd8d0;
+      --border2:      #c8c1b6;
+      --text:         #18150f;
+      --text2:        #4e4940;
+      --text3:        #96908a;
+      --user-bg:      #e8e3da;
+      --user-border:  #d9d3c9;
+      --accent:       #c85f2a;
+      --accent2:      #a04820;
+      --accent-rgb:   200,95,42;
+      /* ── Think block ──────────────────────────────────────────── */
+      --think-bg:        #f3f1fa;
+      --think-bg-done:   #f7f6fc;
+      --think-border:    #c4bae8;
+      --think-accent:    #7060c4;
+      --think-accent-dim:#a898dc;
+      --think-text:      #524870;
+      --think-text-dim:  #8a84a4;
+      /* ── Code ─────────────────────────────────────────────────── */
+      --code-bg:      #f0ede7;
+      --code-border:  #ddd8d0;
+      /* ── Shadows ──────────────────────────────────────────────── */
+      --shadow-xs:    0 1px 2px rgba(0,0,0,.04);
+      --shadow-sm:    0 1px 4px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --shadow:       0 2px 10px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.05);
+      --shadow-md:    0 6px 24px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
+      --shadow-lg:    0 18px 52px rgba(0,0,0,.13), 0 4px 16px rgba(0,0,0,.07);
+      /* ── Typography ───────────────────────────────────────────── */
       --font:         'DM Sans', system-ui, -apple-system, sans-serif;
+      --font-serif:   'Instrument Serif', Georgia, serif;
       --mono:         'DM Mono', 'Fira Code', ui-monospace, monospace;
-      --header-h:     54px;
-      --sidebar-w:    264px;
+      /* ── Layout ───────────────────────────────────────────────── */
+      --header-h:     52px;
+      --sidebar-w:    268px;
       --radius-sm:    8px;
       --radius:       12px;
       --radius-lg:    18px;
-      --radius-xl:    22px;
+      --radius-xl:    24px;
       --ease-spring:  cubic-bezier(0.34, 1.3, 0.64, 1);
       --ease-out:     cubic-bezier(0.2, 0, 0, 1);
       --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
-      /* ── User-adjustable display prefs ─────────────────────────── */
+      /* ── User prefs ───────────────────────────────────────────── */
       --chat-font-size: 15px;
-      --msg-gap:        18px;
+      --msg-gap:        20px;
     }
 
     html, body {
       height: 100%; width: 100%; overflow: hidden;
-      font-family: var(--font); background: var(--bg); color: var(--text);
+      font-family: var(--font); color: var(--text);
       -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
+      /* Textured parchment background */
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(200,95,42,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(112,96,196,.05) 0%, transparent 55%);
     }
 
     #root-layout { display: flex; height: 100dvh; width: 100%; position: relative; }
@@ -93,7 +100,6 @@
     /* ════════════════════════════════════════════════════════════
        SIDEBAR
     ════════════════════════════════════════════════════════════ */
-    /* ══ SIDEBAR ════════════════════════════════════════════════════ */
     #sidebar {
       width: var(--sidebar-w);
       background: var(--sidebar-bg);
@@ -102,78 +108,83 @@
       flex-shrink: 0;
       transition: transform 0.3s var(--ease-in-out);
       z-index: 200;
+      /* subtle inner shadow on right edge */
+      box-shadow: inset -1px 0 0 var(--border), 2px 0 12px rgba(0,0,0,.04);
     }
 
-    /* ── Header: logo + app name + new chat ─────────────────────── */
     .sidebar-header {
-      padding: 14px 14px 10px;
+      padding: 16px 14px 10px;
       flex-shrink: 0;
     }
     .sidebar-brand {
-      display: flex; align-items: center; gap: 9px;
-      padding: 4px 4px 12px;
+      display: flex; align-items: center; gap: 10px;
+      padding: 2px 2px 14px;
     }
     .sidebar-brand-logo {
-      width: 26px; height: 26px; flex-shrink: 0;
-      background: linear-gradient(150deg, #e87a4a 0%, #c95e30 55%, #b34d20 100%);
-      border-radius: 8px;
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: linear-gradient(150deg, #e8763e 0%, #c25628 55%, #a84020 100%);
+      border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 6px rgba(185,72,32,.28), inset 0 1px 0 rgba(255,255,255,.1);
+      box-shadow: 0 2px 8px rgba(168,64,32,.32), inset 0 1px 0 rgba(255,255,255,.12);
     }
-    .sidebar-brand-logo svg { width: 13px; height: 13px; }
+    .sidebar-brand-logo svg { width: 14px; height: 14px; }
     .sidebar-brand-name {
-      font-size: 14px; font-weight: 700; color: var(--text);
-      letter-spacing: -.02em; flex: 1;
+      font-size: 14.5px; font-weight: 700; color: var(--text);
+      letter-spacing: -.025em; flex: 1;
     }
     .sidebar-brand-version {
-      font-size: 10px; font-weight: 500; color: var(--text3);
-      background: var(--bg3); border-radius: 4px; padding: 1px 6px;
-      letter-spacing: .03em;
+      font-size: 10px; font-weight: 600; color: var(--text3);
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 5px; padding: 2px 6px;
+      letter-spacing: .02em;
     }
 
     .new-chat-btn {
       width: 100%; display: flex; align-items: center; gap: 8px;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      background: var(--text);
       border: none; border-radius: var(--radius);
       padding: 10px 14px; font-family: var(--font); font-size: 13px; font-weight: 600;
       color: #fff; cursor: pointer;
-      transition: filter .15s, transform .12s;
-      box-shadow: 0 2px 8px rgba(var(--accent-rgb),.3);
+      transition: background .15s, transform .12s, box-shadow .15s;
       justify-content: center;
+      letter-spacing: .01em;
+      box-shadow: 0 2px 8px rgba(0,0,0,.18);
     }
-    .new-chat-btn:hover { filter: brightness(1.08); }
-    .new-chat-btn:active { transform: scale(.97); filter: brightness(.96); }
-    .new-chat-btn svg { width: 14px; height: 14px; opacity: .9; flex-shrink: 0; }
-    .new-chat-btn span { letter-spacing: .01em; }
+    .new-chat-btn:hover { background: #2c2620; box-shadow: 0 3px 12px rgba(0,0,0,.24); }
+    .new-chat-btn:active { transform: scale(.97); box-shadow: none; }
+    .new-chat-btn svg { width: 14px; height: 14px; opacity: .85; flex-shrink: 0; }
 
-    /* ── Search box ─────────────────────────────────────────────── */
+    /* Search */
     .sidebar-search-wrap {
-      padding: 8px 14px 2px;
+      padding: 8px 14px 4px;
       flex-shrink: 0;
+      position: relative;
     }
     .sidebar-search {
-      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      width: 100%; background: rgba(255,255,255,.6); border: 1px solid var(--border);
       border-radius: var(--radius-sm); padding: 7px 10px 7px 32px;
       font-family: var(--font); font-size: 12.5px; color: var(--text);
-      outline: none; transition: border-color .15s, box-shadow .15s;
+      outline: none; transition: border-color .15s, box-shadow .15s, background .15s;
       box-sizing: border-box;
     }
     .sidebar-search::placeholder { color: var(--text3); }
-    .sidebar-search:focus { border-color: var(--border2); box-shadow: 0 0 0 2px rgba(var(--accent-rgb),.08); }
-    .sidebar-search-wrap { position: relative; }
+    .sidebar-search:focus {
+      border-color: var(--border2); background: rgba(255,255,255,.85);
+      box-shadow: 0 0 0 2.5px rgba(var(--accent-rgb),.1);
+    }
     .sidebar-search-icon {
       position: absolute; left: 24px; top: 50%; transform: translateY(-50%);
       color: var(--text3); pointer-events: none; width: 13px; height: 13px;
     }
 
-    /* ── Session count badge ────────────────────────────────────── */
+    /* Section header */
     .sidebar-section-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 14px 2px;
+      padding: 10px 16px 4px;
     }
     .sidebar-section-title {
       font-size: 10px; font-weight: 700; color: var(--text3);
-      text-transform: uppercase; letter-spacing: .08em; user-select: none;
+      text-transform: uppercase; letter-spacing: .09em; user-select: none;
     }
     .sidebar-count {
       font-size: 10px; font-weight: 600; color: var(--text3);
@@ -181,7 +192,7 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* ── Session list ───────────────────────────────────────────── */
+    /* Session list */
     #session-list {
       flex: 1; overflow-y: auto; padding: 2px 8px 8px;
       display: flex; flex-direction: column; gap: 1px;
@@ -193,23 +204,22 @@
 
     .session-group-label {
       font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .08em;
-      text-transform: uppercase; padding: 10px 6px 3px; user-select: none;
+      text-transform: uppercase; padding: 10px 8px 3px; user-select: none;
     }
 
     .session-item {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 7px 8px; border-radius: var(--radius-sm); cursor: pointer;
-      transition: background .1s, color .1s; color: var(--text2);
+      padding: 8px 8px; border-radius: var(--radius-sm); cursor: pointer;
+      transition: background .12s, color .12s; color: var(--text2);
       position: relative; gap: 4px;
     }
     .session-item:hover { background: var(--sidebar-hover); color: var(--text); }
     .session-item.active {
       background: var(--sidebar-act); color: var(--text);
     }
-    /* Active indicator bar */
     .session-item.active::before {
-      content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
-      width: 3px; border-radius: 0 2px 2px 0;
+      content: ''; position: absolute; left: 0; top: 22%; bottom: 22%;
+      width: 3px; border-radius: 0 3px 3px 0;
       background: var(--accent);
     }
 
@@ -237,17 +247,16 @@
       cursor: pointer; opacity: 0; transition: all 0.12s; flex-shrink: 0;
     }
     .session-item:hover .delete-session-btn { opacity: 1; }
-    .delete-session-btn:hover { background: rgba(220,53,69,.1); color: #c9303a; }
+    .delete-session-btn:hover { background: rgba(200,40,40,.1); color: #b83030; }
 
-    /* Empty state */
     .session-empty {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 8px; padding: 40px 20px; color: var(--text3); text-align: center;
+      gap: 8px; padding: 48px 20px; color: var(--text3); text-align: center;
     }
-    .session-empty svg { width: 32px; height: 32px; opacity: .35; }
-    .session-empty p { font-size: 12.5px; line-height: 1.5; }
+    .session-empty svg { width: 30px; height: 30px; opacity: .3; }
+    .session-empty p { font-size: 12.5px; line-height: 1.55; }
 
-    /* ── Footer: tool buttons ───────────────────────────────────── */
+    /* Sidebar footer */
     .sidebar-footer {
       padding: 8px 8px calc(14px + env(safe-area-inset-bottom, 0px));
       border-top: 1px solid var(--border); flex-shrink: 0;
@@ -258,34 +267,36 @@
       background: transparent; border: none;
       padding: 8px 10px; border-radius: var(--radius-sm);
       font-family: var(--font); font-size: 12.5px; font-weight: 500;
-      color: var(--text2); cursor: pointer; transition: background .1s, color .1s;
+      color: var(--text2); cursor: pointer; transition: background .12s, color .12s;
       text-align: left;
     }
     .tool-btn:hover { background: var(--sidebar-hover); color: var(--text); }
-    .tool-btn svg { width: 14px; height: 14px; flex-shrink: 0; opacity: .8; }
+    .tool-btn svg { width: 14px; height: 14px; flex-shrink: 0; opacity: .75; }
     .tool-btn:hover svg { opacity: 1; }
-    /* Footer divider before settings */
-    .tool-btn-divider {
-      height: 1px; background: var(--border); margin: 4px 0;
-    }
+    .tool-btn-divider { height: 1px; background: var(--border); margin: 4px 2px; }
 
     #sidebar-overlay {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.32);
-      backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); z-index: 199;
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.30);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 199;
     }
     #sidebar-overlay.open { display: block; }
 
     /* ════════════════════════════════════════════════════════════
-       HEADER
+       MAIN AREA
     ════════════════════════════════════════════════════════════ */
     #app { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; overflow: hidden; }
 
+    /* ════════════════════════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════════════════════════ */
     #header {
       position: sticky; top: 0; z-index: 100; height: var(--header-h);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 14px; background: rgba(250,249,247,0.88);
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border); flex-shrink: 0;
+      padding: 0 16px;
+      background: rgba(247,244,239,.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
     #header-left { display: flex; align-items: center; gap: 8px; }
 
@@ -298,15 +309,15 @@
 
     #logo {
       width: 28px; height: 28px;
-      background: linear-gradient(150deg, #e87a4a 0%, #c95e30 55%, #b34d20 100%);
+      background: linear-gradient(150deg, #e8763e 0%, #c25628 55%, #a84020 100%);
       border-radius: 9px; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; box-shadow: 0 2px 6px rgba(185,72,32,.35), inset 0 1px 0 rgba(255,255,255,.12);
+      flex-shrink: 0; box-shadow: 0 2px 8px rgba(168,64,32,.30), inset 0 1px 0 rgba(255,255,255,.12);
     }
     #logo svg { width: 15px; height: 15px; }
 
     #model-selector-wrap { position: relative; }
     #model-btn {
-      display: flex; align-items: center; gap: 5px; padding: 5px 10px 5px 11px;
+      display: flex; align-items: center; gap: 5px; padding: 5px 10px 5px 12px;
       background: transparent; border: 1px solid transparent; border-radius: 20px;
       font-family: var(--font); font-size: 13.5px; font-weight: 600; color: var(--text);
       cursor: pointer; transition: all .15s; white-space: nowrap;
@@ -316,8 +327,9 @@
     #model-btn.open .chevron { transform: rotate(180deg); }
 
     #model-dropdown {
-      display: none; position: absolute; top: calc(100% + 7px); left: 0;
-      min-width: 240px; background: var(--bg); border: 1px solid var(--border);
+      display: none; position: absolute; top: calc(100% + 8px); left: 0;
+      min-width: 248px; background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; z-index: 300;
       animation: dropIn .18s var(--ease-spring);
     }
@@ -334,10 +346,9 @@
     .model-option-desc { font-size: 11.5px; color: var(--text3); line-height: 1.4; }
     .think-badge {
       font-size: 9px; font-weight: 700; letter-spacing: .05em; padding: 1.5px 6px; border-radius: 5px;
-      background: linear-gradient(135deg, var(--think-accent), #5b4faa); color: #fff;
+      background: linear-gradient(135deg, var(--think-accent), #5040a0); color: #fff;
     }
     .checkmark { color: var(--accent); font-size: 13px; margin-left: auto; }
-
     #header-right { display: flex; align-items: center; gap: 6px; }
 
     /* ════════════════════════════════════════════════════════════
@@ -350,21 +361,21 @@
     }
     #messages-wrap::-webkit-scrollbar { width: 4px; }
     #messages-wrap::-webkit-scrollbar-track { background: transparent; }
-    #messages-wrap::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; transition: background .2s; }
+    #messages-wrap::-webkit-scrollbar-thumb { background: transparent; border-radius: 2px; }
     #messages-wrap:hover::-webkit-scrollbar-thumb { background: var(--border2); }
 
-    #messages { width: 100%; max-width: 860px; padding: 28px 20px 48px; display: flex; flex-direction: column; gap: var(--msg-gap, 18px); }
+    #messages { width: 100%; max-width: 820px; padding: 28px 20px 48px; display: flex; flex-direction: column; gap: var(--msg-gap, 20px); }
 
-    .msg-row { display: flex; animation: fadeUp .24s var(--ease-out); width: 100%; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .msg-row { display: flex; animation: fadeUp .22s var(--ease-out); width: 100%; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
     /* User bubble */
     .msg-row.user { justify-content: flex-end; }
     .msg-row.user .bubble {
-      max-width: 82%;
+      max-width: 80%;
       background: var(--user-bg); border: 1px solid var(--user-border);
       border-radius: 20px 20px 5px 20px; padding: 11px 16px;
-      font-size: var(--chat-font-size); line-height: 1.65; color: var(--text);
+      font-size: var(--chat-font-size); line-height: 1.68; color: var(--text);
       word-break: break-word; white-space: pre-wrap;
       box-shadow: var(--shadow-xs);
     }
@@ -372,74 +383,57 @@
     /* Assistant row */
     .msg-row.assistant { justify-content: flex-start; gap: 12px; align-items: flex-start; }
     .assistant-avatar {
-      width: 28px; height: 28px; flex-shrink: 0; margin-top: 3px;
-      background: linear-gradient(150deg, #e87a4a 0%, #c95e30 55%, #b34d20 100%);
+      width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px;
+      background: linear-gradient(150deg, #e8763e 0%, #c25628 55%, #a84020 100%);
       border-radius: 9px; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 6px rgba(185,72,32,.28), inset 0 1px 0 rgba(255,255,255,.1);
+      box-shadow: 0 2px 6px rgba(168,64,32,.26), inset 0 1px 0 rgba(255,255,255,.1);
     }
     .assistant-avatar svg { width: 15px; height: 15px; }
     .assistant-content { flex: 1; min-width: 0; max-width: calc(100% - 40px); display: flex; flex-direction: column; gap: 12px; }
 
     /* ════════════════════════════════════════════════════════════
-       THINK BLOCK — Anthropic reasoning style
+       THINK BLOCK
     ════════════════════════════════════════════════════════════ */
-    /* ── Think block ──────────────────────────────────────────────── */
     .think-block {
       position: relative;
       border: 1px solid var(--think-border);
       border-left: 3px solid var(--think-accent-dim);
       border-radius: var(--radius);
       background: var(--think-bg);
-      /* GPU-composited only — no layout/paint triggered */
-      transition: border-left-color .4s var(--ease-out),
-                  background .4s var(--ease-out),
-                  opacity .3s;
+      transition: border-left-color .4s var(--ease-out), background .4s var(--ease-out), opacity .3s;
       will-change: opacity;
     }
-
-    /* ── Shimmer: two layers for depth ──────────────────────────── */
     .think-block.thinking::before,
     .think-block.thinking::after {
       content: '';
       position: absolute; left: 0; right: 0; height: 2px; top: 0;
-      border-radius: 0 0 2px 2px;
-      pointer-events: none;
+      border-radius: 0 0 2px 2px; pointer-events: none;
     }
     .think-block.thinking::before {
-      background: linear-gradient(90deg,
-        transparent 0%, var(--think-accent) 50%, transparent 100%);
+      background: linear-gradient(90deg, transparent 0%, var(--think-accent) 50%, transparent 100%);
       background-size: 300% 100%;
-      animation: shimmer1 2s ease-in-out infinite;
-      opacity: .9;
+      animation: shimmer1 2s ease-in-out infinite; opacity: .9;
     }
     .think-block.thinking::after {
-      background: linear-gradient(90deg,
-        transparent 0%, var(--think-accent-dim) 50%, transparent 100%);
+      background: linear-gradient(90deg, transparent 0%, var(--think-accent-dim) 50%, transparent 100%);
       background-size: 300% 100%;
-      animation: shimmer1 2s ease-in-out infinite .7s;
-      opacity: .4;
+      animation: shimmer1 2s ease-in-out infinite .7s; opacity: .4;
     }
     @keyframes shimmer1 {
       0%   { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
-
     .think-block.thinking { border-left-color: var(--think-accent); }
     .think-block.done { border-left-color: var(--think-accent-dim); background: var(--think-bg-done); }
-    .think-block.done::before,
-    .think-block.done::after { display: none; }
+    .think-block.done::before, .think-block.done::after { display: none; }
 
-    /* ── Header ──────────────────────────────────────────────────── */
     .think-header {
       display: flex; align-items: center; gap: 9px;
       padding: 10px 14px; cursor: pointer; user-select: none;
-      border-radius: var(--radius);
-      transition: background .14s;
+      border-radius: var(--radius); transition: background .14s;
     }
-    .think-header:hover { background: rgba(124,111,201,.07); }
-    .think-header:active { background: rgba(124,111,201,.12); }
+    .think-header:hover { background: rgba(112,96,196,.07); }
 
-    /* ── Thinking icon: organic wave (3 bars of varying height) ──── */
     .think-icon-thinking {
       display: flex; align-items: center; gap: 2.5px; flex-shrink: 0;
       width: 20px; height: 16px;
@@ -460,36 +454,23 @@
       50%       { opacity: 1;  transform: scaleY(1); }
     }
 
-    /* ── Done icon ───────────────────────────────────────────────── */
     .think-icon-done {
       width: 16px; height: 16px; flex-shrink: 0; border-radius: 50%;
-      background: linear-gradient(135deg, var(--think-accent) 0%, #5b4faa 100%);
+      background: linear-gradient(135deg, var(--think-accent) 0%, #5040a0 100%);
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 1px 4px rgba(124,111,201,.35);
+      box-shadow: 0 1px 4px rgba(112,96,196,.35);
       animation: iconPop .3s var(--ease-spring);
     }
-    @keyframes iconPop {
-      from { transform: scale(0); opacity: 0; }
-      to   { transform: scale(1); opacity: 1; }
-    }
+    @keyframes iconPop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
     .think-icon-done svg { width: 8px; height: 8px; }
 
-    /* ── Label ───────────────────────────────────────────────────── */
     .think-label {
       flex: 1; font-size: 12.5px; font-weight: 600;
-      color: var(--think-text); letter-spacing: .01em;
-      transition: color .3s;
+      color: var(--think-text); letter-spacing: .01em; transition: color .3s;
     }
-    .think-label-secondary {
-      font-size: 11px; font-weight: 400; color: var(--think-text-dim);
-      margin-left: 5px;
-    }
-    .think-tokens {
-      font-size: 10.5px; font-weight: 400; color: var(--think-text-dim);
-      margin-left: 4px; opacity: .75;
-    }
+    .think-label-secondary { font-size: 11px; font-weight: 400; color: var(--think-text-dim); margin-left: 5px; }
+    .think-tokens { font-size: 10.5px; font-weight: 400; color: var(--think-text-dim); margin-left: 4px; opacity: .75; }
 
-    /* ── Chevron ─────────────────────────────────────────────────── */
     .think-chevron {
       color: var(--think-text-dim);
       transition: transform .25s var(--ease-in-out), opacity .2s;
@@ -498,54 +479,29 @@
     .think-header:hover .think-chevron { opacity: 1; }
     .think-block.open .think-chevron { transform: rotate(180deg); }
 
-    /* ── Body: CSS grid trick for smooth height animation ────────── */
-    /* grid-template-rows: 0fr → 1fr triggers smooth height with no JS */
     .think-body-wrap {
-      display: grid;
-      grid-template-rows: 0fr;
+      display: grid; grid-template-rows: 0fr;
       transition: grid-template-rows .32s var(--ease-in-out);
     }
-    .think-block.open .think-body-wrap {
-      grid-template-rows: 1fr;
-    }
+    .think-block.open .think-body-wrap { grid-template-rows: 1fr; }
     .think-body {
-      overflow: hidden;
-      /* padding transition synced with grid */
-      padding: 0 14px;
+      overflow: hidden; padding: 0 14px;
       transition: padding .25s var(--ease-in-out);
     }
-    .think-block.open .think-body {
-      padding: 0 14px 14px;
-      overflow-y: auto;
-      /* Cap at ~60vh, scrollable beyond */
-      max-height: 60vh;
-    }
+    .think-block.open .think-body { padding: 0 14px 14px; overflow-y: auto; max-height: 60vh; }
     .think-body::-webkit-scrollbar { width: 3px; }
-    .think-body::-webkit-scrollbar-thumb { background: rgba(124,111,201,.25); border-radius: 2px; }
-    .think-body::-webkit-scrollbar-thumb:hover { background: var(--think-accent-dim); }
-
-    /* ── Inner content ───────────────────────────────────────────── */
-    .think-body-inner {
-      border-top: 1px solid rgba(197,188,232,.4);
-      padding-top: 11px;
-    }
-
+    .think-body::-webkit-scrollbar-thumb { background: rgba(112,96,196,.25); border-radius: 2px; }
+    .think-body-inner { border-top: 1px solid rgba(197,188,232,.4); padding-top: 11px; }
     .think-md {
-      font-size: 13px; line-height: 1.72;
-      color: var(--think-text); word-break: break-word;
-      font-style: italic;
-      /* Fade-in when content appears */
+      font-size: 13px; line-height: 1.72; color: var(--think-text);
+      word-break: break-word; font-style: italic;
       animation: thinkFadeIn .2s ease-out;
     }
-    @keyframes thinkFadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
+    @keyframes thinkFadeIn { from{opacity:0} to{opacity:1} }
     .think-md p { margin-bottom: 8px; }
     .think-md p:last-child { margin-bottom: 0; }
     .think-md code { font-style: normal; font-size: 12px; }
     .think-md strong { color: var(--think-text); font-style: normal; }
-    /* Streaming plain-text: preserve whitespace/newlines naturally */
     .think-md.streaming { white-space: pre-wrap; font-style: italic; }
 
     /* ════════════════════════════════════════════════════════════
@@ -554,10 +510,7 @@
     .katex-display { overflow-x: auto; overflow-y: hidden; margin: 16px 0; padding: 4px 0; }
     .katex-display > .katex { text-align: center; }
     .katex { font-size: 1.06em; }
-    .math-display {
-      overflow-x: auto; -webkit-overflow-scrolling: touch;
-      padding: 4px 0; margin: 12px 0;
-    }
+    .math-display { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 4px 0; margin: 12px 0; }
     .math-display .katex-display { margin: 0; }
     .katex-err {
       font-family: var(--mono); font-size: 12.5px; color: var(--accent2);
@@ -565,7 +518,7 @@
       border-radius: 5px; padding: 2px 6px; cursor: help;
     }
 
-    .md-content { font-size: var(--chat-font-size); line-height: 1.72; color: var(--text); word-break: break-word; }
+    .md-content { font-size: var(--chat-font-size); line-height: 1.74; color: var(--text); word-break: break-word; }
     .md-content > *:last-child { margin-bottom: 0 !important; }
     .md-content p { margin-bottom: 13px; }
     .md-content h1, .md-content h2, .md-content h3, .md-content h4 {
@@ -575,16 +528,18 @@
     .md-content h1 { font-size: 20px; } .md-content h2 { font-size: 17.5px; }
     .md-content h3 { font-size: 15.5px; } .md-content h4 { font-size: 14px; }
     .md-content ul, .md-content ol { padding-left: 22px; margin-bottom: 13px; }
-    .md-content li { margin-bottom: 5px; line-height: 1.65; }
+    .md-content li { margin-bottom: 5px; line-height: 1.66; }
     .md-content li > p { margin-bottom: 4px; }
     .md-content blockquote {
       border-left: 3px solid var(--border2); padding: 8px 14px; margin: 14px 0;
-      color: var(--text2); background: var(--bg2); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      color: var(--text2); background: var(--bg2);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     }
     .md-content hr { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
     .md-content code:not(pre code) {
       font-family: var(--mono); font-size: 13px; background: var(--code-bg);
-      border: 1px solid var(--border); border-radius: 5px; padding: 1.5px 5px; color: var(--accent2);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 1.5px 5px; color: var(--accent2);
     }
     .md-content pre {
       background: var(--code-bg); border: 1px solid var(--code-border);
@@ -593,7 +548,7 @@
     }
     .code-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 7px 13px; background: rgba(0,0,0,.025); border-bottom: 1px solid var(--code-border);
+      padding: 7px 13px; background: rgba(0,0,0,.03); border-bottom: 1px solid var(--code-border);
     }
     .code-lang {
       font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--text3);
@@ -605,7 +560,7 @@
       gap: 4px; padding: 3px 8px; border-radius: 5px; transition: all .15s;
     }
     .copy-btn:hover { background: var(--bg2); color: var(--text2); }
-    .copy-btn.copied { color: #2e7d32; }
+    .copy-btn.copied { color: #2a7d38; }
     .md-content pre code {
       font-family: var(--mono); font-size: 12.5px; display: block;
       padding: 13px 15px; overflow-x: auto; background: none !important; line-height: 1.65;
@@ -619,11 +574,10 @@
     .md-content a { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
     .md-content a:hover { color: var(--accent2); }
 
-    /* Typing cursor — smooth, flows with text */
+    /* Streaming cursor */
     .cursor {
       display: inline-block; width: 2px; height: 0.85em;
-      background: var(--accent);
-      vertical-align: text-bottom;
+      background: var(--accent); vertical-align: text-bottom;
       border-radius: 2px; margin-left: 2px;
       animation: cursorFade 1.1s ease-in-out infinite;
       position: relative; top: 0.05em;
@@ -633,10 +587,10 @@
       45%, 55% { opacity: 0.15; }
     }
 
-    /* Message action buttons (hover) */
+    /* Message actions */
     .msg-actions {
       display: flex; align-items: center; gap: 3px;
-      opacity: 0; transition: opacity .15s; margin-top: 6px;
+      opacity: 0; transition: opacity .15s; margin-top: 4px;
     }
     .msg-row.assistant:hover .msg-actions { opacity: 1; }
     .msg-action-btn {
@@ -647,81 +601,140 @@
     }
     .msg-action-btn:hover { background: var(--bg2); color: var(--text2); }
     .msg-action-btn svg { width: 13px; height: 13px; }
-    .msg-action-btn.copied { color: #2e7d32; }
+    .msg-action-btn.copied { color: #2a7d38; }
+
+    /* Token pill */
+    .token-usage {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10.5px; color: var(--text3); font-variant-numeric: tabular-nums;
+      padding: 2px 7px 2px 5px; border-radius: 20px;
+      background: var(--bg2); border: 1px solid var(--border);
+      margin-left: 2px; letter-spacing: .01em; line-height: 1.5;
+      opacity: 0; transition: opacity .2s; cursor: default; user-select: none;
+    }
+    .token-usage svg { width: 10px; height: 10px; flex-shrink: 0; }
+    .msg-row.assistant:hover .token-usage { opacity: 1; }
+    .token-usage.live { opacity: 1; }
+
+    /* Input token estimator */
+    #token-estimator {
+      font-size: 10.5px; color: var(--text3); padding: 0 4px 0 0;
+      font-variant-numeric: tabular-nums; white-space: nowrap;
+      align-self: flex-end; padding-bottom: 10px;
+      opacity: 0; transition: opacity .15s; pointer-events: none;
+    }
+    #token-estimator.visible { opacity: 1; }
+
+    /* Session token total */
+    #session-token-total {
+      font-size: 10px; color: var(--text3); padding: 3px 8px;
+      text-align: center; font-variant-numeric: tabular-nums;
+      border-top: 1px solid var(--border); flex-shrink: 0; letter-spacing: .01em;
+    }
+
+    /* Session title rename input */
+    .session-title-input {
+      width: 100%; background: #fff; border: 1px solid var(--accent);
+      border-radius: 5px; padding: 2px 6px; font-family: var(--font);
+      font-size: 13px; font-weight: 500; color: var(--text); outline: none;
+      box-shadow: 0 0 0 2.5px rgba(var(--accent-rgb),.12);
+    }
 
     /* ════════════════════════════════════════════════════════════
        WELCOME SCREEN
     ════════════════════════════════════════════════════════════ */
     #welcome {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 60px 24px 40px; text-align: center; gap: 14px;
+      padding: 56px 24px 48px; text-align: center; gap: 0;
       min-height: calc(100dvh - var(--header-h) - 120px);
     }
     #welcome-logo {
-      width: 64px; height: 64px;
-      background: linear-gradient(150deg, #e87a4a 0%, #c95e30 55%, #b34d20 100%);
-      border-radius: 20px; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 10px 32px rgba(185,72,32,.32), 0 2px 8px rgba(185,72,32,.18), inset 0 1px 0 rgba(255,255,255,.14);
+      width: 72px; height: 72px;
+      background: linear-gradient(150deg, #e8763e 0%, #c25628 55%, #a84020 100%);
+      border-radius: 22px; display: flex; align-items: center; justify-content: center;
+      box-shadow:
+        0 12px 40px rgba(168,64,32,.28),
+        0 3px 10px rgba(168,64,32,.20),
+        inset 0 1px 0 rgba(255,255,255,.15);
+      margin-bottom: 24px;
     }
-    #welcome-logo svg { width: 34px; height: 34px; }
-    #welcome h1 { font-size: 23px; font-weight: 700; color: var(--text); margin-top: 4px; letter-spacing: -.02em; }
-    #welcome p { font-size: 14.5px; color: var(--text3); line-height: 1.6; max-width: 290px; }
-    .welcome-chips { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 370px; margin-top: 14px; }
+    #welcome-logo svg { width: 36px; height: 36px; }
+    #welcome h1 {
+      font-family: var(--font-serif);
+      font-size: 28px; font-weight: 400;
+      color: var(--text); margin-bottom: 10px;
+      letter-spacing: -.01em; line-height: 1.2;
+    }
+    #welcome p {
+      font-size: 14px; color: var(--text3); line-height: 1.65;
+      max-width: 280px; margin-bottom: 32px;
+    }
+    .welcome-chips {
+      display: flex; flex-direction: column; gap: 8px;
+      width: 100%; max-width: 380px;
+    }
     .chip {
-      padding: 11px 16px; background: #fff; border: 1px solid var(--border);
+      padding: 12px 16px; background: rgba(255,255,255,.7); border: 1px solid var(--border);
       border-radius: var(--radius); font-size: 13.5px; color: var(--text2); cursor: pointer;
-      text-align: left; transition: all .15s; font-family: var(--font);
-      box-shadow: var(--shadow-xs);
+      text-align: left; transition: all .18s var(--ease-spring); font-family: var(--font);
+      box-shadow: var(--shadow-xs); backdrop-filter: blur(4px);
     }
-    .chip:hover { border-color: var(--border2); color: var(--text); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
-    .chip:active { transform: scale(.98); }
+    .chip:hover {
+      border-color: var(--border2); color: var(--text);
+      box-shadow: var(--shadow-sm); transform: translateY(-2px);
+      background: rgba(255,255,255,.9);
+    }
+    .chip:active { transform: scale(.98) translateY(0); }
 
     /* ════════════════════════════════════════════════════════════
        INPUT AREA
     ════════════════════════════════════════════════════════════ */
     #input-area {
-      flex-shrink: 0; padding: 10px 16px 14px; background: var(--bg);
+      flex-shrink: 0;
+      padding: 12px 16px 16px;
+      background: transparent;
       display: flex; justify-content: center;
       border-top: 1px solid var(--border);
       position: relative;
     }
     #input-bar {
-      width: 100%; max-width: 860px; display: flex; align-items: flex-end; gap: 8px;
-      background: #fff; border: 1.5px solid var(--border);
-      border-radius: var(--radius-xl); padding: 8px 8px 8px 16px;
+      width: 100%; max-width: 820px; display: flex; align-items: flex-end; gap: 8px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-xl); padding: 10px 10px 10px 18px;
       transition: border-color .15s, box-shadow .15s;
       box-shadow: var(--shadow-sm);
     }
     #input-bar:focus-within {
       border-color: var(--border2);
-      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .09), var(--shadow);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .08), var(--shadow);
     }
     #textarea {
       flex: 1; font-family: var(--font); font-size: 15px; line-height: 1.55;
       color: var(--text); background: transparent; border: none; outline: none;
       resize: none; min-height: 24px; max-height: 180px;
-      padding: 5px 0; overflow-y: auto;
+      padding: 4px 0; overflow-y: auto;
     }
     #textarea::placeholder { color: var(--text3); }
     #send-btn {
-      width: 34px; height: 34px; flex-shrink: 0; border: none; background: var(--text);
+      width: 36px; height: 36px; flex-shrink: 0; border: none; background: var(--text);
       color: #fff; border-radius: var(--radius); cursor: pointer;
       display: flex; align-items: center; justify-content: center; transition: all .15s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2);
     }
-    #send-btn:hover:not(:disabled) { background: #000; transform: scale(1.04); }
-    #send-btn:active:not(:disabled) { transform: scale(.94); }
-    #send-btn:disabled { background: var(--bg3); cursor: not-allowed; }
-    #send-btn.empty:not(:disabled) { background: var(--bg2); color: var(--text3); cursor: default; transform: none; }
+    #send-btn:hover:not(:disabled) { background: #1a1008; transform: scale(1.05); }
+    #send-btn:active:not(:disabled) { transform: scale(.93); }
+    #send-btn:disabled { background: var(--bg3); cursor: not-allowed; box-shadow: none; }
+    #send-btn.empty:not(:disabled) { background: var(--bg2); color: var(--text3); cursor: default; transform: none; box-shadow: none; }
     #send-btn svg { width: 15px; height: 15px; }
-    /* Streaming state: button becomes stop */
     #send-btn.streaming {
       background: var(--text) !important; color: #fff !important;
       cursor: pointer !important; border-radius: 50% !important;
       transition: background .15s, transform .15s, border-radius .2s !important;
     }
-    #send-btn.streaming:hover { background: #c0392b !important; transform: scale(1.07) !important; }
+    #send-btn.streaming:hover { background: #b83030 !important; transform: scale(1.07) !important; }
     #send-btn.streaming:active { transform: scale(.93) !important; }
-    /* stop-btn merged into send-btn */
 
     /* ════════════════════════════════════════════════════════════
        SETTINGS PANEL
@@ -729,7 +742,7 @@
     #settings-overlay {
       visibility: hidden; opacity: 0; pointer-events: none;
       position: fixed; inset: 0;
-      background: rgba(10,8,6,.4);
+      background: rgba(10,8,6,.42);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       z-index: 400; transition: opacity .25s, visibility .25s;
       display: flex; align-items: flex-end; justify-content: center;
@@ -749,14 +762,11 @@
     }
     #settings-overlay.open #settings-sheet { transform: translateY(0); }
 
-    /* Handle */
     .sheet-handle {
       width: 36px; height: 4px;
       background: var(--border2); border-radius: 2px;
-      margin: 10px auto 0; opacity: .55; flex-shrink: 0;
+      margin: 10px auto 0; opacity: .5; flex-shrink: 0;
     }
-
-    /* Header */
     .sheet-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 20px 12px; flex-shrink: 0;
@@ -767,8 +777,7 @@
       width: 32px; height: 32px; border-radius: 10px;
       background: linear-gradient(135deg, var(--bg3) 0%, var(--bg2) 100%);
       border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text2);
+      display: flex; align-items: center; justify-content: center; color: var(--text2);
     }
     .sheet-header-icon svg { width: 15px; height: 15px; }
     .sheet-title { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
@@ -782,55 +791,33 @@
     .sheet-close-btn:hover { background: var(--bg3); color: var(--text); }
     .sheet-close-btn svg { width: 13px; height: 13px; }
 
-    /* Scroll area */
     .settings-scroll-area {
-      overflow-y: auto; overflow-x: hidden;
-      padding: 14px 16px 8px; flex: 1;
+      overflow-y: auto; overflow-x: hidden; padding: 14px 16px 8px; flex: 1;
     }
     .settings-scroll-area::-webkit-scrollbar { width: 3px; }
     .settings-scroll-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-    /* Section label above cards */
     .settings-section-label {
       font-size: 10px; font-weight: 700; color: var(--text3);
       text-transform: uppercase; letter-spacing: .08em;
-      padding: 0 4px 6px; margin-top: 8px;
-      user-select: none;
+      padding: 0 4px 6px; margin-top: 8px; user-select: none;
     }
     .settings-section-label:first-child { margin-top: 0; }
 
-    /* Card */
     .setting-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 8px;
-      box-shadow: var(--shadow-xs);
+      background: rgba(255,255,255,.8); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 8px; box-shadow: var(--shadow-xs);
     }
-
-    /* Card rows — each setting is a row inside the card */
     .card-row {
-      padding: 13px 16px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
+      padding: 13px 16px; border-bottom: 1px solid var(--border); position: relative;
     }
     .card-row:last-child { border-bottom: none; }
-
-    /* Card section header row */
     .card-section-header {
       display: flex; align-items: center; gap: 7px;
-      padding: 11px 16px 10px;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
+      padding: 11px 16px 10px; background: var(--bg2); border-bottom: 1px solid var(--border);
     }
     .card-section-header svg { width: 13px; height: 13px; color: var(--accent); opacity: .9; flex-shrink: 0; }
-    .card-section-title {
-      font-size: 11.5px; font-weight: 700; color: var(--text2);
-      text-transform: uppercase; letter-spacing: .05em;
-    }
-
-    /* Old card-title kept for compat */
+    .card-section-title { font-size: 11.5px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; }
     .card-title {
       font-size: 11.5px; font-weight: 700; margin-bottom: 12px;
       color: var(--text2); display: flex; align-items: center; gap: 6px;
@@ -838,15 +825,11 @@
     }
     .card-title svg { width: 13px; height: 13px; opacity: .75; }
 
-    /* Field */
-    .field-label {
-      font-size: 12px; font-weight: 600; color: var(--text);
-      margin-bottom: 5px; display: flex; align-items: center; gap: 5px;
-    }
+    .field-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
     .field-label-opt {
       font-size: 10px; font-weight: 500; color: var(--text3);
       background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 4px; padding: 1px 5px; letter-spacing: 0; text-transform: none;
+      border-radius: 4px; padding: 1px 5px;
     }
     .input-with-btn { position: relative; margin-bottom: 4px; }
     .input-with-btn .field-input { margin-bottom: 0; padding-right: 40px; }
@@ -871,11 +854,7 @@
     .field-textarea { font-family: var(--font) !important; font-size: 13.5px; resize: vertical; line-height: 1.55; }
     .field-hint { font-size: 11.5px; color: var(--text3); line-height: 1.5; margin-top: 4px; }
 
-    /* Segmented control */
-    .seg-ctrl {
-      display: flex; border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm); overflow: hidden; background: var(--bg);
-    }
+    .seg-ctrl { display: flex; border: 1.5px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--bg); }
     .seg-btn {
       flex: 1; padding: 7px 4px; font-size: 13px; font-family: var(--font);
       font-weight: 500; border: none; background: transparent; color: var(--text2);
@@ -885,11 +864,7 @@
     .seg-btn.active { background: var(--text); color: #fff; font-weight: 600; }
     .seg-btn:not(.active):hover { background: var(--bg2); color: var(--text); }
 
-    /* Toggle row */
-    .toggle-row {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px;
-    }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .toggle-info { flex: 1; min-width: 0; }
     .toggle-label { font-size: 13.5px; font-weight: 600; color: var(--text); }
     .toggle-desc { font-size: 11.5px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
@@ -912,7 +887,6 @@
     #max-context-wrap { padding-top: 0; }
     #max-context-wrap.hidden { display: none; }
 
-    /* Storage warning */
     #storage-warning {
       display: none; align-items: flex-start; gap: 9px;
       background: #fffbea; border: 1px solid #f0c040;
@@ -922,19 +896,14 @@
     #storage-warning svg { flex-shrink: 0; margin-top: 1px; }
     #storage-warning.visible { display: flex; }
 
-    /* Storage bar */
     .storage-bar-wrap { font-size: 13px; color: var(--text2); line-height: 1.5; }
-    .storage-bar {
-      height: 5px; background: var(--bg3); border-radius: 3px;
-      margin-top: 8px; overflow: hidden;
-    }
+    .storage-bar { height: 5px; background: var(--bg3); border-radius: 3px; margin-top: 8px; overflow: hidden; }
     .storage-bar-fill {
       height: 100%; border-radius: 3px;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
       transition: width .5s var(--ease-out);
     }
 
-    /* Data action buttons */
     .data-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
     .data-btn {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -952,40 +921,40 @@
     .data-btn svg { width: 15px; height: 15px; }
     .data-btn:hover { border-color: var(--border2); color: var(--text); }
     .data-btn:hover .data-btn-icon { background: var(--bg3); }
-    .data-btn-warn:hover { border-color: #f5c0c0; color: #c03030; }
+    .data-btn-warn:hover { border-color: #f5c0c0; color: #b83030; }
     .data-btn-warn:hover .data-btn-icon { background: #fff0f0; }
 
-    /* Save button */
     .save-btn {
       margin: 8px 16px calc(16px + env(safe-area-inset-bottom, 0px));
       padding: 14px; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      background: var(--text);
       color: #fff; border: none; border-radius: var(--radius);
       font-family: var(--font); font-size: 14px; font-weight: 700;
-      cursor: pointer; transition: filter .15s, transform .12s, box-shadow .15s;
+      cursor: pointer; transition: background .15s, transform .12s, box-shadow .15s;
       letter-spacing: -.01em;
-      box-shadow: 0 2px 12px rgba(var(--accent-rgb),.35);
+      box-shadow: 0 2px 10px rgba(0,0,0,.20);
     }
-    .save-btn:hover { filter: brightness(1.07); box-shadow: 0 4px 18px rgba(var(--accent-rgb),.45); }
-    .save-btn:active { transform: scale(.98); filter: brightness(.96); box-shadow: none; }
+    .save-btn:hover { background: #1a1008; box-shadow: 0 4px 16px rgba(0,0,0,.28); }
+    .save-btn:active { transform: scale(.98); box-shadow: none; }
 
     /* ════════════════════════════════════════════════════════════
        MISC
     ════════════════════════════════════════════════════════════ */
     #scroll-down {
-      position: fixed; bottom: 88px; right: 16px; width: 34px; height: 34px;
-      background: var(--bg); border: 1px solid var(--border2); border-radius: 50%;
+      position: fixed; bottom: 88px; right: 16px; width: 36px; height: 36px;
+      background: rgba(255,255,255,.9); backdrop-filter: blur(8px);
+      border: 1px solid var(--border2); border-radius: 50%;
       box-shadow: var(--shadow-md); display: none; align-items: center; justify-content: center;
       cursor: pointer; z-index: 50; color: var(--text2); transition: all .18s;
     }
     #scroll-down.visible { display: flex; }
-    #scroll-down:hover { background: var(--bg2); transform: scale(1.05); }
+    #scroll-down:hover { background: #fff; transform: scale(1.06); }
     #scroll-down svg { width: 15px; height: 15px; }
 
     #toast {
       position: fixed; bottom: 96px; left: 50%;
       transform: translateX(-50%) translateY(16px) scale(.95);
-      background: rgba(26,23,20,.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      background: rgba(24,21,15,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       color: #fff; font-size: 13px; font-weight: 500; padding: 9px 18px;
       border-radius: 24px; opacity: 0; pointer-events: none;
       transition: all .28s var(--ease-spring); z-index: 500; white-space: nowrap;
@@ -993,13 +962,13 @@
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 
-    .error-msg { color: #c9303a; font-size: 13.5px; display: flex; align-items: center; gap: 6px; padding: 8px 0; }
+    .error-msg { color: #b83030; font-size: 13.5px; display: flex; align-items: center; gap: 6px; padding: 8px 0; }
     .error-msg svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     .hljs { background: transparent !important; padding: 0 !important; }
 
     /* ════════════════════════════════════════════════════════════
-       MOBILE  ≤ 768px
+       MOBILE ≤ 768px
     ════════════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
       :root { --header-h: 50px; }
@@ -1011,34 +980,25 @@
       #messages { padding: 16px 14px 32px; gap: 22px; }
       .msg-row.user .bubble { max-width: 92%; font-size: 14.5px; }
       .md-content { font-size: 14.5px; line-height: 1.7; }
-      #input-area {
-        padding: 8px 12px calc(12px + env(safe-area-inset-bottom));
-        border-top: 1px solid var(--border);
-      }
+      #input-area { padding: 8px 12px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); }
       #scroll-down { bottom: calc(82px + env(safe-area-inset-bottom)); right: 12px; }
       #toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
-
-      /* Bigger touch targets */
       .delete-session-btn { opacity: 1; width: 28px; height: 28px; }
       .session-item { padding: 10px 10px; }
       .copy-btn { padding: 5px 10px; }
-
-      /* Remove hover actions on mobile (use long press instead) */
       .msg-actions { display: none !important; }
-
-      /* Touch feedback */
       button, a, .session-item, .chip { -webkit-tap-highlight-color: transparent; }
       .chip:active { transform: scale(.97); background: var(--bg3); }
-      .new-chat-btn:active { background: var(--bg2); }
+      .new-chat-btn:active { background: #2c2620; }
       .session-item:active { background: var(--sidebar-act); }
       .tool-btn:active { background: var(--sidebar-hover); }
       #send-btn:active:not(:disabled) { transform: scale(.92); }
       .model-option:active { background: var(--bg3); }
-
-      /* Think block on mobile */
       .think-block.open .think-body { max-height: 55dvh; }
       .think-body-wrap { transition: grid-template-rows .28s var(--ease-in-out); }
       .think-md { font-size: 12.5px; }
+      #welcome h1 { font-size: 24px; }
+      .chip { padding: 11px 14px; font-size: 13px; }
     }
 
     /* ════════════════════════════════════════════════════════════
@@ -1046,24 +1006,24 @@
     ════════════════════════════════════════════════════════════ */
     @keyframes sessionFlash {
       0%   { background: var(--sidebar-act); }
-      40%  { background: rgba(var(--accent-rgb), .2); }
+      40%  { background: rgba(var(--accent-rgb), .18); }
       100% { background: var(--sidebar-act); }
     }
     .session-item.flash { animation: sessionFlash .5s ease; }
 
-    /* Streaming-in-background indicator */
     .session-streaming .session-title::after {
-      content: '';
-      display: inline-block;
+      content: ''; display: inline-block;
       width: 5px; height: 5px;
-      background: var(--think-accent);
-      border-radius: 50%;
-      margin-left: 7px;
-      vertical-align: middle;
+      background: var(--think-accent); border-radius: 50%;
+      margin-left: 7px; vertical-align: middle;
       animation: thinkPulse 1.4s ease-in-out infinite;
     }
     @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes thinkPulse {
+      0%, 100% { opacity: .3; transform: scale(.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
 
     /* Text selection */
     .msg-row { -webkit-user-select: none; user-select: none; }
@@ -1071,25 +1031,20 @@
     .md-content { -webkit-user-select: text; user-select: text; }
     .think-md { -webkit-user-select: text; user-select: text; }
 
-    /* ── Character counter ──────────────────────────────────────────── */
+    /* Character counter */
     #char-counter {
-      position: absolute; right: 54px; bottom: 12px;
+      position: absolute; right: 58px; bottom: 14px;
       font-size: 10.5px; color: var(--text3); pointer-events: none;
-      opacity: 0; transition: opacity .2s;
-      font-variant-numeric: tabular-nums;
+      opacity: 0; transition: opacity .2s; font-variant-numeric: tabular-nums;
     }
     #char-counter.visible { opacity: 1; }
-    #char-counter.warn { color: #c0392b; }
+    #char-counter.warn { color: #b83030; }
 
-    /* ── Typing indicator (three dots) ─────────────────────────────── */
-    .typing-indicator {
-      display: flex; align-items: center; gap: 3px;
-      padding: 10px 14px;
-    }
+    /* Typing indicator */
+    .typing-indicator { display: flex; align-items: center; gap: 3px; padding: 10px 14px; }
     .typing-indicator span {
       width: 6px; height: 6px; border-radius: 50%;
-      background: var(--text3);
-      animation: typingBounce 1.2s ease-in-out infinite;
+      background: var(--text3); animation: typingBounce 1.2s ease-in-out infinite;
     }
     .typing-indicator span:nth-child(2) { animation-delay: .15s; }
     .typing-indicator span:nth-child(3) { animation-delay: .30s; }
@@ -1098,7 +1053,7 @@
       30%           { transform: translateY(-5px); opacity: 1; }
     }
 
-    /* ── Scroll-to-bottom button: add unread badge ──────────────────── */
+    /* Scroll-to-bottom badge */
     #scroll-down-badge {
       position: absolute; top: -5px; right: -5px;
       min-width: 16px; height: 16px; padding: 0 4px;
@@ -1109,23 +1064,19 @@
     }
     #scroll-down.has-unread #scroll-down-badge { display: flex; }
 
-    /* ── User message edit ──────────────────────────────────────────── */
+    /* User message edit */
     .msg-edit-btn {
       position: absolute; left: -28px; top: 50%; transform: translateY(-50%);
       width: 22px; height: 22px;
       background: none; border: none; color: var(--text3);
       border-radius: 5px; cursor: pointer;
-      display: none; align-items: center; justify-content: center;
-      transition: all .12s;
+      display: none; align-items: center; justify-content: center; transition: all .12s;
     }
     .msg-row.user:hover .msg-edit-btn { display: flex; }
     .msg-edit-btn:hover { background: var(--bg2); color: var(--text2); }
     .msg-edit-btn svg { width: 12px; height: 12px; }
 
-    /* ── Edit textarea inside bubble ────────────────────────────────── */
-    .bubble-edit-wrap {
-      display: flex; flex-direction: column; gap: 8px; max-width: 82%;
-    }
+    .bubble-edit-wrap { display: flex; flex-direction: column; gap: 8px; max-width: 80%; }
     .bubble-edit-ta {
       font-family: var(--font); font-size: var(--chat-font-size);
       line-height: 1.65; color: var(--text);
@@ -1137,65 +1088,144 @@
     .bubble-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
     .bubble-edit-save, .bubble-edit-cancel {
       font-family: var(--font); font-size: 12px; font-weight: 600;
-      padding: 5px 14px; border-radius: 8px; cursor: pointer; border: none;
-      transition: all .12s;
+      padding: 5px 14px; border-radius: 8px; cursor: pointer; border: none; transition: all .12s;
     }
-    .bubble-edit-save {
-      background: var(--accent); color: #fff;
-    }
+    .bubble-edit-save { background: var(--accent); color: #fff; }
     .bubble-edit-save:hover { background: var(--accent2); }
-    .bubble-edit-cancel {
-      background: var(--bg3); color: var(--text2);
-    }
+    .bubble-edit-cancel { background: var(--bg3); color: var(--text2); }
     .bubble-edit-cancel:hover { background: var(--border2); }
 
-    /* ── Reaction bar on assistant messages ─────────────────────────── */
-    .msg-reactions {
-      display: flex; gap: 2px; margin-top: 6px;
-      opacity: 0; transition: opacity .15s;
-    }
+    /* Reaction bar */
+    .msg-reactions { display: flex; gap: 2px; margin-top: 6px; opacity: 0; transition: opacity .15s; }
     .msg-row.assistant:hover .msg-reactions { opacity: 1; }
     .reaction-btn {
       display: flex; align-items: center; gap: 4px;
       padding: 4px 9px; border-radius: 20px; border: 1px solid var(--border);
       background: var(--bg); font-size: 11.5px; color: var(--text3);
-      cursor: pointer; transition: all .12s; font-family: var(--font);
-      font-weight: 500;
+      cursor: pointer; transition: all .12s; font-family: var(--font); font-weight: 500;
     }
     .reaction-btn:hover { background: var(--bg2); border-color: var(--border2); color: var(--text2); }
     .reaction-btn.active { background: var(--bg2); border-color: var(--border2); color: var(--text); }
     .reaction-btn svg { width: 12px; height: 12px; }
 
-    /* ── Keyboard shortcut hint ─────────────────────────────────────── */
+    /* ── File Upload ──────────────────────────────────────────── */
+    #attach-btn {
+      width: 32px; height: 32px; flex-shrink: 0; border: none; background: transparent;
+      color: var(--text3); border-radius: var(--radius-sm); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s; align-self: flex-end; margin-bottom: 2px;
+    }
+    #attach-btn:hover { background: var(--bg2); color: var(--text2); }
+    #file-preview-strip {
+      display: none; flex-wrap: wrap; gap: 6px;
+      padding: 2px 0 10px; width: 100%;
+    }
+    #file-preview-strip.has-files { display: flex; }
+    .file-preview-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 8px 5px 9px;
+      background: var(--bg2); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 12px; color: var(--text2);
+      max-width: 200px; transition: border-color .12s; position: relative;
+    }
+    .file-preview-chip:hover { border-color: var(--border2); }
+    .file-preview-chip .file-chip-icon { flex-shrink: 0; color: var(--accent); }
+    .file-preview-chip .file-chip-name {
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      flex: 1; min-width: 0;
+    }
+    .file-preview-chip .file-chip-size { color: var(--text3); font-size: 10.5px; flex-shrink: 0; }
+    .file-preview-chip .remove-file {
+      width: 16px; height: 16px; flex-shrink: 0;
+      background: var(--bg3); color: var(--text3); border: none; border-radius: 50%;
+      font-size: 11px; line-height: 1; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: all .1s; padding: 0;
+    }
+    .file-preview-chip .remove-file:hover { background: var(--border2); color: var(--text); }
+    #input-bar.drag-over {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.15), var(--shadow) !important;
+    }
+    #input-bar-inner { display: flex; align-items: flex-end; gap: 8px; flex: 1; min-width: 0; }
+    #input-bar { flex-direction: column; align-items: stretch; gap: 0; padding: 10px 10px 10px 18px; }
+    /* File chips inside user bubble */
+    .bubble-files { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 7px; }
+    .bubble-file-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 9px; background: rgba(255,255,255,.55);
+      border: 1px solid var(--user-border); border-radius: 20px;
+      font-size: 11.5px; color: var(--text2);
+    }
+    .bubble-file-chip svg { color: var(--accent); flex-shrink: 0; }
+
+    /* ── Token Stats Panel ──────────────────────────────────────── */
+    #stats-overlay {
+      position: fixed; inset: 0; z-index: 1200;
+      background: rgba(18,14,8,.45);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    #stats-overlay.open { opacity: 1; pointer-events: all; }
+    #stats-panel {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+      width: min(700px, 96vw); max-height: 84vh;
+      display: flex; flex-direction: column; overflow: hidden;
+      transform: translateY(14px) scale(.97); transition: transform .22s var(--ease-spring);
+    }
+    #stats-overlay.open #stats-panel { transform: none; }
+    .stats-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .stats-title { font-size: 16px; font-weight: 600; color: var(--text); }
+    .stats-subtitle { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    .stats-close-btn {
+      width: 30px; height: 30px; border: none; background: var(--bg2); color: var(--text2);
+      border-radius: var(--radius-sm); cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: all .12s;
+    }
+    .stats-close-btn:hover { background: var(--bg3); }
+    .stats-body { flex: 1; overflow-y: auto; padding: 18px 22px 24px; }
+    .stats-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px;
+    }
+    .stats-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 13px 15px;
+    }
+    .stats-card-val {
+      font-size: 22px; font-weight: 700; color: var(--text);
+      line-height: 1.15; font-variant-numeric: tabular-nums;
+    }
+    .stats-card-lbl { font-size: 11.5px; color: var(--text3); margin-top: 3px; }
+    .stats-section-title {
+      font-size: 11.5px; font-weight: 600; color: var(--text2);
+      text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px;
+    }
+    .stats-chart-wrap { margin-bottom: 24px; overflow: hidden; }
+    .stats-chart-wrap svg { width: 100%; display: block; overflow: visible; }
+    .stats-empty { text-align: center; color: var(--text3); font-size: 13px; padding: 24px 0; }
+    .stats-bar-label { font-size: 11px; fill: var(--text3); font-family: var(--font); }
+    .stats-bar-val { font-size: 10.5px; fill: var(--text2); font-family: var(--font); font-weight: 600; }
+    .stats-axis-label { font-size: 10px; fill: var(--text3); font-family: var(--font); }
+
+    /* Keyboard hint */
     .kbd-hint {
       font-size: 10px; color: var(--text3); padding: 2px 5px;
       border: 1px solid var(--border2); border-radius: 4px;
-      font-family: var(--mono); background: var(--bg2);
-      line-height: 1.4;
+      font-family: var(--mono); background: var(--bg2); line-height: 1.4;
     }
 
-    /* ── Input area hint row ────────────────────────────────────────── */
+    /* Input hint row */
     #input-hint {
       display: flex; align-items: center; justify-content: center;
-      gap: 8px; padding: 0 0 6px;
+      gap: 8px; padding: 4px 0 0;
       font-size: 11px; color: var(--text3);
-      max-width: 860px; width: 100%; margin: 0 auto;
+      max-width: 820px; width: 100%; margin: 0 auto;
     }
-
-    /* ── Session streaming indicator in sidebar ─────────────────────── */
-
-
-    /* ── Welcome screen chips: improve ─────────────────────────────── */
-    .chip {
-      transition: all .18s var(--ease-spring) !important;
-    }
-    .chip:hover {
-      transform: translateY(-1px) !important;
-      box-shadow: var(--shadow) !important;
-      border-color: var(--border2) !important;
-    }
-    .chip:active { transform: scale(.98) translateY(0) !important; }
-  </style>
+</style>
 </head>
 <body>
 
@@ -1237,6 +1267,10 @@
         导出备份
       </button>
       <div class="tool-btn-divider"></div>
+      <button class="tool-btn" onclick="openStats()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><rect x="2" y="2" width="20" height="20" rx="2" opacity="0"/></svg>
+        用量统计
+      </button>
       <button class="tool-btn" onclick="openSettings()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="10" cy="18" r="2" fill="currentColor" stroke="none"/></svg>
         偏好设置
@@ -1280,13 +1314,21 @@
     </button>
     <div id="input-area">
       <div id="input-bar">
-        <textarea id="textarea" placeholder="给 DeepSeek 发送消息…" rows="1" onkeydown="handleKeydown(event)" oninput="handleInput()"></textarea>
-        <div id="char-counter"></div>
-        <button id="send-btn" class="empty" onclick="sendMessage()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V6M6 12l6-6 6 6"/></svg>
-        </button>
+        <div id="file-preview-strip"></div>
+        <div id="input-bar-inner">
+          <textarea id="textarea" placeholder="给 DeepSeek 发送消息…" rows="1" onkeydown="handleKeydown(event)" oninput="handleInput()"></textarea>
+          <div id="char-counter"></div>
+          <div id="token-estimator"></div>
+          <button id="attach-btn" onclick="attachFiles()" title="附加文件 (txt/md/pdf/csv/代码…)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <button id="send-btn" class="empty" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V6M6 12l6-6 6 6"/></svg>
+          </button>
+        </div>
       </div>
     </div>
+    <div id="session-token-total" style="display:none"></div>
     <div id="input-hint">
       <span>按 <span class="kbd-hint">Enter</span> 发送</span>
       <span style="color:var(--border2)">·</span>
@@ -1405,6 +1447,11 @@
           <input class="field-input" id="max-context-input" type="number" min="2" max="200" placeholder="20">
           <div class="field-hint">每次最多携带最新几条记录发送给模型</div>
         </div>
+        <div class="card-row">
+          <label class="field-label">Max Tokens <span class="field-label-opt">最大输出</span></label>
+          <input class="field-input" id="max-tokens-input" type="number" min="256" max="65536" placeholder="8192">
+          <div class="field-hint">控制单次回复的最大 token 数，留空使用默认値 8192</div>
+        </div>
       </div>
 
       <!-- ⑤ 数据管理 -->
@@ -1444,6 +1491,26 @@
 
 <div id="toast"></div>
 
+<!-- Image file input (hidden) -->
+<!-- File input (hidden) -->
+<input type="file" id="file-input" accept=".txt,.md,.markdown,.csv,.json,.xml,.yaml,.yml,.html,.htm,.css,.js,.ts,.jsx,.tsx,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sh,.sql,.pdf,.log,.ini,.toml,.env" multiple style="display:none" onchange="handleFileInput(event)">
+
+<!-- Token Stats Panel -->
+<div id="stats-overlay" onclick="handleStatsOverlayClick(event)">
+  <div id="stats-panel">
+    <div class="stats-header">
+      <div>
+        <div class="stats-title">📊 Token 用量统计</div>
+        <div class="stats-subtitle" id="stats-subtitle">分析所有对话的 Token 消耗</div>
+      </div>
+      <button class="stats-close-btn" onclick="closeStats()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="stats-body" id="stats-body"></div>
+  </div>
+</div>
+
 <script>
 // ============================================================
 //  CONSTANTS
@@ -1451,6 +1518,114 @@
 const SESSIONS_KEY  = 'ds_sessions_v3';
 const ACTIVE_ID_KEY = 'ds_active_session_id';
 const CFG_KEY       = 'ds_cfg_v2';
+const APIKEY_ENC_KEY = 'ds_apikey_enc_v1'; // encrypted API key stored separately
+
+// ============================================================
+//  LIGHTWEIGHT TOKENIZER  (cl100k_base approximation)
+//  Calibrated ratios:
+//    1 English char  ≈ 0.3 token  (˙e. ~3.33 chars per token)
+//    1 CJK char      ≈ 0.6 token
+//    1 Kana char     ≈ 0.6 token
+//    1 Hangul char   ≈ 0.6 token
+//    Whitespace runs → 1 token
+//    Other symbols   → 1 token each
+// ============================================================
+function estimateTokens(text) {
+  if (!text) return 0;
+  let tokens = 0;
+  const CJK_RE = /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/;
+  let i = 0;
+  while (i < text.length) {
+    const ch = text[i];
+    // CJK / Kana / Hangul: 0.6 token per char
+    if (CJK_RE.test(ch)) {
+      let j = i;
+      while (j < text.length && CJK_RE.test(text[j])) j++;
+      tokens += (j - i) * 0.6;
+      i = j; continue;
+    }
+    // ASCII letter/digit run: 0.3 token per char
+    if (/[a-zA-Z0-9]/.test(ch)) {
+      let j = i;
+      while (j < text.length && /[a-zA-Z0-9]/.test(text[j])) j++;
+      tokens += (j - i) * 0.3;
+      i = j; continue;
+    }
+    // Whitespace run: 1 token total
+    if (/\s/.test(ch)) {
+      while (i < text.length && /\s/.test(text[i])) i++;
+      tokens += 1; continue;
+    }
+    // Punctuation / other symbols: 1 token each
+    tokens += 1; i++;
+  }
+  return Math.round(tokens);
+}
+function fmtTokens(n) {
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+  return String(n);
+}
+
+// ============================================================
+//  CRYPTO HELPER  — AES-GCM encryption for the API key
+//  Key is derived from a fixed passphrase + browser origin via
+//  PBKDF2, so the stored value is never human-readable plaintext.
+// ============================================================
+const CryptoHelper = {
+  _cryptoKey: null,
+
+  async _getKey() {
+    if (this._cryptoKey) return this._cryptoKey;
+    // Derive an AES-256-GCM key from a fixed passphrase + origin
+    const passphrase = new TextEncoder().encode('ds-apikey-shield-v1:' + location.origin);
+    const salt       = new TextEncoder().encode('deepseek-chat-enc-salt-2025');
+    const base = await crypto.subtle.importKey('raw', passphrase, 'PBKDF2', false, ['deriveKey']);
+    this._cryptoKey = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt, iterations: 200000, hash: 'SHA-256' },
+      base,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['encrypt', 'decrypt']
+    );
+    return this._cryptoKey;
+  },
+
+  async encrypt(plaintext) {
+    if (!plaintext) return '';
+    try {
+      const key = await this._getKey();
+      const iv  = crypto.getRandomValues(new Uint8Array(12));
+      const ct  = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        new TextEncoder().encode(plaintext)
+      );
+      // Prepend IV so we can decrypt later: base64( iv || ciphertext )
+      const buf = new Uint8Array(12 + ct.byteLength);
+      buf.set(iv, 0);
+      buf.set(new Uint8Array(ct), 12);
+      return btoa(String.fromCharCode(...buf));
+    } catch (e) {
+      console.warn('[Crypto] encrypt failed:', e);
+      return '';
+    }
+  },
+
+  async decrypt(b64) {
+    if (!b64) return '';
+    try {
+      const key = await this._getKey();
+      const buf = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+      const iv  = buf.slice(0, 12);
+      const ct  = buf.slice(12);
+      const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+      return new TextDecoder().decode(plain);
+    } catch (e) {
+      console.warn('[Crypto] decrypt failed (key may have changed):', e);
+      return '';
+    }
+  },
+};
 const MAX_SESSIONS  = 200;        // hard cap on number of sessions
 const MAX_HISTORY   = 500;        // hard cap on messages per session
 const STORAGE_WARN_BYTES = 4 * 1024 * 1024; // warn at 4 MB
@@ -1465,11 +1640,13 @@ const state = {
   systemPrompt: '',
   enableSliding: true,
   maxContextSize: 20,
+  maxTokens: 8192,
   sessions: [],
   currentSessionId: null,
   isStreaming: false,
   abortController: null,
   streamingSessionId: null,   // track which session is streaming
+  pendingFiles: [],            // { name, content, size } text files waiting to be sent
   enterSend: true,
   fontSize: 'medium',
   msgSpacing: 'comfortable',
@@ -1479,34 +1656,49 @@ const state = {
 //  STORAGE MANAGER  ← core fix for disappearing conversations
 // ============================================================
 const StorageManager = {
-  /** Robustly save sessions. Returns true on success. */
-  saveSessions() {
+  // ── Debounced write: coalesce rapid calls into one idle-callback write ──
+  // During streaming, saveSessions() is called on every autosave tick and at
+  // stream end.  Serialising the entire sessions array on the main thread is
+  // expensive (can be 100 KB+).  We debounce at 300 ms and run inside
+  // requestIdleCallback so the browser can finish painting first.
+  _saveTimer: null,
+  _flushWrite() {
     try {
       const serialized = JSON.stringify(state.sessions);
       localStorage.setItem(SESSIONS_KEY, serialized);
-      if (state.currentSessionId) {
+      if (state.currentSessionId)
         localStorage.setItem(ACTIVE_ID_KEY, state.currentSessionId);
-      }
-      return true;
     } catch (e) {
       if (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014) {
-        // Emergency: trim oldest sessions and retry
         console.warn('[Storage] Quota exceeded, trimming…');
         this._emergencyTrim();
         try {
           localStorage.setItem(SESSIONS_KEY, JSON.stringify(state.sessions));
           showToast('⚠ 存储空间不足，已自动清理旧对话');
-          return true;
         } catch (e2) {
           showToast('❌ 存储失败，请导出备份后清理对话');
           console.error('[Storage] Save failed even after trim:', e2);
-          return false;
         }
+      } else {
+        console.error('[Storage] Unexpected save error:', e);
       }
-      console.error('[Storage] Unexpected save error:', e);
-      return false;
     }
   },
+  /** Schedule a debounced write.  Pass urgent=true to bypass debounce. */
+  saveSessions(urgent = false) {
+    if (this._saveTimer) { clearTimeout(this._saveTimer); this._saveTimer = null; }
+    if (urgent) { this._flushWrite(); return; }
+    this._saveTimer = setTimeout(() => {
+      this._saveTimer = null;
+      if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(() => this._flushWrite(), { timeout: 2000 });
+      } else {
+        this._flushWrite();
+      }
+    }, 300);
+  },
+  /** Force an immediate synchronous write (page hide, export, etc.) */
+  saveSessionsNow() { this._flushWrite(); },
 
   /** Load and VALIDATE sessions from localStorage. */
   loadSessions() {
@@ -1527,6 +1719,8 @@ const StorageManager = {
               role: m.role,
               content: typeof m.content === 'string' ? m.content : '',
               reasoning: typeof m.reasoning === 'string' ? m.reasoning : '',
+              _usage: (m._usage && typeof m._usage.total === 'number') ? m._usage : null,
+              _files: Array.isArray(m._files) ? m._files : undefined,
             }))
             .slice(-MAX_HISTORY),
           updatedAt: typeof s.updatedAt === 'number' ? s.updatedAt : Date.now(),
@@ -1541,12 +1735,44 @@ const StorageManager = {
 
   loadConfig() {
     try {
-      return JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+      const cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+      delete cfg.apiKey; // never return plaintext key from config
+      return cfg;
     } catch { return {}; }
   },
 
   saveConfig(cfg) {
-    try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch {}
+    try {
+      const safe = Object.assign({}, cfg);
+      delete safe.apiKey; // never persist plaintext key in config blob
+      localStorage.setItem(CFG_KEY, JSON.stringify(safe));
+    } catch {}
+  },
+
+  /** Encrypt the API key and save it to localStorage. */
+  async saveApiKey(key) {
+    try {
+      if (!key) { localStorage.removeItem(APIKEY_ENC_KEY); return; }
+      const enc = await CryptoHelper.encrypt(key);
+      if (enc) localStorage.setItem(APIKEY_ENC_KEY, enc);
+    } catch (e) { console.warn('[Storage] saveApiKey failed:', e); }
+  },
+
+  /**
+   * Decrypt and return the stored API key.
+   * Pass `legacyPlaintext` to auto-migrate old plaintext values from the config blob.
+   */
+  async loadApiKey(legacyPlaintext) {
+    try {
+      const enc = localStorage.getItem(APIKEY_ENC_KEY);
+      if (enc) return await CryptoHelper.decrypt(enc);
+      // Migration: if old config had a plaintext key, encrypt and re-save it
+      if (legacyPlaintext) {
+        await this.saveApiKey(legacyPlaintext);
+        return legacyPlaintext;
+      }
+    } catch (e) { console.warn('[Storage] loadApiKey failed:', e); }
+    return '';
   },
 
   getActiveId() {
@@ -2011,8 +2237,25 @@ function katexRender(src, display) {
   }
 }
 
+// ── renderMarkdown LRU cache (max 256 entries) ──────────────────────────
+// History messages are re-rendered every time the user switches sessions.
+// Caching the output eliminates repeated KaTeX + hljs work for identical text.
+const _mdCache = new Map();
+const _MD_CACHE_MAX = 256;
+function _mdCacheSet(key, val) {
+  if (_mdCache.size >= _MD_CACHE_MAX) {
+    // Evict oldest entry (Map preserves insertion order)
+    _mdCache.delete(_mdCache.keys().next().value);
+  }
+  _mdCache.set(key, val);
+}
+
 function renderMarkdown(text) {
   if (!text || typeof text !== 'string') return '';
+  // Only cache complete, finished renders (not live streaming suffixes).
+  // Use full text as key — cheap for typical message lengths.
+  const cached = _mdCache.get(text);
+  if (cached !== undefined) return cached;
 
   // Two independent stores — CRITICAL separation:
   //   codeSaved  → restored BEFORE marked (so marked can syntax-highlight them)
@@ -2191,6 +2434,7 @@ function renderMarkdown(text) {
   html = html.replace(/<p>\s*(<div class="math-display">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
   html = html.replace(/<p>\s*<\/p>/g, '');
 
+  _mdCacheSet(text, html);
   return html;
 }
 
@@ -2373,7 +2617,7 @@ function handleInput() {
   ta.style.height = 'auto';
   ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
   const btn = document.getElementById('send-btn');
-  btn.classList.toggle('empty', !ta.value.trim());
+  btn.classList.toggle('empty', !ta.value.trim() && state.pendingFiles.length === 0);
   // Character counter — show when > 200 chars
   const counter = document.getElementById('char-counter');
   const len = ta.value.length;
@@ -2383,6 +2627,15 @@ function handleInput() {
     counter.classList.toggle('warn', len > 3800);
   } else {
     counter.classList.remove('visible', 'warn');
+  }
+  // Token estimator
+  const est = document.getElementById('token-estimator');
+  if (ta.value.trim()) {
+    const t = estimateTokens(ta.value);
+    est.textContent = `~${fmtTokens(t)} tokens`;
+    est.classList.add('visible');
+  } else {
+    est.classList.remove('visible');
   }
 }
 
@@ -2508,7 +2761,7 @@ function sendChip(btn) {
 // ============================================================
 //  MESSAGE RENDERING
 // ============================================================
-function buildUserRow(text) {
+function buildUserRow(text, images = [], appendToDOM = true) {
   hideWelcome();
   const row = document.createElement('div');
   row.className = 'msg-row user';
@@ -2521,14 +2774,31 @@ function buildUserRow(text) {
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
-  bubble.textContent = text || '';
+
+  // Show attached file chips
+  if (images && images.length > 0) {
+    const fileStrip = document.createElement('div');
+    fileStrip.className = 'bubble-files';
+    images.forEach(f => {
+      const chip = document.createElement('span');
+      chip.className = 'bubble-file-chip';
+      chip.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>${esc(f.name)}`;
+      fileStrip.appendChild(chip);
+    });
+    bubble.appendChild(fileStrip);
+  }
+
+  const textNode = document.createTextNode(text || '');
+  bubble.appendChild(textNode);
 
   editBtn.addEventListener('click', () => startEditBubble(row, bubble, text || ''));
 
   row.appendChild(editBtn);
   row.appendChild(bubble);
-  document.getElementById('messages').appendChild(row);
-  scrollToBottom(false);
+  if (appendToDOM) {
+    document.getElementById('messages').appendChild(row);
+    scrollToBottom(false);
+  }
   return row;
 }
 
@@ -2601,7 +2871,7 @@ function startEditBubble(row, bubble, originalText) {
   ta.setSelectionRange(ta.value.length, ta.value.length);
 }
 
-function buildAssistantRow(initContent = '', initReasoning = '', isHistory = false) {
+function buildAssistantRow(initContent = '', initReasoning = '', isHistory = false, appendToDOM = true) {
   const isReasoner = state.model === 'deepseek-reasoner' || !!initReasoning;
   const row = document.createElement('div');
   row.className = 'msg-row assistant';
@@ -2702,6 +2972,23 @@ function buildAssistantRow(initContent = '', initReasoning = '', isHistory = fal
   // Action buttons (desktop hover) — NO onclick to avoid scroll conflict
   const actions = document.createElement('div');
   actions.className = 'msg-actions';
+
+  // Token usage pill (populated after stream finishes, or from history)
+  const tokenPill = document.createElement('span');
+  tokenPill.className = 'token-usage' + (isHistory ? '' : ' live');
+  tokenPill.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg><span class="token-pill-text">…</span>`;
+  if (isHistory) {
+    // For history rows, usage was stored on the message object
+    const hist = getSessionById(state.currentSessionId)?.history;
+    if (hist) {
+      // Find the assistant message corresponding to this row by position
+      const assistMsgs = hist.filter(m => m.role === 'assistant');
+      // We'll set it after append below; store ref for later
+      tokenPill._needsHistoryFill = true;
+    }
+  }
+  actions.appendChild(tokenPill);
+
   const copyBtn = document.createElement('button');
   copyBtn.className = 'msg-action-btn';
   copyBtn.title = '复制';
@@ -2722,12 +3009,63 @@ function buildAssistantRow(initContent = '', initReasoning = '', isHistory = fal
   });
   actions.appendChild(copyBtn);
 
+  // Regenerate button (only shown for history rows, not live streaming rows)
+  if (isHistory) {
+    const regenBtn = document.createElement('button');
+    regenBtn.className = 'msg-action-btn';
+    regenBtn.title = '重新生成';
+    regenBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>重新生成`;
+    regenBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (state.isStreaming) return;
+      const session = getSessionById(state.currentSessionId);
+      if (!session) return;
+      // Find this assistant message in history (last assistant before end)
+      const allRows = [...document.getElementById('messages').querySelectorAll('.msg-row')];
+      const rowIdx = allRows.indexOf(row);
+      // Remove this and any following rows from DOM
+      for (let i = allRows.length - 1; i >= rowIdx; i--) allRows[i].remove();
+      // Remove this and any following messages from history
+      const assistIdx = session.history.findLastIndex(m => m.role === 'assistant');
+      if (assistIdx !== -1) session.history.splice(assistIdx);
+      StorageManager.saveSessions();
+      // Rebuild the context and stream again
+      const messagesToSend = [];
+      if (state.systemPrompt) messagesToSend.push({ role: 'system', content: state.systemPrompt });
+      const cleanHistory = session.history.filter(m => !m._partial && m.content);
+      let historyToSend = cleanHistory;
+      if (state.enableSliding && state.maxContextSize > 0) historyToSend = cleanHistory.slice(-state.maxContextSize);
+      historyToSend.forEach(m => messagesToSend.push({ role: m.role, content: m.content }));
+      const refs = buildAssistantRow('', '', false);
+      setUI(true);
+      try { await stream(refs, messagesToSend, session); } finally { setUI(false); }
+    });
+    actions.appendChild(regenBtn);
+  }
+
   col.appendChild(mdEl);
   col.appendChild(actions);
   row.append(avatar, col);
-  document.getElementById('messages').appendChild(row);
-  scrollToBottom(false);
-  return { mdEl, thinkRefs, row };
+  if (appendToDOM) {
+    document.getElementById('messages').appendChild(row);
+    scrollToBottom(false);
+  }
+  // For history rows, populate the token pill from stored usage if available
+  if (isHistory && tokenPill) {
+    const session = getSessionById(state.currentSessionId);
+    if (session) {
+      // Find the assistant history entry whose content matches initContent
+      const msg = session.history.filter(m => m.role === 'assistant').find(m => m.content === initContent);
+      if (msg?._usage?.total) {
+        const u = msg._usage;
+        tokenPill.querySelector('.token-pill-text').textContent =
+          `↑${fmtTokens(u.prompt)} ↓${fmtTokens(u.completion)} Σ${fmtTokens(u.total)}`;
+      } else {
+        tokenPill.style.display = 'none';
+      }
+    }
+  }
+  return { mdEl, thinkRefs, row, tokenPill };
 }
 
 function renderErrorInRow(mdEl, message) {
@@ -2813,7 +3151,7 @@ function switchSession(id) {
       const historyToRender = session.history.filter(m => !m._partial);
       historyToRender.forEach(m => {
         if (m.role === 'user') {
-          buildUserRow(m.content);
+          buildUserRow(m.content, m._files || []);
         } else if (m.role === 'assistant') {
           buildAssistantRow(m.content, m.reasoning || '', true);
         }
@@ -2826,44 +3164,167 @@ function switchSession(id) {
       return;
     }
 
-    // Render validated history
-    session.history.forEach(m => {
-      if (m.role === 'user') {
-        buildUserRow(m.content);
-      } else if (m.role === 'assistant') {
-        buildAssistantRow(m.content, m.reasoning || '', true);
+    // ── Batched history render ───────────────────────────────────────
+    // Render only the last EAGER_COUNT messages synchronously so the user
+    // sees the latest content immediately.  Older messages are filled in
+    // during idle time, walking backwards from the eager boundary.
+    const EAGER_COUNT = 20;
+    const hist = session.history;
+    const eagerStart = Math.max(0, hist.length - EAGER_COUNT);
+
+    // Synchronous: most-recent EAGER_COUNT messages, batched into a fragment
+    // to avoid N separate reflows from N appendChild calls.
+    // Note: buildAssistantRow returns {row, mdEl, ...}; buildUserRow returns the element directly.
+    {
+      const frag = document.createDocumentFragment();
+      for (let i = eagerStart; i < hist.length; i++) {
+        const m = hist[i];
+        let rowEl;
+        if (m.role === 'user') rowEl = buildUserRow(m.content, m._files || [], false);
+        else if (m.role === 'assistant') rowEl = buildAssistantRow(m.content, m.reasoning || '', true, false).row;
+        if (rowEl) frag.appendChild(rowEl);
       }
-    });
+      msgContainer.appendChild(frag);  // single reflow
+    }
+
     requestAnimationFrame(() => {
       requestAnimationFrame(() => scrollToBottom(false));
     });
+
+    // Idle: prepend older messages in reverse-chronological chunks
+    if (eagerStart > 0) {
+      let idleIdx = eagerStart - 1;
+      const sessionIdAtStart = id;
+      const idleRender = (deadline) => {
+        // Abort if user switched away
+        if (state.currentSessionId !== sessionIdAtStart) return;
+        const frag = document.createDocumentFragment();
+        const firstChild = msgContainer.firstChild;
+        while (idleIdx >= 0) {
+          const m = hist[idleIdx];
+          let rowEl;
+          if (m.role === 'user') rowEl = buildUserRow(m.content, m._files || [], false);
+          else if (m.role === 'assistant') rowEl = buildAssistantRow(m.content, m.reasoning || '', true, false).row;
+          if (rowEl) frag.prepend(rowEl);
+          idleIdx--;
+          // Yield back to browser if time is running short
+          if (deadline && deadline.timeRemaining() < 8) break;
+        }
+        // Single insertion per idle slice
+        if (frag.childNodes.length) msgContainer.insertBefore(frag, firstChild || null);
+        if (idleIdx >= 0) {
+          if (typeof requestIdleCallback === 'function') {
+            requestIdleCallback(idleRender, { timeout: 3000 });
+          } else {
+            setTimeout(() => idleRender(null), 32);
+          }
+        }
+      };
+      if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(idleRender, { timeout: 3000 });
+      } else {
+        setTimeout(() => idleRender(null), 32);
+      }
+    }
   }
 
   StorageManager.saveSessions();
-  renderSessionList();
+  // Patch sidebar active state without rebuilding the whole list.
+  // Full renderSessionList() here causes a full DOM rebuild on every session click.
+  {
+    const prev = document.querySelector('.session-item.active');
+    if (prev) prev.classList.remove('active');
+    const next = document.querySelector(`.session-item[data-sid="${id}"]`);
+    if (next) next.classList.add('active');
+    // If the item doesn't exist yet (e.g. after createNewSession), fall back to full render
+    if (!next) renderSessionList();
+  }
+  updateSessionTokenTotal();
   if (window.innerWidth <= 768) toggleSidebar(false);
 }
 
 function deleteSession(e, id) {
   e.stopPropagation();
   if (state.isStreaming && state.streamingSessionId === id) stopStream();
-  state.sessions = state.sessions.filter(s => s.id !== id);
-  if (state.sessions.length === 0) {
-    createNewSession(true);
-  } else if (state.currentSessionId === id) {
-    switchSession(state.sessions[0].id);
-  } else {
-    StorageManager.saveSessions();
-    renderSessionList();
+
+  // ── Instant visual feedback: animate the item out first ──────────────
+  const itemEl = document.querySelector(`.session-item[data-sid="${id}"]`);
+  if (itemEl) {
+    itemEl.style.transition = 'opacity 0.15s, transform 0.15s';
+    itemEl.style.opacity = '0';
+    itemEl.style.transform = 'translateX(-12px)';
+    itemEl.style.pointerEvents = 'none';
   }
+
+  // ── Defer the actual state mutation to next frame so the animation plays ─
+  setTimeout(() => {
+    state.sessions = state.sessions.filter(s => s.id !== id);
+
+    if (state.sessions.length === 0) {
+      createNewSession(true);
+    } else if (state.currentSessionId === id) {
+      // Switching to another session is the heavy part — still needs to happen
+      switchSession(state.sessions[0].id);
+    } else {
+      // Deleting a background session: just remove the DOM node and save.
+      // No need to re-render the entire list or touch the message area.
+      if (itemEl) {
+        // Also remove any adjacent group label that's now orphaned
+        const prev = itemEl.previousElementSibling;
+        const next = itemEl.nextElementSibling;
+        if (prev?.classList.contains('session-group-label') &&
+            (!next || next.classList.contains('session-group-label'))) {
+          prev.remove();
+        }
+        itemEl.remove();
+      } else {
+        renderSessionList();
+      }
+      // Update count badge
+      const countEl = document.getElementById('session-count');
+      if (countEl) countEl.textContent = state.sessions.length || '';
+      StorageManager.saveSessions();
+    }
+  }, 150);
 }
 
 function updateSessionTitleIfNew(text) {
+  // Immediate placeholder so sidebar is never empty
   const session = getSessionById(state.currentSessionId);
   if (session && session.history.length === 1 && session.title === '新对话') {
     session.title = text.slice(0, 20) + (text.length > 20 ? '…' : '');
     renderSessionList();
+    // Fire-and-forget: generate a proper title once settled
+    setTimeout(() => autoGenerateTitle(session, text), 1200);
   }
+}
+
+async function autoGenerateTitle(session, userText) {
+  if (!state.apiKey) return;
+  const expected = userText.slice(0, 20) + (userText.length > 20 ? '…' : '');
+  if (!session || session.title !== expected) return;
+  try {
+    const res = await fetch(`${state.baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${state.apiKey}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        max_tokens: 20,
+        messages: [
+          { role: 'system', content: '你是一个对话标题生成助手。5儰7个中文字为对话起一个简洁、准确的标题，只输出标题本身，不加引号、标点或任何其他内容。' },
+          { role: 'user', content: userText.slice(0, 300) },
+        ],
+      }),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const title = data.choices?.[0]?.message?.content?.trim();
+    if (title && title.length >= 2 && title.length <= 20 && getSessionById(session.id)) {
+      session.title = title;
+      StorageManager.saveSessions();
+      renderSessionList();
+    }
+  } catch { /* silent — placeholder stays if API call fails */ }
 }
 
 // ── Session search filter ─────────────────────────────────────────
@@ -2875,8 +3336,6 @@ function filterSessions(q) {
 
 function renderSessionList() {
   const list = document.getElementById('session-list');
-  list.innerHTML = '';
-
   const countEl = document.getElementById('session-count');
 
   // Filter by search query
@@ -2893,6 +3352,7 @@ function renderSessionList() {
 
   // Empty state
   if (sessions.length === 0) {
+    list.innerHTML = '';
     const empty = document.createElement('div');
     empty.className = 'session-empty';
     empty.innerHTML = _sessionFilter
@@ -2904,33 +3364,81 @@ function renderSessionList() {
 
   // Sort by updated time (newest first) and group
   const sorted = [...sessions].sort((a, b) => b.updatedAt - a.updatedAt);
+
+  // ── Diff strategy ─────────────────────────────────────────────────────
+  // Build the desired ordered list of keys (group-label or session-id).
+  // Compare against existing DOM; only add/remove/update what changed.
+  // This avoids thrashing all event listeners on every minor state change.
+  const existingItems = new Map(); // sid → element
+  const existingLabels = new Map(); // group string → element
+  for (const child of list.children) {
+    if (child.dataset.sid) existingItems.set(child.dataset.sid, child);
+    else if (child.classList.contains('session-group-label')) existingLabels.set(child.textContent, child);
+  }
+
+  const fragment = document.createDocumentFragment();
   let lastGroup = null;
 
-  sorted.forEach(s => {
-    // Group label
-    const group = formatRelativeDate(s.updatedAt);
-    if (group !== lastGroup) {
-      const label = document.createElement('div');
-      label.className = 'session-group-label';
-      label.textContent = group;
-      list.appendChild(label);
-      lastGroup = group;
-    }
-
-    const isActive = s.id === state.currentSessionId;
-    const isStreaming = state.isStreaming && s.id === state.streamingSessionId;
+  // Helper: build a brand-new session-item element
+  function buildSessionEl(s) {
+    const isActive   = s.id === state.currentSessionId;
+    const isStream   = state.isStreaming && s.id === state.streamingSessionId;
     const el = document.createElement('div');
-    el.className = `session-item${isActive ? ' active' : ''}${isStreaming ? ' session-streaming' : ''}`;
+    el.className = `session-item${isActive ? ' active' : ''}${isStream ? ' session-streaming' : ''}`;
     el.dataset.sid = s.id;
     el.onclick = () => switchSession(s.id);
 
-    // Inner: title + preview
     const inner = document.createElement('div');
     inner.className = 'session-item-inner';
 
     const titleEl = document.createElement('div');
     titleEl.className = 'session-title';
-    // Highlight search match in title
+    _applyTitleContent(titleEl, s);
+    titleEl.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      if (state.isStreaming && state.streamingSessionId === s.id) return;
+      const input = document.createElement('input');
+      input.className = 'session-title-input';
+      input.value = s.title;
+      titleEl.replaceWith(input);
+      input.focus(); input.select();
+      const commit = () => {
+        const v = input.value.trim();
+        if (v && v !== s.title) { s.title = v; StorageManager.saveSessions(); }
+        renderSessionList();
+      };
+      input.addEventListener('blur', commit);
+      input.addEventListener('keydown', ev => {
+        if (ev.key === 'Enter') { ev.preventDefault(); input.blur(); }
+        if (ev.key === 'Escape') { input.value = s.title; input.blur(); }
+      });
+      input.addEventListener('click', ev => ev.stopPropagation());
+    });
+
+    const lastAssist = [...s.history].reverse().find(m => m.role === 'assistant' && m.content);
+    const previewEl = document.createElement('div');
+    previewEl.className = 'session-preview';
+    if (lastAssist) {
+      const plain = lastAssist.content.replace(/[#*>\[\]_~]/g, '').replace(/\n+/g, ' ').trim();
+      previewEl.textContent = plain.slice(0, 60) + (plain.length > 60 ? '…' : '');
+    }
+    inner.append(titleEl, previewEl);
+
+    const metaEl = document.createElement('div');
+    metaEl.className = 'session-meta';
+    metaEl.textContent = formatRelativeTime(s.updatedAt);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'delete-session-btn';
+    delBtn.title = '删除对话';
+    delBtn.onclick = (e) => deleteSession(e, s.id);
+    delBtn.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>`;
+
+    el.append(inner, metaEl, delBtn);
+    return el;
+  }
+
+  function _applyTitleContent(titleEl, s) {
     if (_sessionFilter && s.title.toLowerCase().includes(_sessionFilter)) {
       const idx = s.title.toLowerCase().indexOf(_sessionFilter);
       titleEl.innerHTML =
@@ -2942,34 +3450,46 @@ function renderSessionList() {
     } else {
       titleEl.textContent = s.title;
     }
+  }
 
-    // Preview: last assistant message snippet
-    const lastAssist = [...s.history].reverse().find(m => m.role === 'assistant' && m.content);
-    const previewEl = document.createElement('div');
-    previewEl.className = 'session-preview';
-    if (lastAssist) {
-      // Strip markdown for preview
-      const plain = lastAssist.content.replace(/[#*>\[\]_~]/g, '').replace(/\n+/g, ' ').trim();
-      previewEl.textContent = plain.slice(0, 60) + (plain.length > 60 ? '…' : '');
+  sorted.forEach(s => {
+    const group = formatRelativeDate(s.updatedAt);
+    if (group !== lastGroup) {
+      let labelEl = existingLabels.get(group);
+      if (!labelEl) {
+        labelEl = document.createElement('div');
+        labelEl.className = 'session-group-label';
+        labelEl.textContent = group;
+      }
+      fragment.appendChild(labelEl);
+      lastGroup = group;
     }
 
-    inner.append(titleEl, previewEl);
+    const isActive  = s.id === state.currentSessionId;
+    const isStream  = state.isStreaming && s.id === state.streamingSessionId;
+    let el = existingItems.get(s.id);
 
-    // Meta: relative time
-    const metaEl = document.createElement('div');
-    metaEl.className = 'session-meta';
-    metaEl.textContent = formatRelativeTime(s.updatedAt);
+    if (!el) {
+      el = buildSessionEl(s);
+    } else {
+      // Patch only changed properties — avoid full rebuild
+      const wantClass = `session-item${isActive ? ' active' : ''}${isStream ? ' session-streaming' : ''}`;
+      if (el.className !== wantClass) el.className = wantClass;
 
-    // Delete button
-    const delBtn = document.createElement('button');
-    delBtn.className = 'delete-session-btn';
-    delBtn.title = '删除对话';
-    delBtn.onclick = (e) => deleteSession(e, s.id);
-    delBtn.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>`;
+      const titleDiv = el.querySelector('.session-title');
+      if (titleDiv) _applyTitleContent(titleDiv, s);
 
-    el.append(inner, metaEl, delBtn);
-    list.appendChild(el);
+      const metaDiv = el.querySelector('.session-meta');
+      if (metaDiv) {
+        const t = formatRelativeTime(s.updatedAt);
+        if (metaDiv.textContent !== t) metaDiv.textContent = t;
+      }
+    }
+    fragment.appendChild(el);
   });
+
+  // Replace all children in one operation — single reflow
+  list.replaceChildren(fragment);
 }
 
 // More precise relative time
@@ -2993,7 +3513,8 @@ async function sendMessage() {
   if (state.isStreaming) return;
   const ta = document.getElementById('textarea');
   const text = ta.value.trim();
-  if (!text) return;
+  const files = [...state.pendingFiles];
+  if (!text && files.length === 0) return;
 
   if (!state.apiKey) {
     openSettings();
@@ -3005,30 +3526,46 @@ async function sendMessage() {
   if (!session) { showToast('无效的对话，请新建对话'); return; }
 
   ta.value = '';
+  clearPendingFiles();
   handleInput();
   triggerHaptic('light');
+
+  // Build the full message text: inject file contents as fenced blocks before the user text
+  let fullText = text;
+  if (files.length > 0) {
+    const fileBlocks = files.map(f => {
+      const ext = f.name.split('.').pop().toLowerCase();
+      return `\`\`\`${ext} (${f.name})\n${f.content}\n\`\`\``;
+    }).join('\n\n');
+    fullText = fileBlocks + (text ? '\n\n' + text : '');
+  }
+
   const messagesToSend = [];
   if (state.systemPrompt) messagesToSend.push({ role: 'system', content: state.systemPrompt });
 
-  // Strip autosave placeholder entries before building context
   const cleanHistory = session.history.filter(m => !m._partial && m.content);
   let historyToSend = cleanHistory;
   if (state.enableSliding && state.maxContextSize > 0) {
     historyToSend = cleanHistory.slice(-state.maxContextSize);
   }
   historyToSend.forEach(m => messagesToSend.push({ role: m.role, content: m.content }));
-  messagesToSend.push({ role: 'user', content: text });
+  messagesToSend.push({ role: 'user', content: fullText });
 
-  // Add user message to state immediately
-  session.history.push({ role: 'user', content: text, reasoning: '' });
+  // Save to history — store the full text (with file blocks) as content,
+  // store file metadata separately so chips can be re-rendered
+  session.history.push({
+    role: 'user',
+    content: fullText,
+    reasoning: '',
+    _files: files.length > 0 ? files.map(f => ({ name: f.name, size: f.size })) : undefined,
+  });
   session.updatedAt = Date.now();
-  updateSessionTitleIfNew(text);
+  updateSessionTitleIfNew(text || (files.length > 0 ? files[0].name : ''));
   StorageManager.saveSessions();
 
-  buildUserRow(text);
+  buildUserRow(text, files);
   const refs = buildAssistantRow('', '', false);
   setUI(true);
-  // Re-focus for quick follow-up (desktop); on mobile keyboard stays up naturally
   if (window.innerWidth > 768) document.getElementById('textarea').focus();
   try {
     await stream(refs, messagesToSend, session);
@@ -3061,7 +3598,7 @@ function refreshStreamUI() {
   } else {
     // Restore as send button
     btn.classList.remove('streaming');
-    btn.classList.toggle('empty', !document.getElementById('textarea').value.trim());
+    btn.classList.toggle('empty', !document.getElementById('textarea').value.trim() && state.pendingFiles.length === 0);
     btn.disabled = false;
     btn.onclick = sendMessage;
     btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V6M6 12l6-6 6 6"/></svg>`;
@@ -3077,14 +3614,14 @@ function stopStream() {
   state.abortController?.abort();
 }
 
-async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
+async function stream({ mdEl, thinkRefs, row, tokenPill }, messagesToSend, session) {
   state.abortController = new AbortController();
   state.streamingSessionId = session.id;
   session._liveRefs = { mdEl, thinkRefs };  // for re-attaching if user switches back
 
   let thinking = '', answer = '', thinkDone = false;
   const t0 = Date.now();
-  let renderTimer = null, lastRenderTime = 0;
+  let renderTimer = null;  // kept for compatibility, not used by rAF path
 
   // Track the last character count rendered for thinking — for incremental append
   let thinkRenderedLen = 0;
@@ -3094,28 +3631,56 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
   let renderedLen = 0;   // chars already committed to _stable DOM
   let cursorEl = null;   // reused cursor span
 
+  // ── Code-block-aware safe boundary finder ────────────────────────
+  // Returns the index of the last \n\n that is NOT inside an open fenced
+  // code block.  Returns -1 if no safe boundary exists in [0, searchUpTo).
+  // Returns the index of the last \n\n in text[0..searchUpTo) that is
+  // NOT inside an open fenced code block. Returns -1 if none found.
+  function safeChunkBoundary(text, searchUpTo) {
+    let inFence = false, fenceChar = '', fenceLen = 0;
+    let lastSafe = -1, i = 0;
+    while (i < searchUpTo) {
+      const ch = text[i];
+      // Must be at the very start of a line
+      const atLineStart = (i === 0 || text[i - 1] === '\n');
+      if (atLineStart && (ch === '`' || ch === '~')) {
+        let j = i;
+        while (j < text.length && text[j] === ch) j++;
+        const runLen = j - i;
+        if (runLen >= 3) {
+          if (!inFence) {
+            inFence = true; fenceChar = ch; fenceLen = runLen;
+            i = j; continue;
+          } else if (ch === fenceChar && runLen >= fenceLen) {
+            inFence = false;
+            i = j; continue;
+          }
+        }
+      }
+      if (!inFence && ch === '\n' && text[i + 1] === '\n') {
+        lastSafe = i;
+      }
+      i++;
+    }
+    return lastSafe;
+  }
+
   const updateDOM = () => {
     // Guard: check session still exists (might have been deleted)
     if (!getSessionById(session.id)) return;
 
     if (thinking && thinkRefs && !thinkDone) {
       // ── Thinking in progress: incremental plain-text append ──────────────
-      // Plain text only during stream — no renderMarkdown (too expensive per frame).
-      // Full markdown render happens exactly once when thinking finishes.
       if (thinkRenderedLen === 0) {
         thinkRefs.mdDiv.textContent = thinking;
       } else if (thinking.length > thinkRenderedLen) {
-        // Append only the new slice — no full reassignment, no DOM thrash
         thinkRefs.mdDiv.appendChild(
           document.createTextNode(thinking.slice(thinkRenderedLen))
         );
       }
       thinkRenderedLen = thinking.length;
-      // Auto-scroll: rAF-deferred so we don't force sync layout every 80ms
       if (thinkRefs.block.classList.contains('open') && !isUserScrolledUp) {
-        requestAnimationFrame(() => {
-          thinkRefs.body.scrollTop = thinkRefs.body.scrollHeight;
-        });
+        requestAnimationFrame(() => { thinkRefs.body.scrollTop = thinkRefs.body.scrollHeight; });
       }
     }
     // Only update live DOM if this session is currently displayed
@@ -3123,24 +3688,29 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
       if (answer) {
         // Remove typing indicator on first token
         if (mdEl._typingEl) { mdEl._typingEl.remove(); mdEl._typingEl = null; }
-        // ── True incremental append — no DOM node is ever destroyed ──────
-        // scrollLeft on .math-display elements survives because nodes live forever.
-        const LIVE_WINDOW = 500;
-        const searchFrom = Math.max(renderedLen, answer.length - LIVE_WINDOW);
-        const boundaryIdx = answer.lastIndexOf('\n\n', searchFrom);
 
-        if (boundaryIdx > renderedLen) {
-          // Commit the new stable chunk: render → append nodes to _stable
-          const chunk = answer.slice(renderedLen, boundaryIdx);
-          const tmp = document.createElement('div');
-          tmp.innerHTML = renderMarkdown(chunk);
-          // Move children (not wrapper) so we don't nest extra divs
-          while (tmp.firstChild) mdEl._stable.appendChild(tmp.firstChild);
-          renderedLen = boundaryIdx;
+        // ── Code-block-aware incremental append ──────────────────────────
+        // We only try to "freeze" a stable prefix once the answer is long
+        // enough that keeping a live window makes sense (> 2×LIVE_WINDOW).
+        // For short replies we just render everything into _live directly —
+        // this fixes the bug where short responses appeared blank.
+        const LIVE_WINDOW = 600;
+        const STABLE_THRESHOLD = LIVE_WINDOW * 2;   // 1200 chars before we bother splitting
+
+        if (answer.length > STABLE_THRESHOLD) {
+          // Only scan up to the point that leaves a full LIVE_WINDOW at the end
+          const searchUpTo = answer.length - LIVE_WINDOW;
+          const boundaryIdx = safeChunkBoundary(answer, searchUpTo);
+          if (boundaryIdx > renderedLen) {
+            const chunk = answer.slice(renderedLen, boundaryIdx);
+            const tmp = document.createElement('div');
+            tmp.innerHTML = renderMarkdown(chunk);
+            while (tmp.firstChild) mdEl._stable.appendChild(tmp.firstChild);
+            renderedLen = boundaryIdx;
+          }
         }
 
-        // Live suffix: render into _live (replace is OK — suffix is short,
-        // user cannot have scrolled something that doesn't exist yet)
+        // Live suffix (or full answer when short): always re-rendered from scratch
         const liveSuffix = answer.slice(renderedLen);
         mdEl._live.innerHTML = liveSuffix ? renderMarkdown(liveSuffix) : '';
 
@@ -3173,18 +3743,14 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
     }
   };
 
+  let _rafPending = false;
   const scheduleRender = () => {
-    const now = Date.now();
-    if (now - lastRenderTime > 80) {
+    if (_rafPending) return;          // already queued for next frame
+    _rafPending = true;
+    requestAnimationFrame(() => {
+      _rafPending = false;
       updateDOM();
-      lastRenderTime = now;
-    } else if (!renderTimer) {
-      renderTimer = setTimeout(() => {
-        updateDOM();
-        lastRenderTime = Date.now();
-        renderTimer = null;
-      }, 80);
-    }
+    });
   };
 
   // ── Autosave partial response every 4 seconds ─────────────────────────
@@ -3242,7 +3808,7 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
         model: state.model,
         messages: messagesToSend,
         stream: true,
-        max_tokens: 8192,
+        max_tokens: state.maxTokens || 8192,
       }),
       signal: state.abortController.signal,
     });
@@ -3269,6 +3835,15 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
         if (!t.startsWith('data: ')) continue;
         let json;
         try { json = JSON.parse(t.slice(6)); } catch { continue; }
+        // Capture usage from the final stream chunk (no choices.delta in that frame)
+        if (json.usage) {
+          session._lastUsage = {
+            prompt: json.usage.prompt_tokens || 0,
+            completion: json.usage.completion_tokens || 0,
+            total: json.usage.total_tokens || 0,
+            ts: Date.now(),
+          };
+        }
         const delta = json.choices?.[0]?.delta;
         if (!delta) continue;
         if (delta.reasoning_content && thinkRefs) {
@@ -3322,7 +3897,7 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
       return; // skip saving assistant message
     }
   } finally {
-    if (renderTimer) { clearTimeout(renderTimer); renderTimer = null; }
+    _rafPending = false;  // cancel any pending rAF render
 
     // ── Clean up autosave infra ────────────────────────────────────────
     clearInterval(autosaveTimer);
@@ -3370,15 +3945,48 @@ async function stream({ mdEl, thinkRefs, row }, messagesToSend, session) {
 
     // Save assistant message if there's content
     if ((answer || thinking) && getSessionById(session.id)) {
-      session.history.push({ role: 'assistant', content: answer, reasoning: thinking });
+      session.history.push({ role: 'assistant', content: answer, reasoning: thinking, _usage: session._lastUsage || null });
       session.updatedAt = Date.now();
-      StorageManager.saveSessions();
+      StorageManager.saveSessions(true);  // urgent: stream just finished
       renderSessionList();
     }
+
+    // ── Update token pill with real usage from API ───────────────────
+    if (tokenPill) {
+      const u = session._lastUsage;
+      if (u && u.total) {
+        tokenPill.querySelector('.token-pill-text').textContent =
+          `↑${fmtTokens(u.prompt)} ↓${fmtTokens(u.completion)} Σ${fmtTokens(u.total)}`;
+        tokenPill.classList.remove('live');
+        // Store on the message object for history display
+        const lastMsg = session.history[session.history.length - 1];
+        if (lastMsg?.role === 'assistant') lastMsg._usage = u;
+        StorageManager.saveSessions();
+      } else {
+        tokenPill.style.display = 'none';
+      }
+    }
+    updateSessionTokenTotal();
 
     state.abortController = null;
     state.streamingSessionId = null;
     scrollToBottom(true);
+  }
+}
+
+// ── Update the session-level total token counter ─────────────────────────
+function updateSessionTokenTotal() {
+  const el = document.getElementById('session-token-total');
+  if (!el) return;
+  const session = getSessionById(state.currentSessionId);
+  if (!session) { el.style.display = 'none'; return; }
+  let total = 0;
+  session.history.forEach(m => { if (m._usage?.total) total += m._usage.total; });
+  if (total > 0) {
+    el.style.display = 'block';
+    el.textContent = `本对话已消耗 ${fmtTokens(total)} tokens`;
+  } else {
+    el.style.display = 'none';
   }
 }
 
@@ -3393,6 +4001,7 @@ function openSettings() {
   document.getElementById('system-prompt-input').value = state.systemPrompt;
   document.getElementById('sliding-context-input').checked = state.enableSliding;
   document.getElementById('max-context-input').value = state.maxContextSize;
+  document.getElementById('max-tokens-input').value = state.maxTokens || 8192;
   document.getElementById('enter-send-input').checked = state.enterSend !== false;
   // Populate segmented controls
   const segVals = { 'font-size-ctrl': state.fontSize || 'medium', 'msg-spacing-ctrl': state.msgSpacing || 'comfortable' };
@@ -3441,6 +4050,8 @@ function saveSettings() {
   // Always read the value even when the wrap is hidden, so it's never lost
   const ctxVal = parseInt(document.getElementById('max-context-input').value, 10);
   state.maxContextSize = (ctxVal > 0 && ctxVal <= 500) ? ctxVal : 20;
+  const tokVal = parseInt(document.getElementById('max-tokens-input').value, 10);
+  state.maxTokens = (tokVal >= 256 && tokVal <= 65536) ? tokVal : 8192;
   state.enterSend = document.getElementById('enter-send-input').checked;
 
   const fontSize = document.querySelector('#font-size-ctrl .seg-btn.active')?.dataset.val || 'medium';
@@ -3450,10 +4061,12 @@ function saveSettings() {
 
   applyDisplayPrefs(fontSize, msgSpacing);
 
+  // Save API key encrypted separately; all other config stored without the key
+  StorageManager.saveApiKey(state.apiKey);
   StorageManager.saveConfig({
-    apiKey: state.apiKey, baseUrl: state.baseUrl,
+    baseUrl: state.baseUrl,
     systemPrompt: state.systemPrompt, enableSliding: state.enableSliding,
-    maxContextSize: state.maxContextSize, enterSend: state.enterSend,
+    maxContextSize: state.maxContextSize, maxTokens: state.maxTokens, enterSend: state.enterSend,
     fontSize, msgSpacing,
   });
   closeSettings();
@@ -3589,20 +4202,38 @@ document.getElementById('textarea').addEventListener('focus', () => {
 //  EXPORT / IMPORT
 // ============================================================
 function exportData() {
+  // Never include the API key in exported files
+  const exportConfig = StorageManager.loadConfig();
+  delete exportConfig.apiKey;
   const data = {
     version: 3,
-    config: StorageManager.loadConfig(),
+    config: exportConfig,
     sessions: state.sessions,
     activeId: state.currentSessionId,
     exportDate: new Date().toISOString(),
   };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
+  const json = JSON.stringify(data, null, 2);
+  const filename = `DeepSeek-Backup-${new Date().toISOString().slice(0,10)}.json`;
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `DeepSeek-Backup-${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  a.download = filename;
+
+  // file:// 协议下 createObjectURL 会被部分浏览器拦截，改用 data URI 兜底
+  if (location.protocol === 'file:') {
+    // TextEncoder → Uint8Array → btoa，兼容所有非 ASCII 字符（中文对话内容）
+    const bytes = new TextEncoder().encode(json);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    a.href = 'data:application/json;charset=utf-8;base64,' + btoa(binary);
+    a.click();
+  } else {
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.click();
+    // 延迟释放，确保浏览器已开始下载
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  }
+
   showToast('✓ 导出成功');
 }
 
@@ -3645,20 +4276,320 @@ function showToast(msg) {
   _toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
+
+// ============================================================
+//  TEXT FILE UPLOAD
+// ============================================================
+const MAX_FILE_SIZE_MB = 2;
+const MAX_FILES = 5;
+const SUPPORTED_EXTENSIONS = new Set([
+  'txt','md','markdown','csv','json','xml','yaml','yml',
+  'html','htm','css','js','ts','jsx','tsx','py','java',
+  'c','cpp','cs','go','rs','rb','php','sh','sql','log',
+  'ini','toml','env',
+]);
+
+function fmtFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function attachFiles() {
+  document.getElementById('file-input').click();
+}
+
+async function handleFileInput(e) {
+  const files = [...e.target.files];
+  e.target.value = '';
+  await addTextFiles(files);
+}
+
+async function addTextFiles(files) {
+  for (const file of files) {
+    if (state.pendingFiles.length >= MAX_FILES) {
+      showToast(`最多同时附加 ${MAX_FILES} 个文件`); break;
+    }
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!SUPPORTED_EXTENSIONS.has(ext)) {
+      showToast(`不支持 .${ext} 格式，请上传文本类文件`); continue;
+    }
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      showToast(`"${file.name}" 超过 ${MAX_FILE_SIZE_MB}MB 限制`); continue;
+    }
+    if (state.pendingFiles.some(f => f.name === file.name)) {
+      showToast(`"${file.name}" 已附加`); continue;
+    }
+    try {
+      const content = await readFileAsText(file);
+      state.pendingFiles.push({ name: file.name, content, size: file.size, ext });
+    } catch {
+      showToast(`读取 "${file.name}" 失败`);
+    }
+  }
+  renderFilePreviewStrip();
+  handleInput();
+}
+
+function readFileAsText(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsText(file, 'UTF-8');
+  });
+}
+
+function getFileIcon(ext) {
+  const codeExts = new Set(['js','ts','jsx','tsx','py','java','c','cpp','cs','go','rs','rb','php','sh','sql','css','html','htm']);
+  const dataExts = new Set(['json','xml','yaml','yml','csv','toml','ini','env']);
+  if (ext === 'pdf') return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`;
+  if (codeExts.has(ext)) return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`;
+  if (dataExts.has(ext)) return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>`;
+  return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+}
+
+function renderFilePreviewStrip() {
+  const strip = document.getElementById('file-preview-strip');
+  strip.innerHTML = '';
+  state.pendingFiles.forEach((f, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'file-preview-chip';
+    chip.title = `${f.name} · ${fmtFileSize(f.size)}`;
+    chip.innerHTML = `<span class="file-chip-icon">${getFileIcon(f.ext)}</span>
+      <span class="file-chip-name">${esc(f.name)}</span>
+      <span class="file-chip-size">${fmtFileSize(f.size)}</span>`;
+    const rm = document.createElement('button');
+    rm.className = 'remove-file';
+    rm.innerHTML = '&times;';
+    rm.title = '移除';
+    rm.addEventListener('click', ev => {
+      ev.stopPropagation();
+      state.pendingFiles.splice(i, 1);
+      renderFilePreviewStrip();
+      handleInput();
+    });
+    chip.appendChild(rm);
+    strip.appendChild(chip);
+  });
+  strip.classList.toggle('has-files', state.pendingFiles.length > 0);
+}
+
+function clearPendingFiles() {
+  state.pendingFiles = [];
+  renderFilePreviewStrip();
+}
+
+// Drag-and-drop onto input bar
+const inputBar = document.getElementById('input-bar');
+inputBar.addEventListener('dragover', e => {
+  const hasFiles = [...(e.dataTransfer?.items || [])].some(i => i.kind === 'file');
+  if (hasFiles) { e.preventDefault(); inputBar.classList.add('drag-over'); }
+});
+inputBar.addEventListener('dragleave', () => inputBar.classList.remove('drag-over'));
+inputBar.addEventListener('drop', async e => {
+  e.preventDefault();
+  inputBar.classList.remove('drag-over');
+  const files = [...e.dataTransfer.files];
+  if (files.length) await addTextFiles(files);
+});
+
+// ============================================================
+//  TOKEN STATS PANEL
+// ============================================================
+function openStats() {
+  renderStatsPanel();
+  document.getElementById('stats-overlay').classList.add('open');
+  if (window.innerWidth <= 768) toggleSidebar(false);
+}
+function closeStats() {
+  document.getElementById('stats-overlay').classList.remove('open');
+}
+function handleStatsOverlayClick(e) {
+  if (e.target.id === 'stats-overlay') closeStats();
+}
+
+function renderStatsPanel() {
+  const body = document.getElementById('stats-body');
+
+  // ── Aggregate data ─────────────────────────────────────────
+  let totalPrompt = 0, totalCompletion = 0, totalAll = 0;
+  let sessionsWithData = 0;
+  const dailyMap = new Map(); // ISO date → tokens
+
+  state.sessions.forEach(s => {
+    let sessionTokens = 0;
+    s.history.forEach(m => {
+      if (m._usage) {
+        totalPrompt     += m._usage.prompt     || 0;
+        totalCompletion += m._usage.completion || 0;
+        totalAll        += m._usage.total      || 0;
+        sessionTokens   += m._usage.total      || 0;
+
+        // daily bucketing
+        const day = new Date(m._usage.ts || s.updatedAt || Date.now())
+          .toISOString().slice(0, 10);
+        dailyMap.set(day, (dailyMap.get(day) || 0) + (m._usage.total || 0));
+      }
+    });
+    if (sessionTokens > 0) sessionsWithData++;
+  });
+
+  // ── Top-5 sessions by token usage ─────────────────────────
+  const topSessions = state.sessions
+    .map(s => {
+      const tokens = s.history.reduce((a, m) => a + (m._usage?.total || 0), 0);
+      return { title: s.title || '未命名对话', tokens, id: s.id };
+    })
+    .filter(s => s.tokens > 0)
+    .sort((a, b) => b.tokens - a.tokens)
+    .slice(0, 6);
+
+  // ── Last 14 days chart data ────────────────────────────────
+  const days14 = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const label = `${d.getMonth() + 1}/${d.getDate()}`;
+    days14.push({ key, label, tokens: dailyMap.get(key) || 0 });
+  }
+
+  // ── Subtitle ───────────────────────────────────────────────
+  document.getElementById('stats-subtitle').textContent =
+    `共 ${state.sessions.length} 个对话，其中 ${sessionsWithData} 个有 Token 记录`;
+
+  if (totalAll === 0) {
+    body.innerHTML = `<div class="stats-empty">暂无 Token 数据<br><small>发送消息后即可追踪用量</small></div>`;
+    return;
+  }
+
+  const fmtK = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n);
+
+  // ── Build HTML ─────────────────────────────────────────────
+  // 1. Summary cards
+  let html = `
+    <div class="stats-cards">
+      <div class="stats-card">
+        <div class="stats-card-val">${fmtK(totalAll)}</div>
+        <div class="stats-card-lbl">总 Token 消耗</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-val">${fmtK(totalPrompt)}</div>
+        <div class="stats-card-lbl">输入 Token (↑)</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-val">${fmtK(totalCompletion)}</div>
+        <div class="stats-card-lbl">输出 Token (↓)</div>
+      </div>
+    </div>`;
+
+  // 2. Daily chart (last 14 days)
+  const maxDay = Math.max(...days14.map(d => d.tokens), 1);
+  const chartW = 630, chartH = 120, padL = 36, padR = 10, padT = 16, padB = 28;
+  const innerW = chartW - padL - padR;
+  const innerH = chartH - padT - padB;
+  const barW = Math.floor(innerW / 14 * 0.62);
+  const barGap = innerW / 14;
+
+  let bars = '', labels = '', yGridLines = '';
+
+  // Y-axis gridlines
+  for (let i = 0; i <= 3; i++) {
+    const yFrac = i / 3;
+    const y = padT + innerH * (1 - yFrac);
+    const val = Math.round(maxDay * yFrac);
+    yGridLines += `<line x1="${padL}" y1="${y}" x2="${chartW - padR}" y2="${y}"
+      stroke="var(--border)" stroke-width="1" stroke-dasharray="${i === 0 ? 'none' : '3,3'}"/>`;
+    if (i > 0) yGridLines += `<text x="${padL - 4}" y="${y + 4}" text-anchor="end"
+      class="stats-axis-label">${fmtK(val)}</text>`;
+  }
+
+  days14.forEach((d, i) => {
+    const x = padL + i * barGap + barGap / 2 - barW / 2;
+    const barH = d.tokens > 0 ? Math.max(3, (d.tokens / maxDay) * innerH) : 0;
+    const y = padT + innerH - barH;
+    const isToday = i === 13;
+    const fill = d.tokens > 0
+      ? (isToday ? 'var(--accent)' : 'var(--bg3)')
+      : 'var(--bg2)';
+    const stroke = d.tokens > 0
+      ? (isToday ? 'none' : 'var(--border2)')
+      : 'var(--border)';
+
+    bars += `<rect x="${x}" y="${y}" width="${barW}" height="${barH}"
+      rx="3" fill="${fill}" stroke="${stroke}" stroke-width="0.8">
+      <title>${d.key}: ${d.tokens.toLocaleString()} tokens</title>
+    </rect>`;
+    if (d.tokens > 0) {
+      bars += `<text x="${x + barW / 2}" y="${y - 4}" text-anchor="middle"
+        class="stats-bar-val">${fmtK(d.tokens)}</text>`;
+    }
+    // Every other label to avoid crowding
+    if (i % 2 === 0 || i === 13) {
+      labels += `<text x="${x + barW / 2}" y="${chartH - 4}" text-anchor="middle"
+        class="stats-bar-label">${d.label}</text>`;
+    }
+  });
+
+  html += `
+    <div class="stats-section-title">近 14 天 Token 消耗</div>
+    <div class="stats-chart-wrap">
+      <svg viewBox="0 0 ${chartW} ${chartH}" xmlns="http://www.w3.org/2000/svg">
+        ${yGridLines}${bars}${labels}
+      </svg>
+    </div>`;
+
+  // 3. Top sessions bar chart
+  if (topSessions.length > 0) {
+    const maxS = topSessions[0].tokens;
+    html += `<div class="stats-section-title" style="margin-top:6px">用量最多的对话</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:4px">`;
+
+    topSessions.forEach(s => {
+      const pct = (s.tokens / maxS * 100).toFixed(1);
+      const isCurrent = s.id === state.currentSessionId;
+      html += `
+        <div style="display:flex;align-items:center;gap:9px;cursor:pointer"
+             onclick="closeStats();switchSession('${s.id}')">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12.5px;color:var(--text);white-space:nowrap;overflow:hidden;
+                 text-overflow:ellipsis;font-weight:${isCurrent ? 600 : 400}"
+                 title="${esc(s.title)}">${esc(s.title)}</div>
+            <div style="height:5px;background:var(--bg3);border-radius:3px;margin-top:4px;overflow:hidden">
+              <div style="height:100%;width:${pct}%;background:${isCurrent ? 'var(--accent)' : 'var(--text3)'};
+                   border-radius:3px;transition:width .4s var(--ease-out)"></div>
+            </div>
+          </div>
+          <div style="font-size:11.5px;color:var(--text2);white-space:nowrap;
+               font-variant-numeric:tabular-nums;font-weight:600">${fmtK(s.tokens)}</div>
+        </div>`;
+    });
+
+    html += `</div>`;
+  }
+
+  body.innerHTML = html;
+}
+
 // ============================================================
 //  INITIALIZATION
 // ============================================================
-(function init() {
+(async function init() {
   // 1. Migrate old data formats
   StorageManager.migrate();
 
-  // 2. Load config
+  // 2. Load config (without apiKey — stored encrypted separately)
   const cfg = StorageManager.loadConfig();
-  state.apiKey        = cfg.apiKey        || '';
+  // legacyPlainKey: present only in old installs that stored the key in config JSON
+  const legacyPlainKey = (() => {
+    try { return JSON.parse(localStorage.getItem(CFG_KEY) || '{}').apiKey || ''; } catch { return ''; }
+  })();
+
   state.baseUrl       = cfg.baseUrl       || 'https://api.deepseek.com';
   state.systemPrompt  = cfg.systemPrompt  || '';
   state.enableSliding = cfg.enableSliding !== false;
   state.maxContextSize= cfg.maxContextSize || 20;
+  state.maxTokens     = cfg.maxTokens     || 8192;
   state.enterSend     = cfg.enterSend     !== false;
   state.fontSize      = cfg.fontSize      || 'medium';
   state.msgSpacing    = cfg.msgSpacing    || 'comfortable';
@@ -3681,6 +4612,15 @@ function showToast(msg) {
 
   // 5. Focus input
   document.getElementById('textarea').focus();
+
+  // 6. Load API key (decrypt from secure storage; migrate plaintext if found)
+  state.apiKey = await StorageManager.loadApiKey(legacyPlainKey);
+  if (legacyPlainKey) {
+    // Remove plaintext key from old config blob now that it's been migrated
+    const cleanCfg = Object.assign({}, cfg);
+    delete cleanCfg.apiKey;
+    StorageManager.saveConfig(cleanCfg);
+  }
 })();
 
 // ============================================================
@@ -3692,10 +4632,13 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Save on page hide (PWA background)
+// Save on page hide (PWA background) — must be synchronous, debounce bypassed
 window.addEventListener('pagehide', () => {
-  StorageManager.saveSessions();
+  StorageManager.saveSessionsNow();
 });
+window.addEventListener('beforeunload', () => {
+  StorageManager.saveSessionsNow();
+}, { capture: true });
 
 // ============================================================
 //  PWA: SERVICE WORKER
