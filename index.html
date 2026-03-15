@@ -83,19 +83,191 @@
       --msg-gap:        20px;
     }
 
+    /* ── Dark mode palette ───────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg:           #141210;
+      --bg2:          #1e1b18;
+      --bg3:          #272320;
+      --sidebar-bg:   #191611;
+      --sidebar-hover:#232019;
+      --sidebar-act:  #2e2a25;
+      --border:       #2e2a25;
+      --border2:      #3d3830;
+      --text:         #f0ece4;
+      --text2:        #b8b0a4;
+      --text3:        #6e6760;
+      --user-bg:      #242018;
+      --user-border:  #302b22;
+      --accent:       #e0733a;
+      --accent2:      #c85f2a;
+      --accent-rgb:   224,115,58;
+      --think-bg:        #1a1828;
+      --think-bg-done:   #1d1b2c;
+      --think-border:    #3a3258;
+      --think-accent:    #9080e0;
+      --think-accent-dim:#6858b0;
+      --think-text:      #b0a0e0;
+      --think-text-dim:  #706890;
+      --code-bg:      #1a1714;
+      --code-border:  #2e2a25;
+      --shadow-xs:    0 1px 2px rgba(0,0,0,.20);
+      --shadow-sm:    0 1px 4px rgba(0,0,0,.28), 0 1px 2px rgba(0,0,0,.20);
+      --shadow:       0 2px 10px rgba(0,0,0,.36), 0 1px 3px rgba(0,0,0,.24);
+      --shadow-md:    0 6px 24px rgba(0,0,0,.44), 0 2px 8px rgba(0,0,0,.30);
+      --shadow-lg:    0 18px 52px rgba(0,0,0,.56), 0 4px 16px rgba(0,0,0,.36);
+    }
+    /* hljs dark override */
+    [data-theme="dark"] .hljs { background: transparent !important; color: #c9c4bb !important; }
+    [data-theme="dark"] .hljs-keyword, [data-theme="dark"] .hljs-built_in { color: #e0a070 !important; }
+    [data-theme="dark"] .hljs-string { color: #90c878 !important; }
+    [data-theme="dark"] .hljs-comment { color: #5a5448 !important; }
+    [data-theme="dark"] .hljs-number { color: #80c0e8 !important; }
+    [data-theme="dark"] .hljs-title { color: #d0a8f0 !important; }
+    [data-theme="dark"] .hljs-attr, [data-theme="dark"] .hljs-variable { color: #e8c878 !important; }
+    [data-theme="dark"] .hljs-tag { color: #e07878 !important; }
+
     html, body {
       height: 100%; width: 100%; overflow: hidden;
       font-family: var(--font); color: var(--text);
       -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
-      /* Textured parchment background */
       background-color: var(--bg);
       background-image:
         radial-gradient(ellipse 80% 50% at 20% 0%, rgba(200,95,42,.06) 0%, transparent 60%),
         radial-gradient(ellipse 60% 40% at 90% 100%, rgba(112,96,196,.05) 0%, transparent 55%);
+      transition: background-color .25s, color .25s;
+    }
+    [data-theme="dark"] body, [data-theme="dark"] html, html[data-theme="dark"] {
+      background-image:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(224,115,58,.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(144,128,224,.04) 0%, transparent 55%);
     }
 
-    #root-layout { display: flex; height: 100dvh; width: 100%; position: relative; }
+    /* ── Dark mode header & input ───────────────────────────── */
+    [data-theme="dark"] #header {
+      background: rgba(20,18,16,.92);
+    }
+    [data-theme="dark"] #input-bar {
+      background: rgba(30,27,24,.9);
+    }
+
+    /* ── Search clear button ────────────────────────────────── */
+    .sidebar-search-clear {
+      position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+      background: var(--bg3); border: none; border-radius: 50%;
+      width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text3); padding: 0; transition: all .12s;
+    }
+    .sidebar-search-clear:hover { background: var(--border2); color: var(--text2); }
+
+    /* ── Search result items ────────────────────────────────── */
+    .search-result-item {
+      padding: 7px 10px; border-radius: var(--radius-sm); cursor: pointer;
+      transition: background .12s; margin: 0 2px;
+    }
+    .search-result-item:hover { background: var(--sidebar-hover); }
+    .search-result-title {
+      font-size: 12.5px; font-weight: 500; color: var(--text2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .search-result-snippet {
+      font-size: 11px; color: var(--text3); margin-top: 2px;
+      line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .search-result-snippet mark {
+      background: rgba(var(--accent-rgb),.22); color: var(--text2);
+      border-radius: 2px; padding: 0 1px;
+    }
+    .search-no-results {
+      padding: 12px 14px; font-size: 12px; color: var(--text3); text-align: center;
+    }
+
+    /* ── Message highlight for search jump ─────────────────── */
+    @keyframes msgHighlight {
+      0%   { box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.5); }
+      100% { box-shadow: none; }
+    }
+    .msg-highlight { animation: msgHighlight 1.8s ease-out forwards; border-radius: var(--radius); }
+
+    /* ── Branch navigation ──────────────────────────────────── */
+    .branch-nav {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin-top: 4px; opacity: 0; transition: opacity .15s;
+    }
+    .msg-row.user:hover .branch-nav { opacity: 1; }
+    .branch-nav-btn {
+      width: 20px; height: 20px; border: 1px solid var(--border); background: var(--bg2);
+      border-radius: 5px; color: var(--text3); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .12s; padding: 0;
+    }
+    .branch-nav-btn:hover { background: var(--bg3); border-color: var(--border2); color: var(--text2); }
+    .branch-nav-btn:disabled { opacity: .3; cursor: default; pointer-events: none; }
+    .branch-nav-label {
+      font-size: 10.5px; color: var(--text3); font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Prompt templates library ───────────────────────────── */
+    #prompts-overlay {
+      visibility: hidden; opacity: 0; pointer-events: none;
+      position: fixed; inset: 0;
+      background: rgba(10,8,6,.42);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      z-index: 400; transition: opacity .25s, visibility .25s;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    #prompts-overlay.open { visibility: visible; opacity: 1; pointer-events: auto; }
+    #prompts-sheet {
+      width: 100%; max-width: 560px;
+      background: var(--bg);
+      border-radius: 28px 28px 0 0;
+      padding: 0 0 env(safe-area-inset-bottom, 0px);
+      transform: translateY(100%);
+      transition: transform .38s var(--ease-spring);
+      display: flex; flex-direction: column;
+      max-height: 80dvh;
+      box-shadow: 0 -12px 48px rgba(0,0,0,.16), 0 -1px 0 rgba(0,0,0,.05);
+    }
+    #prompts-overlay.open #prompts-sheet { transform: translateY(0); }
+    .prompt-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background .12s; margin: 2px 8px;
+    }
+    .prompt-item:hover { background: var(--bg2); }
+    .prompt-item-icon {
+      width: 32px; height: 32px; border-radius: 9px; background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .prompt-item-text { flex: 1; min-width: 0; }
+    .prompt-item-title { font-size: 13.5px; font-weight: 600; color: var(--text); }
+    .prompt-item-preview {
+      font-size: 11.5px; color: var(--text3); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* ── Sandbox code runner ────────────────────────────────── */
+    .run-btn {
+      font-family: var(--font); font-size: 11px; font-weight: 600; color: #2a7d38;
+      background: none; border: none; cursor: pointer; display: flex; align-items: center;
+      gap: 4px; padding: 3px 8px; border-radius: 5px; transition: all .15s;
+    }
+    .run-btn:hover { background: rgba(42,125,56,.12); }
+    .run-btn svg { width: 11px; height: 11px; }
+    .sandbox-output {
+      border-top: 1px solid var(--code-border); padding: 10px 14px;
+      font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+      color: var(--text2); background: var(--bg2); white-space: pre-wrap;
+      max-height: 320px; overflow-y: auto;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .sandbox-output:has(img) { padding: 10px; }
+    .sandbox-output.error { color: #b83030; }
+    .sandbox-output.running { color: var(--text3); font-style: italic; }
+
+    #root-layout { display: flex; height: 100dvh; width: 100%; position: relative; overflow: hidden; }
 
     /* ════════════════════════════════════════════════════════════
        SIDEBAR
@@ -627,9 +799,9 @@
 
     /* Session token total */
     #session-token-total {
-      font-size: 10px; color: var(--text3); padding: 3px 8px;
+      font-size: 10px; color: var(--text3); padding: 2px 8px 0;
       text-align: center; font-variant-numeric: tabular-nums;
-      border-top: 1px solid var(--border); flex-shrink: 0; letter-spacing: .01em;
+      flex-shrink: 0; letter-spacing: .01em; width: 100%; max-width: 820px;
     }
 
     /* Session title rename input */
@@ -691,9 +863,9 @@
     ════════════════════════════════════════════════════════════ */
     #input-area {
       flex-shrink: 0;
-      padding: 12px 16px 16px;
+      padding: 8px 16px calc(12px + env(safe-area-inset-bottom, 0px));
       background: transparent;
-      display: flex; justify-content: center;
+      display: flex; flex-direction: column; align-items: center;
       border-top: 1px solid var(--border);
       position: relative;
     }
@@ -705,6 +877,7 @@
       border-radius: var(--radius-xl); padding: 10px 10px 10px 18px;
       transition: border-color .15s, box-shadow .15s;
       box-shadow: var(--shadow-sm);
+      margin-top: 8px;
     }
     #input-bar:focus-within {
       border-color: var(--border2);
@@ -980,7 +1153,8 @@
       #messages { padding: 16px 14px 32px; gap: 22px; }
       .msg-row.user .bubble { max-width: 92%; font-size: 14.5px; }
       .md-content { font-size: 14.5px; line-height: 1.7; }
-      #input-area { padding: 8px 12px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); }
+      #input-area { padding: 6px 12px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--border); }
+      #input-hint { display: none; }
       #scroll-down { bottom: calc(82px + env(safe-area-inset-bottom)); right: 12px; }
       #toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
       .delete-session-btn { opacity: 1; width: 28px; height: 28px; }
@@ -1064,13 +1238,16 @@
     }
     #scroll-down.has-unread #scroll-down-badge { display: flex; }
 
-    /* User message edit */
+    /* User message edit & regen buttons */
     .msg-edit-btn {
       position: absolute; left: -28px; top: 50%; transform: translateY(-50%);
       width: 22px; height: 22px;
       background: none; border: none; color: var(--text3);
       border-radius: 5px; cursor: pointer;
       display: none; align-items: center; justify-content: center; transition: all .12s;
+    }
+    .msg-regen-btn {
+      left: -52px !important;
     }
     .msg-row.user:hover .msg-edit-btn { display: flex; }
     .msg-edit-btn:hover { background: var(--bg2); color: var(--text2); }
@@ -1223,8 +1400,20 @@
       display: flex; align-items: center; justify-content: center;
       gap: 8px; padding: 4px 0 0;
       font-size: 11px; color: var(--text3);
-      max-width: 820px; width: 100%; margin: 0 auto;
+      max-width: 820px; width: 100%;
     }
+
+    /* Continue button */
+    #continue-btn {
+      display: none; align-items: center; gap: 6px;
+      padding: 5px 14px; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; font-family: var(--font); font-size: 12.5px; font-weight: 600;
+      color: var(--text2); cursor: pointer; transition: all .15s;
+      margin: 4px auto 0; width: fit-content; flex-shrink: 0;
+    }
+    #continue-btn.visible { display: flex; }
+    #continue-btn:hover { background: var(--bg3); border-color: var(--border2); color: var(--text); }
+    #continue-btn svg { width: 13px; height: 13px; }
 </style>
 </head>
 <body>
@@ -1249,7 +1438,17 @@
     <!-- Search -->
     <div class="sidebar-search-wrap">
       <svg class="sidebar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="sidebar-search" id="session-search" type="text" placeholder="搜索对话…" oninput="filterSessions(this.value)" autocomplete="off" spellcheck="false">
+      <input class="sidebar-search" id="session-search" type="text" placeholder="搜索对话标题或内容…" oninput="filterSessions(this.value)" autocomplete="off" spellcheck="false">
+      <button class="sidebar-search-clear" id="search-clear-btn" onclick="clearSearch()" style="display:none" title="清除搜索">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="11" height="11"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <!-- Search results panel -->
+    <div id="search-results-panel" style="display:none">
+      <div class="sidebar-section-header" style="padding-top:6px">
+        <span class="sidebar-section-title" id="search-results-label">内容匹配</span>
+      </div>
+      <div id="search-results-list"></div>
     </div>
     <!-- Section header -->
     <div class="sidebar-section-header">
@@ -1270,6 +1469,15 @@
       <button class="tool-btn" onclick="openStats()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><rect x="2" y="2" width="20" height="20" rx="2" opacity="0"/></svg>
         用量统计
+      </button>
+      <button class="tool-btn" id="theme-toggle-btn" onclick="toggleTheme()">
+        <svg id="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <span id="theme-toggle-label">深色模式</span>
+      </button>
+      <button class="tool-btn" onclick="openPrompts()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Prompt 模板
       </button>
       <button class="tool-btn" onclick="openSettings()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="10" cy="18" r="2" fill="currentColor" stroke="none"/></svg>
@@ -1313,6 +1521,7 @@
       <div id="scroll-down-badge"></div>
     </button>
     <div id="input-area">
+      <div id="session-token-total" style="display:none"></div>
       <div id="input-bar">
         <div id="file-preview-strip"></div>
         <div id="input-bar-inner">
@@ -1327,12 +1536,11 @@
           </button>
         </div>
       </div>
-    </div>
-    <div id="session-token-total" style="display:none"></div>
-    <div id="input-hint">
-      <span>按 <span class="kbd-hint">Enter</span> 发送</span>
-      <span style="color:var(--border2)">·</span>
-      <span><span class="kbd-hint">Shift+Enter</span> 换行</span>
+      <button id="continue-btn" onclick="continueGeneration()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        继续生成
+      </button>
+      <div id="input-hint"></div>
     </div>
   </div>
 </div>
@@ -1491,6 +1699,11 @@
 
 <div id="toast"></div>
 
+<!-- Prompts Library Overlay -->
+<div id="prompts-overlay" onclick="handlePromptsOverlayClick(event)">
+  <div id="prompts-sheet"></div>
+</div>
+
 <!-- Image file input (hidden) -->
 <!-- File input (hidden) -->
 <input type="file" id="file-input" accept=".txt,.md,.markdown,.csv,.json,.xml,.yaml,.yml,.html,.htm,.css,.js,.ts,.jsx,.tsx,.py,.java,.c,.cpp,.cs,.go,.rs,.rb,.php,.sh,.sql,.pdf,.log,.ini,.toml,.env" multiple style="display:none" onchange="handleFileInput(event)">
@@ -1645,12 +1858,52 @@ const state = {
   currentSessionId: null,
   isStreaming: false,
   abortController: null,
-  streamingSessionId: null,   // track which session is streaming
-  pendingFiles: [],            // { name, content, size } text files waiting to be sent
+  streamingSessionId: null,
+  pendingFiles: [],
   enterSend: true,
   fontSize: 'medium',
   msgSpacing: 'comfortable',
+  theme: 'light',
+  lastStoppedSession: null,
 };
+
+// ============================================================
+//  DARK MODE
+// ============================================================
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const moon = document.getElementById('theme-icon-moon');
+  const sun  = document.getElementById('theme-icon-sun');
+  const lbl  = document.getElementById('theme-toggle-label');
+  if (theme === 'dark') {
+    if (moon) moon.style.display = 'none';
+    if (sun)  sun.style.display  = '';
+    if (lbl)  lbl.textContent    = '亮色模式';
+    const hljsLink = document.querySelector('link[href*="highlight.js"]');
+    if (hljsLink) hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+  } else {
+    if (moon) moon.style.display = '';
+    if (sun)  sun.style.display  = 'none';
+    if (lbl)  lbl.textContent    = '深色模式';
+    const hljsLink = document.querySelector('link[href*="highlight.js"]');
+    if (hljsLink) hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+  }
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.content = theme === 'dark' ? '#141210' : '#fdfbf7';
+}
+
+function toggleTheme() {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(state.theme);
+  StorageManager.saveConfig({
+    baseUrl: state.baseUrl, systemPrompt: state.systemPrompt,
+    enableSliding: state.enableSliding, maxContextSize: state.maxContextSize,
+    maxTokens: state.maxTokens, enterSend: state.enterSend,
+    fontSize: state.fontSize, msgSpacing: state.msgSpacing,
+    theme: state.theme,
+  });
+  _mdCache.clear();
+}
 
 // ============================================================
 //  STORAGE MANAGER  ← core fix for disappearing conversations
@@ -1721,6 +1974,11 @@ const StorageManager = {
               reasoning: typeof m.reasoning === 'string' ? m.reasoning : '',
               _usage: (m._usage && typeof m._usage.total === 'number') ? m._usage : null,
               _files: Array.isArray(m._files) ? m._files : undefined,
+              _userText: typeof m._userText === 'string' ? m._userText : undefined,
+              _stopped: m._stopped === true ? true : undefined,
+              _silent: m._silent === true ? true : undefined,
+              _branches: Array.isArray(m._branches) ? m._branches : undefined,
+              _branchIdx: typeof m._branchIdx === 'number' ? m._branchIdx : undefined,
             }))
             .slice(-MAX_HISTORY),
           updatedAt: typeof s.updatedAt === 'number' ? s.updatedAt : Date.now(),
@@ -2443,6 +2701,7 @@ async function typesetElement(_el) {}
 function scheduleTypeset(_el) {}
 
 
+const RUNNABLE_LANGS = new Set(['javascript','js','python','py','html']);
 const myRenderer = new marked.Renderer();
 myRenderer.code = (code, lang) => {
   const language = lang || 'plaintext';
@@ -2453,7 +2712,11 @@ myRenderer.code = (code, lang) => {
       : hljs.highlightAuto(code).value;
   } catch { hi = esc(code); }
   const uid = 'c' + Math.random().toString(36).slice(2, 9);
-  return `<pre><div class="code-header"><span class="code-lang">${esc(language)}</span><button class="copy-btn" data-target="${uid}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><code id="${uid}" class="hljs">${hi}</code></pre>`;
+  const normLang = (lang || '').toLowerCase().replace(/^py$/, 'python').replace(/^js$/, 'javascript');
+  const runBtn = RUNNABLE_LANGS.has(normLang)
+    ? `<button class="run-btn" onclick="runCodeBlock('${uid}','${normLang}',this)" title="在沙箱中运行"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>运行</button>`
+    : '';
+  return `<pre><div class="code-header"><span class="code-lang">${esc(language)}</span><div style="display:flex;align-items:center;gap:4px">${runBtn}<button class="copy-btn" data-target="${uid}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div></div><code id="${uid}" class="hljs">${hi}</code></pre>`;
 };
 marked.use({ renderer: myRenderer, breaks: true, gfm: true });
 
@@ -2701,6 +2964,7 @@ msgsWrap.addEventListener('scroll', () => {
   if (!isUserScrolledUp) {
     _unreadCount = 0;
     scrollBtn.classList.remove('has-unread');
+    document.getElementById('scroll-down-badge').textContent = '';
   }
 }, { passive: true });
 
@@ -2710,7 +2974,18 @@ function incrementUnread() {
   const btn = document.getElementById('scroll-down');
   const badge = document.getElementById('scroll-down-badge');
   btn.classList.add('has-unread');
-  badge.textContent = _unreadCount > 9 ? '9+' : _unreadCount;
+  badge.textContent = _unreadCount > 99 ? '99+' : _unreadCount;
+}
+
+// 流结束时：如果用户在上方阅读，把 badge 换成一个向下箭头提示（而非数字计数）
+function notifyStreamEnd() {
+  if (!isUserScrolledUp) return;
+  const btn = document.getElementById('scroll-down');
+  const badge = document.getElementById('scroll-down-badge');
+  btn.classList.add('has-unread');
+  // 用特殊标记表示"回复已完成，点击跳到底"
+  badge.textContent = '↓';
+  badge.style.fontSize = '9px';
 }
 
 function scrollToBottom(force = false) {
@@ -2719,6 +2994,9 @@ function scrollToBottom(force = false) {
   if (force) {
     _unreadCount = 0;
     document.getElementById('scroll-down').classList.remove('has-unread');
+    const badge = document.getElementById('scroll-down-badge');
+    badge.textContent = '';
+    badge.style.fontSize = '';
   }
 }
 
@@ -2734,10 +3012,10 @@ function renderWelcome() {
       <h1>你好，我是 DeepSeek</h1>
       <p>强大的 AI 助手，支持 V3.2 通用对话与深度思考模式</p>
       <div class="welcome-chips">
-        <button class="chip" onclick="sendChip(this)">✦ 深度思考：9.11 和 9.8 哪个大？</button>
-        <button class="chip" onclick="sendChip(this)">📝 帮我写一个 Python 快速排序</button>
-        <button class="chip" onclick="sendChip(this)">🌐 用简单的语言解释量子纠缠</button>
-        <button class="chip" onclick="sendChip(this)">✉️ 帮我写一封专业的商务邮件模板</button>
+        <button class="chip" onclick="sendChip(this)">✦ 深度思考：分析特斯拉未来五年的商业风险</button>
+        <button class="chip" onclick="sendChip(this)">🐛 帮我 review 这段代码并找出潜在 bug</button>
+        <button class="chip" onclick="sendChip(this)">🌐 用 ELI5 方式解释大型语言模型的工作原理</button>
+        <button class="chip" onclick="sendChip(this)">✍️ 帮我把这段话改写得更简洁有力</button>
       </div>
     </div>`;
 }
@@ -2761,7 +3039,7 @@ function sendChip(btn) {
 // ============================================================
 //  MESSAGE RENDERING
 // ============================================================
-function buildUserRow(text, images = [], appendToDOM = true) {
+function buildUserRow(text, images = [], appendToDOM = true, histMsgIdx = -1) {
   hideWelcome();
   const row = document.createElement('div');
   row.className = 'msg-row user';
@@ -2793,8 +3071,50 @@ function buildUserRow(text, images = [], appendToDOM = true) {
 
   editBtn.addEventListener('click', () => startEditBubble(row, bubble, text || ''));
 
+  // ── 重新生成此回复按钮（显示在气泡左侧，hover 可见）──────────────
+  const regenUserBtn = document.createElement('button');
+  regenUserBtn.className = 'msg-edit-btn msg-regen-btn';
+  regenUserBtn.title = '重新生成回复';
+  regenUserBtn.style.left = '-52px'; // 排在编辑按钮左侧
+  regenUserBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  regenUserBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (state.isStreaming) return;
+    await regenFromUserMsg(row, histMsgIdx);
+  });
+
+  // Branch navigation — only shown when the message has siblings
+  const branchNav = document.createElement('div');
+  branchNav.className = 'branch-nav';
+  if (histMsgIdx >= 0) {
+    const session = getSessionById(state.currentSessionId);
+    const msg = session?.history[histMsgIdx];
+    if (msg && Array.isArray(msg._branches) && msg._branches.length > 1) {
+      const cur    = (msg._branchIdx || 0) + 1;
+      const total  = msg._branches.length;
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'branch-nav-btn';
+      prevBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><polyline points="15 18 9 12 15 6"/></svg>`;
+      prevBtn.disabled = cur <= 1;
+      prevBtn.title = '上一个版本';
+      const lbl = document.createElement('span');
+      lbl.className = 'branch-nav-label';
+      lbl.textContent = `${cur} / ${total}`;
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'branch-nav-btn';
+      nextBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><polyline points="9 18 15 12 9 6"/></svg>`;
+      nextBtn.disabled = cur >= total;
+      nextBtn.title = '下一个版本';
+      prevBtn.addEventListener('click', e => { e.stopPropagation(); switchBranch(histMsgIdx, -1); });
+      nextBtn.addEventListener('click', e => { e.stopPropagation(); switchBranch(histMsgIdx, +1); });
+      branchNav.append(prevBtn, lbl, nextBtn);
+    }
+  }
+
+  row.appendChild(regenUserBtn);
   row.appendChild(editBtn);
   row.appendChild(bubble);
+  if (branchNav.hasChildNodes()) row.appendChild(branchNav);
   if (appendToDOM) {
     document.getElementById('messages').appendChild(row);
     scrollToBottom(false);
@@ -2849,11 +3169,27 @@ function startEditBubble(row, bubble, originalText) {
     const rowIdx = allRows.indexOf(row);
     for (let i = allRows.length - 1; i > rowIdx; i--) allRows[i].remove();
 
-    // Find and trim session history from this user message onward
+    // Find the user message in history and save branch before trimming
     for (let i = session.history.length - 1; i >= 0; i--) {
-      if (session.history[i].role === 'user' && session.history[i].content === originalText) {
-        session.history.splice(i);
-        break;
+      const m = session.history[i];
+      if (m.role === 'user') {
+        const displayText = m._userText !== undefined ? m._userText : m.content;
+        if (displayText === originalText) {
+          // Store previous version as a branch
+          const branchSnapshot = {
+            userText: m._userText !== undefined ? m._userText : m.content,
+            content: m.content,
+            files: m._files,
+            // Grab the following assistant reply if any
+            assistantContent: session.history[i + 1]?.role === 'assistant' ? session.history[i + 1].content : '',
+            assistantReasoning: session.history[i + 1]?.role === 'assistant' ? (session.history[i + 1].reasoning || '') : '',
+          };
+          if (!m._branches) m._branches = [{ ...branchSnapshot }];
+          m._branches.push({ userText: newText, content: newText, files: undefined, assistantContent: '', assistantReasoning: '' });
+          m._branchIdx = m._branches.length - 1;
+          session.history.splice(i);
+          break;
+        }
       }
     }
 
@@ -3020,25 +3356,27 @@ function buildAssistantRow(initContent = '', initReasoning = '', isHistory = fal
       if (state.isStreaming) return;
       const session = getSessionById(state.currentSessionId);
       if (!session) return;
-      // Find this assistant message in history (last assistant before end)
+      // Find the user message that precedes this assistant row in DOM
       const allRows = [...document.getElementById('messages').querySelectorAll('.msg-row')];
       const rowIdx = allRows.indexOf(row);
-      // Remove this and any following rows from DOM
-      for (let i = allRows.length - 1; i >= rowIdx; i--) allRows[i].remove();
-      // Remove this and any following messages from history
-      const assistIdx = session.history.findLastIndex(m => m.role === 'assistant');
-      if (assistIdx !== -1) session.history.splice(assistIdx);
-      StorageManager.saveSessions();
-      // Rebuild the context and stream again
-      const messagesToSend = [];
-      if (state.systemPrompt) messagesToSend.push({ role: 'system', content: state.systemPrompt });
-      const cleanHistory = session.history.filter(m => !m._partial && m.content);
-      let historyToSend = cleanHistory;
-      if (state.enableSliding && state.maxContextSize > 0) historyToSend = cleanHistory.slice(-state.maxContextSize);
-      historyToSend.forEach(m => messagesToSend.push({ role: m.role, content: m.content }));
-      const refs = buildAssistantRow('', '', false);
-      setUI(true);
-      try { await stream(refs, messagesToSend, session); } finally { setUI(false); }
+      // Walk backwards to find the preceding user row index in history
+      let userHistIdx = -1;
+      for (let i = rowIdx - 1; i >= 0; i--) {
+        if (allRows[i].classList.contains('user')) {
+          // Count how many non-silent user rows precede this one to map to histMsgIdx
+          const userRows = allRows.slice(0, i + 1).filter(r => r.classList.contains('user'));
+          // Find corresponding history index
+          let uCount = 0;
+          for (let h = 0; h < session.history.length; h++) {
+            if (session.history[h].role === 'user' && !session.history[h]._silent) {
+              if (uCount === userRows.length - 1) { userHistIdx = h; break; }
+              uCount++;
+            }
+          }
+          break;
+        }
+      }
+      await regenFromUserMsg(row, userHistIdx, true /* isFromAssistantBtn */);
     });
     actions.appendChild(regenBtn);
   }
@@ -3132,6 +3470,9 @@ function switchSession(id) {
   }
   state.currentSessionId = id;
   refreshStreamUI();   // update stop-btn visibility for the session we just switched to
+  // Hide continue button on session switch — refreshStreamUI will re-show if needed
+  const continueBtn = document.getElementById('continue-btn');
+  if (continueBtn) continueBtn.classList.remove('visible');
 
   // Restore the model for this session
   const modelEl = document.querySelector(`.model-option[data-model="${session.model}"]`);
@@ -3149,16 +3490,18 @@ function switchSession(id) {
     if (state.isStreaming && state.streamingSessionId === id && session._liveRefs) {
       // Render all history EXCEPT the last assistant turn (which is live)
       const historyToRender = session.history.filter(m => !m._partial);
-      historyToRender.forEach(m => {
-        if (m.role === 'user') {
-          buildUserRow(m.content, m._files || []);
+      historyToRender.forEach((m, i) => {
+        const origIdx = session.history.indexOf(m);
+        if (m.role === 'user' && !m._silent) {
+          buildUserRow(m._userText !== undefined ? m._userText : m.content, m._files || [], true, origIdx);
         } else if (m.role === 'assistant') {
           buildAssistantRow(m.content, m.reasoning || '', true);
         }
       });
       // Re-attach the live streaming row
       document.getElementById('messages').appendChild(session._liveRefs.mdEl.closest('.msg-row'));
-      scrollToBottom(true);
+      // 切回正在流式输出的对话时，如果用户之前在底部则跟随，否则不强制
+      scrollToBottom(false);
       refreshStreamUI();
       if (window.innerWidth <= 768) toggleSidebar(false);
       return;
@@ -3180,7 +3523,7 @@ function switchSession(id) {
       for (let i = eagerStart; i < hist.length; i++) {
         const m = hist[i];
         let rowEl;
-        if (m.role === 'user') rowEl = buildUserRow(m.content, m._files || [], false);
+        if (m.role === 'user' && !m._silent) rowEl = buildUserRow(m._userText !== undefined ? m._userText : m.content, m._files || [], false, i);
         else if (m.role === 'assistant') rowEl = buildAssistantRow(m.content, m.reasoning || '', true, false).row;
         if (rowEl) frag.appendChild(rowEl);
       }
@@ -3203,7 +3546,7 @@ function switchSession(id) {
         while (idleIdx >= 0) {
           const m = hist[idleIdx];
           let rowEl;
-          if (m.role === 'user') rowEl = buildUserRow(m.content, m._files || [], false);
+          if (m.role === 'user' && !m._silent) rowEl = buildUserRow(m._userText !== undefined ? m._userText : m.content, m._files || [], false, idleIdx);
           else if (m.role === 'assistant') rowEl = buildAssistantRow(m.content, m.reasoning || '', true, false).row;
           if (rowEl) frag.prepend(rowEl);
           idleIdx--;
@@ -3332,11 +3675,88 @@ let _sessionFilter = '';
 let _sessionFilterTimer = null;
 function filterSessions(q) {
   _sessionFilter = q.trim().toLowerCase();
+  const clearBtn = document.getElementById('search-clear-btn');
+  if (clearBtn) clearBtn.style.display = _sessionFilter ? '' : 'none';
   if (_sessionFilterTimer) clearTimeout(_sessionFilterTimer);
   _sessionFilterTimer = setTimeout(() => {
     _sessionFilterTimer = null;
     renderSessionList();
-  }, 120);
+    renderSearchContentResults(_sessionFilter);
+  }, 160);
+}
+
+function clearSearch() {
+  const inp = document.getElementById('session-search');
+  if (inp) inp.value = '';
+  filterSessions('');
+}
+
+function renderSearchContentResults(q) {
+  const panel  = document.getElementById('search-results-panel');
+  const list   = document.getElementById('search-results-list');
+  const label  = document.getElementById('search-results-label');
+  if (!panel || !list) return;
+  if (!q || q.length < 2) { panel.style.display = 'none'; return; }
+
+  // Search inside message content across all sessions
+  const matches = [];
+  for (const session of state.sessions) {
+    for (let i = 0; i < session.history.length; i++) {
+      const m = session.history[i];
+      const haystack = (m._userText || m.content || '').toLowerCase();
+      if (m.role !== 'user' && m.role !== 'assistant') continue;
+      const idx = haystack.indexOf(q);
+      if (idx === -1) continue;
+      // Snippet: up to 80 chars centred around match
+      const raw = (m._userText || m.content || '');
+      const start = Math.max(0, idx - 30);
+      const end   = Math.min(raw.length, idx + q.length + 50);
+      const snippet = (start > 0 ? '…' : '') + raw.slice(start, end).replace(/\n/g,' ') + (end < raw.length ? '…' : '');
+      // Highlight match in snippet
+      const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+      const snipHtml = esc(snippet).replace(re, '<mark>$1</mark>');
+      matches.push({ session, msgIdx: i, snipHtml, role: m.role });
+      if (matches.length >= 20) break;
+    }
+    if (matches.length >= 20) break;
+  }
+
+  if (matches.length === 0) {
+    panel.style.display = '';
+    list.innerHTML = `<div class="search-no-results">消息内容中未找到「${esc(q)}」</div>`;
+    if (label) label.textContent = '消息内容';
+    return;
+  }
+
+  if (label) label.textContent = `消息内容 (${matches.length})`;
+  panel.style.display = '';
+  list.innerHTML = '';
+  matches.forEach(({ session, msgIdx, snipHtml, role }) => {
+    const item = document.createElement('div');
+    item.className = 'search-result-item';
+    item.innerHTML = `
+      <div class="search-result-title">${esc(session.title)}
+        <span style="font-weight:400;color:var(--text3);margin-left:4px">${role === 'user' ? '· 你' : '· AI'}</span>
+      </div>
+      <div class="search-result-snippet">${snipHtml}</div>`;
+    item.addEventListener('click', () => {
+      switchSession(session.id);
+      // Jump to message after render
+      setTimeout(() => jumpToMessage(session.id, msgIdx), 120);
+      if (window.innerWidth <= 768) toggleSidebar(false);
+    });
+    list.appendChild(item);
+  });
+}
+
+function jumpToMessage(sessionId, msgIdx) {
+  if (state.currentSessionId !== sessionId) return;
+  const rows = document.getElementById('messages').querySelectorAll('.msg-row');
+  const target = rows[msgIdx];
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  target.classList.add('msg-highlight');
+  setTimeout(() => target.classList.remove('msg-highlight'), 2200);
 }
 
 function renderSessionList() {
@@ -3560,11 +3980,13 @@ async function sendMessage() {
   messagesToSend.push({ role: 'user', content: fullText });
 
   // Save to history — store the full text (with file blocks) as content,
-  // store file metadata separately so chips can be re-rendered
+  // store file metadata separately so chips can be re-rendered,
+  // store the original user-typed text so history rendering skips file blocks
   session.history.push({
     role: 'user',
     content: fullText,
     reasoning: '',
+    _userText: text,
     _files: files.length > 0 ? files.map(f => ({ name: f.name, size: f.size })) : undefined,
   });
   session.updatedAt = Date.now();
@@ -3596,22 +4018,26 @@ function setUI(streaming) {
 function refreshStreamUI() {
   const curStreaming = state.isStreaming && state.streamingSessionId === state.currentSessionId;
   const btn = document.getElementById('send-btn');
+  const continueBtn = document.getElementById('continue-btn');
   if (curStreaming) {
-    // Become a stop button
     btn.disabled = false;
     btn.classList.remove('empty');
     btn.classList.add('streaming');
     btn.onclick = stopStream;
     btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>`;
+    if (continueBtn) continueBtn.classList.remove('visible');
   } else {
-    // Restore as send button
     btn.classList.remove('streaming');
     btn.classList.toggle('empty', !document.getElementById('textarea').value.trim() && state.pendingFiles.length === 0);
     btn.disabled = false;
     btn.onclick = sendMessage;
     btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V6M6 12l6-6 6 6"/></svg>`;
+    // Show continue button if last stream was stopped mid-way on this session
+    const session = getSessionById(state.currentSessionId);
+    const lastMsg = session?.history[session.history.length - 1];
+    const wasStopped = lastMsg?.role === 'assistant' && lastMsg._stopped;
+    if (continueBtn) continueBtn.classList.toggle('visible', !!wasStopped);
   }
-  // Show a subtle "background" indicator in sidebar for the streaming session
   document.querySelectorAll('.session-item').forEach(el => {
     const isStreaming = state.isStreaming && el.dataset.sid === state.streamingSessionId;
     el.classList.toggle('session-streaming', isStreaming);
@@ -3893,6 +4319,7 @@ async function stream({ mdEl, thinkRefs, row, tokenPill }, messagesToSend, sessi
   } catch (err) {
     if (err.name === 'AbortError') {
       // User stopped — partial content is fine, handled in finally
+      state._streamWasStopped = true;
     } else {
       renderErrorInRow(mdEl, `请求失败：${err.message}`);
       showToast('请求失败，请检查网络和 API Key');
@@ -3953,10 +4380,14 @@ async function stream({ mdEl, thinkRefs, row, tokenPill }, messagesToSend, sessi
 
     // Save assistant message if there's content
     if ((answer || thinking) && getSessionById(session.id)) {
-      session.history.push({ role: 'assistant', content: answer, reasoning: thinking, _usage: session._lastUsage || null });
+      const wasStopped = !!state._streamWasStopped;
+      state._streamWasStopped = false;
+      session.history.push({ role: 'assistant', content: answer, reasoning: thinking, _usage: session._lastUsage || null, _stopped: wasStopped && !!answer });
       session.updatedAt = Date.now();
-      StorageManager.saveSessions(true);  // urgent: stream just finished
+      StorageManager.saveSessions(true);
       renderSessionList();
+    } else {
+      state._streamWasStopped = false;
     }
 
     // ── Update token pill with real usage from API ───────────────────
@@ -3978,7 +4409,10 @@ async function stream({ mdEl, thinkRefs, row, tokenPill }, messagesToSend, sessi
 
     state.abortController = null;
     state.streamingSessionId = null;
-    scrollToBottom(true);
+    // 流结束时：如果用户已手动上滚，不强制跳到底部，仅更新 unread badge
+    // 只有用户本来就在底部跟随时，才平滑滚到底
+    scrollToBottom(false);
+    notifyStreamEnd();
   }
 }
 
@@ -4075,7 +4509,7 @@ function saveSettings() {
     baseUrl: state.baseUrl,
     systemPrompt: state.systemPrompt, enableSliding: state.enableSliding,
     maxContextSize: state.maxContextSize, maxTokens: state.maxTokens, enterSend: state.enterSend,
-    fontSize, msgSpacing,
+    fontSize, msgSpacing, theme: state.theme,
   });
   closeSettings();
   showToast('✓ 设置已保存');
@@ -4410,6 +4844,10 @@ function openStats() {
   document.getElementById('stats-overlay').classList.add('open');
   if (window.innerWidth <= 768) toggleSidebar(false);
 }
+function handlePromptsOverlayClick(e) {
+  if (e.target.id === 'prompts-overlay') closePrompts();
+}
+
 function closeStats() {
   document.getElementById('stats-overlay').classList.remove('open');
 }
@@ -4601,6 +5039,8 @@ function renderStatsPanel() {
   state.enterSend     = cfg.enterSend     !== false;
   state.fontSize      = cfg.fontSize      || 'medium';
   state.msgSpacing    = cfg.msgSpacing    || 'comfortable';
+  state.theme         = cfg.theme         || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(state.theme);
   applyDisplayPrefs(state.fontSize, state.msgSpacing);
   updateKeyboardHint();
 
@@ -4630,6 +5070,700 @@ function renderStatsPanel() {
     StorageManager.saveConfig(cleanCfg);
   }
 })();
+
+// ============================================================
+//  BRANCH NAVIGATION
+// ============================================================
+function switchBranch(msgIdx, delta) {
+  const session = getSessionById(state.currentSessionId);
+  if (!session || state.isStreaming) return;
+  const msg = session.history[msgIdx];
+  if (!msg || !Array.isArray(msg._branches)) return;
+
+  const newIdx = (msg._branchIdx || 0) + delta;
+  if (newIdx < 0 || newIdx >= msg._branches.length) return;
+
+  const branch = msg._branches[newIdx];
+  msg._branchIdx = newIdx;
+
+  // Restore the branch's user text and the following assistant reply
+  msg._userText = branch.userText;
+  msg.content   = branch.content;
+  msg._files    = branch.files;
+
+  // Replace everything after this message with the branch's assistant reply
+  session.history.splice(msgIdx + 1);
+  if (branch.assistantContent) {
+    session.history.push({
+      role: 'assistant',
+      content: branch.assistantContent,
+      reasoning: branch.assistantReasoning || '',
+    });
+  }
+  StorageManager.saveSessions();
+  // Re-render the session from scratch
+  switchSession(state.currentSessionId);
+}
+
+// ============================================================
+//  REGENERATE FROM A USER MESSAGE  (branch-aware)
+// ============================================================
+async function regenFromUserMsg(userRowEl, histMsgIdx, isFromAssistantBtn = false) {
+  const session = getSessionById(state.currentSessionId);
+  if (!session || state.isStreaming) return;
+
+  const allRows = [...document.getElementById('messages').querySelectorAll('.msg-row')];
+  const userRowIdx = allRows.indexOf(userRowEl);
+
+  // ── 1. Snapshot the current assistant reply into a branch ──────────────
+  // Find the assistant history entry that follows this user message
+  if (histMsgIdx >= 0) {
+    const userMsg = session.history[histMsgIdx];
+    const assistMsg = session.history[histMsgIdx + 1];
+    if (userMsg && assistMsg?.role === 'assistant' && assistMsg.content) {
+      // Save old reply as a branch on the user message
+      const snap = {
+        userText:          userMsg._userText !== undefined ? userMsg._userText : userMsg.content,
+        content:           userMsg.content,
+        files:             userMsg._files,
+        assistantContent:  assistMsg.content,
+        assistantReasoning: assistMsg.reasoning || '',
+      };
+      if (!userMsg._branches) {
+        // First regeneration: create initial branch array from current state
+        userMsg._branches = [{ ...snap }];
+      } else {
+        // Already has branches: update the current branch's assistant content
+        const curIdx = userMsg._branchIdx || 0;
+        if (userMsg._branches[curIdx]) {
+          userMsg._branches[curIdx].assistantContent  = assistMsg.content;
+          userMsg._branches[curIdx].assistantReasoning = assistMsg.reasoning || '';
+        }
+      }
+      // Add a new empty-assistant branch as the upcoming reply slot
+      userMsg._branches.push({
+        userText: snap.userText, content: snap.content, files: snap.files,
+        assistantContent: '', assistantReasoning: '',
+      });
+      userMsg._branchIdx = userMsg._branches.length - 1;
+    }
+  }
+
+  // ── 2. Remove DOM rows from userRow's next sibling onward ─────────────
+  const startRemove = isFromAssistantBtn ? userRowIdx : userRowIdx + 1;
+  for (let i = allRows.length - 1; i >= startRemove; i--) allRows[i].remove();
+
+  // ── 3. Trim history after this user message ────────────────────────────
+  if (histMsgIdx >= 0) {
+    session.history.splice(histMsgIdx + 1);
+  } else {
+    // Fallback: trim from last assistant message
+    const lastAssist = session.history.findLastIndex(m => m.role === 'assistant');
+    if (lastAssist !== -1) session.history.splice(lastAssist);
+  }
+  StorageManager.saveSessions();
+
+  // ── 4. Re-render branch nav on the user row (now has multiple branches) ─
+  const existingBranchNav = userRowEl.querySelector('.branch-nav');
+  if (existingBranchNav) existingBranchNav.remove();
+  if (histMsgIdx >= 0) {
+    const userMsg = session.history[histMsgIdx];
+    if (userMsg && Array.isArray(userMsg._branches) && userMsg._branches.length > 1) {
+      const cur   = (userMsg._branchIdx || 0) + 1;
+      const total = userMsg._branches.length;
+      const nav   = document.createElement('div');
+      nav.className = 'branch-nav';
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'branch-nav-btn';
+      prevBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><polyline points="15 18 9 12 15 6"/></svg>`;
+      prevBtn.disabled = cur <= 1;
+      prevBtn.title = '上一个版本';
+      const lbl = document.createElement('span');
+      lbl.className = 'branch-nav-label';
+      lbl.textContent = `${cur} / ${total}`;
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'branch-nav-btn';
+      nextBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><polyline points="9 18 15 12 9 6"/></svg>`;
+      nextBtn.disabled = cur >= total;
+      nextBtn.title = '下一个版本';
+      const idx = histMsgIdx;
+      prevBtn.addEventListener('click', e => { e.stopPropagation(); switchBranch(idx, -1); });
+      nextBtn.addEventListener('click', e => { e.stopPropagation(); switchBranch(idx, +1); });
+      nav.append(prevBtn, lbl, nextBtn);
+      userRowEl.appendChild(nav);
+    }
+  }
+
+  // ── 5. Build messages payload and stream ──────────────────────────────
+  const messagesToSend = [];
+  if (state.systemPrompt) messagesToSend.push({ role: 'system', content: state.systemPrompt });
+  const cleanHistory = session.history.filter(m => !m._partial && m.content);
+  let historyToSend = cleanHistory;
+  if (state.enableSliding && state.maxContextSize > 0) historyToSend = cleanHistory.slice(-state.maxContextSize);
+  historyToSend.forEach(m => messagesToSend.push({ role: m.role, content: m.content }));
+
+  const refs = buildAssistantRow('', '', false);
+  setUI(true);
+  if (window.innerWidth > 768) document.getElementById('textarea').focus();
+  try { await stream(refs, messagesToSend, session); } finally { setUI(false); }
+}
+async function continueGeneration() {
+  if (state.isStreaming) return;
+  const session = getSessionById(state.currentSessionId);
+  if (!session) return;
+
+  // Find the last stopped assistant message
+  const lastMsg = session.history[session.history.length - 1];
+  if (!lastMsg || lastMsg.role !== 'assistant') return;
+
+  // Clear the stopped flag
+  lastMsg._stopped = false;
+  const continueBtn = document.getElementById('continue-btn');
+  if (continueBtn) continueBtn.classList.remove('visible');
+
+  // Build messages including a "请继续" user turn
+  const messagesToSend = [];
+  if (state.systemPrompt) messagesToSend.push({ role: 'system', content: state.systemPrompt });
+  const cleanHistory = session.history.filter(m => !m._partial && m.content);
+  let historyToSend = cleanHistory;
+  if (state.enableSliding && state.maxContextSize > 0) {
+    historyToSend = cleanHistory.slice(-state.maxContextSize);
+  }
+  historyToSend.forEach(m => messagesToSend.push({ role: m.role, content: m.content }));
+  messagesToSend.push({ role: 'user', content: '请继续' });
+
+  // Add a silent user message to history so context is correct
+  session.history.push({ role: 'user', content: '请继续', _userText: '', _silent: true });
+
+  // Build a new assistant row and stream into it
+  const refs = buildAssistantRow('', '', false);
+  setUI(true);
+  if (window.innerWidth > 768) document.getElementById('textarea').focus();
+  try {
+    await stream(refs, messagesToSend, session);
+  } finally {
+    setUI(false);
+  }
+}
+
+// ============================================================
+//  SANDBOX CODE RUNNER
+// ============================================================
+function runCodeBlock(uid, lang, btn) {
+  const codeEl = document.getElementById(uid);
+  if (!codeEl) return;
+  const code = codeEl.innerText;
+  const pre = codeEl.closest('pre');
+
+  // Remove any existing output
+  const existing = pre.nextElementSibling;
+  if (existing?.classList.contains('sandbox-output')) existing.remove();
+
+  const out = document.createElement('div');
+  out.className = 'sandbox-output running';
+  out.textContent = '运行中…';
+  pre.insertAdjacentElement('afterend', out);
+
+  btn.disabled = true;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="11" height="11"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>运行中`;
+
+  const reset = () => {
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><polygon points="5 3 19 12 5 21 5 3"/></svg>运行`;
+  };
+
+  if (lang === 'html') {
+    out.className = 'sandbox-output';
+    out.style.cssText = 'padding:0;';
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'width:100%;border:none;min-height:120px;max-height:400px;display:block;border-radius:0 0 var(--radius) var(--radius);';
+    iframe.sandbox = 'allow-scripts';
+    out.appendChild(iframe);
+    iframe.srcdoc = code;
+    // Auto-resize
+    iframe.onload = () => {
+      try {
+        const h = iframe.contentDocument?.body?.scrollHeight;
+        if (h) iframe.style.height = Math.min(Math.max(h + 16, 80), 400) + 'px';
+      } catch {}
+    };
+    reset();
+    return;
+  }
+
+  if (lang === 'javascript') {
+    const logs = [];
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.sandbox = 'allow-scripts';
+    document.body.appendChild(iframe);
+    const win = iframe.contentWindow;
+    win.console = {
+      log:   (...a) => logs.push(a.map(String).join(' ')),
+      error: (...a) => logs.push('❌ ' + a.map(String).join(' ')),
+      warn:  (...a) => logs.push('⚠️ ' + a.map(String).join(' ')),
+      info:  (...a) => logs.push(a.map(String).join(' ')),
+    };
+    try {
+      win.eval(code);
+      out.className = 'sandbox-output';
+      out.textContent = logs.length ? logs.join('\n') : '✓ 执行完成（无输出）';
+    } catch (e) {
+      out.className = 'sandbox-output error';
+      out.textContent = '❌ ' + e.toString();
+    }
+    iframe.remove();
+    reset();
+    return;
+  }
+
+  if (lang === 'python') {
+    out.className = 'sandbox-output running';
+
+    const setStatus = (msg) => {
+      out.className = 'sandbox-output running';
+      out.textContent = msg;
+    };
+
+    (async () => {
+      try {
+        // ── Step 1: 加载 Pyodide ──────────────────────────────────────────
+        if (!window._pyodide) {
+          setStatus('⏳ 正在加载 Python 运行时（首次约需 10-20 秒）…');
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';
+          document.head.appendChild(script);
+          await new Promise((res, rej) => {
+            script.onload = res;
+            script.onerror = () => rej(new Error('无法加载 Pyodide，请检查网络连接'));
+          });
+          window._pyodide = await loadPyodide({
+            indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/',
+            stdout: () => {}, stderr: () => {},
+          });
+          // 预装 micropip（全程在 JS 层调用，不在 Python 里用 await）
+          await window._pyodide.loadPackage('micropip');
+
+          // ── 安装中文字体支持 ──────────────────────────────────────────
+          // Pyodide 默认没有中文字体，matplotlib 图表里的中文会显示方块
+          // 用 micropip 安装 matplotlib-fontja（包含 CJK 字体），并配置 rcParams
+          try {
+            const mp = window._pyodide.pyimport('micropip');
+            await mp.install('matplotlib-fontja');
+            window._pyodide.runPython(`
+try:
+    import matplotlib_fontja
+    matplotlib_fontja.japanize()   # 注册 CJK 字体到 matplotlib
+    import matplotlib as _mpl
+    _mpl.rcParams['axes.unicode_minus'] = False  # 修复负号显示
+except Exception:
+    pass  # 字体安装失败时静默，不中断执行
+`);
+          } catch { /* 字体加载失败不阻断运行 */ }
+        }
+
+        const py = window._pyodide;
+
+        // ── Step 2: 分析 import，用 JS API 加载 / 安装所需包 ─────────────
+        // Python 标准库（跳过，不需要安装）
+        const STD = new Set([
+          'sys','os','io','re','json','math','random','time','datetime','calendar',
+          'collections','itertools','functools','pathlib','string','copy','typing',
+          'abc','enum','dataclasses','contextlib','warnings','traceback','inspect',
+          'operator','struct','hashlib','hmac','base64','binascii','urllib','http',
+          'html','xml','csv','sqlite3','threading','queue','subprocess','shutil',
+          'tempfile','glob','fnmatch','decimal','fractions','statistics','cmath',
+          'array','bisect','heapq','difflib','textwrap','unicodedata','codecs',
+          'pickle','shelve','gzip','zipfile','tarfile','platform','signal','gc',
+          'weakref','types','numbers','keyword','ast','dis','pprint','reprlib',
+          'builtins','_io','site','asyncio','concurrent','multiprocessing',
+          'logging','unittest','doctest','pdb','profile','timeit','cProfile',
+          'importlib','pkgutil','pkg_resources','setuptools','pip','argparse',
+          'getopt','optparse','configparser','tomllib','email','smtplib',
+          'imaplib','poplib','ftplib','telnetlib','xmlrpc','uuid','secrets',
+          'ipaddress','socket','ssl','select','selectors','asynchat','asyncore',
+          'ctypes','cffi','atexit','contextlib','abc','io','errno',
+        ]);
+
+        // Pyodide 分发包：必须用 loadPackage（含精确包名映射）
+        // import名 → loadPackage时用的精确名
+        const PYODIDE_PKG_MAP = {
+          'numpy':      'numpy',
+          'np':         'numpy',
+          'pandas':     'pandas',
+          'pd':         'pandas',
+          'matplotlib': 'matplotlib',
+          'plt':        'matplotlib',
+          'scipy':      'scipy',
+          'sklearn':    'scikit-learn',
+          'PIL':        'Pillow',
+          'cv2':        'opencv-python',
+          'lxml':       'lxml',
+          'yaml':       'PyYAML',
+          'cryptography': 'cryptography',
+          'Crypto':     'pycryptodome',
+          'sympy':      'sympy',
+          'seaborn':    'seaborn',
+          'sns':        'seaborn',
+          'statsmodels':'statsmodels',
+          'pytz':       'pytz',
+          'dateutil':   'python-dateutil',
+          'shapely':    'shapely',
+          'geopandas':  'geopandas',
+          'bokeh':      'bokeh',
+          'altair':     'altair',
+          'networkx':   'networkx',
+          'igraph':     'igraph',
+          'Pygments':   'Pygments',
+          'pygments':   'Pygments',
+          'regex':      'regex',
+          'xxhash':     'xxhash',
+          'cffi':       'cffi',
+        };
+
+        // 其他别名（micropip 安装）
+        const MICROPIP_ALIAS = {
+          'bs4':     'beautifulsoup4',
+          'dotenv':  'python-dotenv',
+          'attr':    'attrs',
+          'tqdm':    'tqdm',
+          'rich':    'rich',
+          'tabulate':'tabulate',
+          'httpx':   'httpx',
+          'pydantic':'pydantic',
+          'loguru':  'loguru',
+          'arrow':   'arrow',
+          'emoji':   'emoji',
+          'click':   'click',
+        };
+
+        // 提取真正的 import 语句（跳过注释行）
+        // 同时捕获动态导入：__import__('pkg') / importlib.import_module('pkg')
+        const realImports = new Set();
+        for (const line of code.split('\n')) {
+          const trimmed = line.trimStart();
+          if (trimmed.startsWith('#')) continue;
+          // 静态 import / from 语句
+          const mStatic = trimmed.match(/^(?:import|from)\s+([a-zA-Z_][a-zA-Z0-9_]*)/);
+          if (mStatic) realImports.add(mStatic[1]);
+          // 动态 __import__('pkg') 或 import_module('pkg')
+          const mDynamic = [...trimmed.matchAll(/__import__\s*\(\s*['"]([a-zA-Z_][a-zA-Z0-9_.]*)['"]/g),
+                             ...trimmed.matchAll(/import_module\s*\(\s*['"]([a-zA-Z_][a-zA-Z0-9_.]*)['"]/g)];
+          for (const md of mDynamic) realImports.add(md[1].split('.')[0]);
+        }
+        // 也扫描字符串列表里的包名（处理像 [("numpy","科学计算"), ...] 这种模式）
+        // 提取所有单/双引号字符串，看是否是已知包名
+        const allStrings = [...code.matchAll(/['"]([a-zA-Z_][a-zA-Z0-9_-]*)['"](?:\s*,|\s*\))/g)].map(m => m[1]);
+        for (const s of allStrings) {
+          if (PYODIDE_PKG_MAP[s] || MICROPIP_ALIAS[s]) realImports.add(s);
+        }
+
+        const loadViaPyodide = new Set();
+        const loadViaMicropip = new Set();
+        const alreadyLoaded = new Set(Object.keys(py.loadedPackages || {}));
+
+        for (const raw of realImports) {
+          if (STD.has(raw)) continue;
+          if (raw === 'js' || raw === 'pyodide' || raw === 'micropip') continue;
+
+          // Pyodide 分发包？
+          if (PYODIDE_PKG_MAP[raw]) {
+            const pkgName = PYODIDE_PKG_MAP[raw];
+            if (!alreadyLoaded.has(pkgName) && !alreadyLoaded.has(raw)) {
+              loadViaPyodide.add(pkgName);
+            }
+            continue;
+          }
+
+          // micropip 别名？
+          const pipName = MICROPIP_ALIAS[raw] || raw;
+          if (!alreadyLoaded.has(pipName) && !alreadyLoaded.has(raw)) {
+            loadViaMicropip.add(pipName);
+          }
+        }
+
+        // Pyodide 环境里无法安装的包（C 扩展 / 不兼容 WASM）
+        const CANNOT_INSTALL = new Set([
+          'torch','tensorflow','tf','keras','flask','django','fastapi',
+          'uvicorn','gunicorn','celery','redis','pymongo','psycopg2',
+          'mysqlclient','cx_Oracle','pywin32','win32api','tkinter',
+          'gtk','wx','kivy','pyglet','pygame','OpenGL',
+        ]);
+
+        if (loadViaPyodide.size > 0) {
+          const pkgList = [...loadViaPyodide];
+          setStatus(`📦 加载 ${pkgList.join(', ')}…`);
+          try {
+            await py.loadPackage(pkgList);
+          } catch (e) {
+            console.warn('loadPackage failed:', e);
+          }
+        }
+
+        if (loadViaMicropip.size > 0) {
+          const micropip = py.pyimport('micropip');
+          for (const pkg of loadViaMicropip) {
+            if (CANNOT_INSTALL.has(pkg)) continue; // 跳过无法安装的包
+            setStatus(`📦 安装 ${pkg}…`);
+            try {
+              await micropip.install(pkg);
+            } catch (e) {
+              console.warn(`micropip install ${pkg} failed:`, e);
+            }
+          }
+        }
+
+        // ── Step 3: 执行代码，独立 stdout/stderr ─────────────────────────
+        setStatus('▶ 运行中…');
+
+        // ── 自动补全缺失的常见别名 import ──────────────────────────────────
+        // AI 生成的代码经常省略 import，假设上下文已有（如直接用 np.array 但没写 import numpy as np）
+        const AUTO_IMPORTS = [
+          // 检测模式                  → 补充的 import 语句
+          [/\bnp\./,                   'import numpy as np'],
+          [/\bpd\./,                   'import pandas as pd'],
+          [/\bplt\./,                  'import matplotlib.pyplot as plt'],
+          [/\bsns\./,                  'import seaborn as sns'],
+          [/\bscipy\b/,               'import scipy'],
+          [/\bsklearn\b/,             'from sklearn import *'],
+          [/\btorch\b/,               'import torch'],
+          [/\btf\./,                   'import tensorflow as tf'],
+          [/\bcv2\b/,                  'import cv2'],
+          [/\bpx\./,                   'import plotly.express as px'],
+          [/\bgo\.\w+\s*\(/,          'import plotly.graph_objects as go'],
+          [/\bjson\b/,                 'import json'],
+          [/\bos\b/,                   'import os'],
+          [/\bre\b/,                   'import re'],
+          [/\bmath\./,                 'import math'],
+          [/\brandom\./,               'import random'],
+          [/\bdatetime\b/,             'import datetime'],
+          [/\bcollections\b/,          'import collections'],
+          [/\bitertools\b/,            'import itertools'],
+          [/\bfunctools\b/,            'import functools'],
+          [/\bpathlib\b/,              'import pathlib'],
+          [/\btyping\b/,               'import typing'],
+        ];
+
+        // 找出代码里已有的 import（避免重复注入）
+        const existingImports = new Set();
+        (code.match(/^\s*(?:import|from)\s+(\S+)/gm) || []).forEach(l => {
+          const m = l.match(/(?:import|from)\s+(\S+)/);
+          if (m) existingImports.add(m[1].split('.')[0]);
+        });
+
+        const autoLines = [];
+        for (const [pattern, stmt] of AUTO_IMPORTS) {
+          if (!pattern.test(code)) continue;
+          // 提取包名判断是否已导入
+          const pkgMatch = stmt.match(/import\s+(\S+)/);
+          const pkgName = pkgMatch ? pkgMatch[1].split('.')[0] : null;
+          if (pkgName && existingImports.has(pkgName)) continue;
+          // 别名（as np 等）也检查
+          const asMatch = stmt.match(/as\s+(\w+)/);
+          if (asMatch && existingImports.has(asMatch[1])) continue;
+          autoLines.push(stmt);
+        }
+
+        // 把自动 import 加在用户代码最前面
+        const codeToRun = autoLines.length > 0
+          ? autoLines.join('\n') + '\n' + code
+          : code;
+
+        // ── 统一用 async def 包装 + runPythonAsync ──────────────────────
+        // 无论代码是否含 await，都包进 async def 执行：
+        // • await 在 async 函数里天然合法
+        // • if __name__ == '__main__' 通过 __name__ 变量注入正常触发
+        // • stdout/stderr 在函数外捕获，内部 print 照常被拦截
+        const indented = codeToRun.split('\n').map(l => '    ' + l).join('\n');
+        // 包装脚本前缀（用户代码开始前的行数，用于修正 traceback 行号）
+        const PREAMBLE = `import sys, io as _io, traceback as _tb
+_out_buf = _io.StringIO()
+_err_buf = _io.StringIO()
+_old_out, _old_err = sys.stdout, sys.stderr
+sys.stdout = _out_buf; sys.stderr = _err_buf
+_run_error = None
+async def _user_main():
+    __name__ = '__main__'
+`;
+        const WRAPPER_OFFSET = PREAMBLE.split('\n').length; // 动态计算，精确偏移
+        const pyScript = PREAMBLE + indented + `
+try:
+    await _user_main()
+except Exception:
+    _run_error = _tb.format_exc()
+finally:
+    sys.stdout = _old_out; sys.stderr = _old_err
+try: del _user_main
+except: pass`;
+
+        try {
+          await py.runPythonAsync(pyScript);
+        } catch (jsErr) {
+          try { py.runPython('sys.stdout = _old_out; sys.stderr = _old_err'); } catch {}
+          out.className = 'sandbox-output error';
+          const raw = String(jsErr).replace(/^PythonError:\s*/, '');
+          const lines2 = raw.split('\n').filter(l => !l.includes('_pyodide') && !l.includes('eval_code'));
+          const tbStart = lines2.findIndex(l => l.match(/Traceback|^\s*File\s+"|SyntaxError|NameError|TypeError|\w+Error:/));
+          out.textContent = '❌ ' + (tbStart >= 0 ? lines2.slice(tbStart) : lines2).join('\n').trim();
+          reset(); return;
+        }
+
+        const stdout  = py.runPython('_out_buf.getvalue()');
+        const stderr  = py.runPython('_err_buf.getvalue()');
+        const pyError = py.runPython('_run_error');
+        try { py.runPython('del _out_buf, _err_buf, _old_out, _old_err, _run_error'); } catch {}
+
+        if (pyError) {
+          // 过滤内部框架行，用动态计算的偏移修正行号
+          const lines = pyError.split('\n')
+            .filter(l =>
+              !l.includes('in _user_main') &&
+              !l.includes('await _user_main') &&
+              !l.match(/^\s+exec\(compile/)
+            )
+            .map(l => l.replace(/line (\d+)/, (_, n) => {
+              const corrected = parseInt(n) - WRAPPER_OFFSET;
+              return corrected > 0 ? `line ${corrected}` : `line ${n}`;
+            }));
+          out.className = 'sandbox-output error';
+          out.textContent = '❌ ' + lines.join('\n').trim();
+          reset(); return;
+        }
+
+        // 过滤 stderr 中的常见噪音警告（不影响功能，但会干扰用户）
+        const cleanStderr = stderr ? stderr.split('\n').filter(l => {
+          if (!l.trim()) return false;
+          if (l.includes('Glyph') && l.includes('missing from current font')) return false;
+          if (l.includes('UserWarning: Install `pyyaml`')) return false;
+          if (l.includes('Pyarrow will become a required dependency')) return false;
+          if (l.includes('FutureWarning') && l.includes('observed=False')) return false;
+          if (l.includes('DeprecationWarning') && l.includes('Pyarrow')) return false;
+          return true;
+        }).join('\n').trim() : '';
+
+        const combined = (stdout + (cleanStderr ? '\n[stderr]\n' + cleanStderr : '')).trim();
+
+        // ── Step 4: 检查 matplotlib 图表 ──────────────────────────────────
+        const hasPlot = /matplotlib|import\s+pyplot|plt\.show|plt\.savefig/.test(code);
+        if (hasPlot) {
+          try {
+            const hasFigs = py.runPython(`
+import matplotlib.pyplot as _plt_
+_has = len(_plt_.get_fignums()) > 0
+_has
+`);
+            if (hasFigs) {
+              const imgData = py.runPython(`
+import io as _io2, base64 as _b64
+import matplotlib.pyplot as _plt_
+_buf2 = _io2.BytesIO()
+_plt_.savefig(_buf2, format='png', bbox_inches='tight', dpi=130, facecolor='white')
+_buf2.seek(0)
+_b64.b64encode(_buf2.read()).decode('utf-8')
+`);
+              py.runPython('_plt_.close("all")');
+              out.className = 'sandbox-output';
+              out.style.padding = '10px';
+              out.innerHTML = '';
+              if (combined) {
+                const pre = document.createElement('pre');
+                pre.style.cssText = 'margin:0 0 8px;padding:6px 10px;font-size:12px;color:var(--text2);background:var(--bg3);border-radius:6px;white-space:pre-wrap';
+                pre.textContent = combined;
+                out.appendChild(pre);
+              }
+              const img = document.createElement('img');
+              img.src = 'data:image/png;base64,' + imgData;
+              img.style.cssText = 'max-width:100%;display:block;border-radius:6px;';
+              img.alt = 'matplotlib figure';
+              out.appendChild(img);
+              reset(); return;
+            }
+          } catch (e) {
+            console.warn('matplotlib render failed:', e);
+          }
+        }
+
+        // ── Step 5: 纯文本输出 ────────────────────────────────────────────
+        out.className = 'sandbox-output';
+        out.textContent = combined || '✓ 执行完成（无输出）';
+
+      } catch (e) {
+        out.className = 'sandbox-output error';
+        out.textContent = '❌ ' + String(e).replace(/^Error:\s*/, '');
+      }
+      reset();
+    })();
+  }
+}
+
+// ============================================================
+//  PROMPT TEMPLATES LIBRARY
+// ============================================================
+const PROMPT_TEMPLATES = [
+  { icon: '🔍', title: '代码 Review', preview: '找出潜在 bug、性能问题和改进建议', prompt: '请帮我 review 以下代码，找出潜在的 bug、安全问题、性能瓶颈，并给出具体的改进建议：\n\n```\n[粘贴你的代码]\n```' },
+  { icon: '📝', title: '会议纪要', preview: '将会议内容整理为结构化纪要', prompt: '请将以下会议内容整理成结构化的会议纪要，包含：会议主题、参与者决定的关键事项、行动项（负责人+截止日期）、待讨论问题：\n\n[粘贴会议内容]' },
+  { icon: '🌐', title: '技术概念解释', preview: 'ELI5 解释复杂技术概念', prompt: '请用简单易懂的语言解释以下技术概念，假设我是一个有基础编程经验但不熟悉这个领域的人。用类比和实例来帮助理解：\n\n[填写概念]' },
+  { icon: '✍️', title: '文字润色', preview: '让文字更简洁有力', prompt: '请帮我润色以下文字，使其更简洁、专业、有力。保留核心意思，去除冗余表达，改善句子结构：\n\n[粘贴原文]' },
+  { icon: '🧪', title: '单元测试生成', preview: '为代码自动生成测试用例', prompt: '请为以下代码生成完整的单元测试。覆盖正常路径、边界条件和异常情况，使用对应语言的标准测试框架：\n\n```\n[粘贴你的代码]\n```' },
+  { icon: '📊', title: '数据分析框架', preview: '构建数据分析思路', prompt: '我有以下数据集需要分析：[描述数据集]。分析目标是：[描述目标]。请帮我设计一个分析框架，包括：数据清洗步骤、关键指标定义、可视化建议和可能的洞察方向。' },
+  { icon: '🎯', title: '产品需求文档', preview: '将想法转化为 PRD', prompt: '请帮我将以下产品想法转化为一份简洁的产品需求文档（PRD），包含：背景与目标、目标用户、核心功能列表（用户故事格式）、成功指标、非功能性需求：\n\n[描述你的产品想法]' },
+  { icon: '🔧', title: 'SQL 查询优化', preview: '分析并优化 SQL 性能', prompt: '请分析以下 SQL 查询的性能问题，解释为什么慢，并提供优化后的版本和优化思路说明：\n\n```sql\n[粘贴你的 SQL]\n```\n\n表结构：[描述相关表结构]' },
+];
+
+function openPrompts() {
+  const overlay = document.getElementById('prompts-overlay');
+  if (!overlay) return;
+  // Build content if not yet built
+  if (!overlay._built) {
+    overlay._built = true;
+    const sheet = document.getElementById('prompts-sheet');
+    sheet.innerHTML = `
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-header-left">
+          <div class="sheet-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <div class="sheet-title">Prompt 模板库</div>
+            <div class="sheet-subtitle">点击即可插入到输入框</div>
+          </div>
+        </div>
+        <button class="sheet-close-btn" onclick="closePrompts()" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="settings-scroll-area" style="flex:1;overflow-y:auto;padding:8px 0 16px">
+        ${PROMPT_TEMPLATES.map((p, i) => `
+          <div class="prompt-item" onclick="usePrompt(${i})">
+            <div class="prompt-item-icon">${p.icon}</div>
+            <div class="prompt-item-text">
+              <div class="prompt-item-title">${esc(p.title)}</div>
+              <div class="prompt-item-preview">${esc(p.preview)}</div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14" style="color:var(--text3);flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>`).join('')}
+      </div>`;
+  }
+  overlay.classList.add('open');
+  if (window.innerWidth <= 768) toggleSidebar(false);
+}
+
+function closePrompts() {
+  document.getElementById('prompts-overlay')?.classList.remove('open');
+}
+
+function usePrompt(idx) {
+  const p = PROMPT_TEMPLATES[idx];
+  if (!p) return;
+  const ta = document.getElementById('textarea');
+  ta.value = p.prompt;
+  handleInput();
+  ta.focus();
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+  closePrompts();
+  showToast(`✓ 已插入「${p.title}」模板`);
+}
 
 // ============================================================
 //  PWA: page visibility — re-check scroll on return to foreground
