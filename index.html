@@ -3329,9 +3329,14 @@ async function autoGenerateTitle(session, userText) {
 
 // ── Session search filter ─────────────────────────────────────────
 let _sessionFilter = '';
+let _sessionFilterTimer = null;
 function filterSessions(q) {
   _sessionFilter = q.trim().toLowerCase();
-  renderSessionList();
+  if (_sessionFilterTimer) clearTimeout(_sessionFilterTimer);
+  _sessionFilterTimer = setTimeout(() => {
+    _sessionFilterTimer = null;
+    renderSessionList();
+  }, 120);
 }
 
 function renderSessionList() {
@@ -3356,7 +3361,7 @@ function renderSessionList() {
     const empty = document.createElement('div');
     empty.className = 'session-empty';
     empty.innerHTML = _sessionFilter
-      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>没有找到「${_sessionFilter}」<br>相关的对话</p>`
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>没有找到「${esc(_sessionFilter)}」<br>相关的对话</p>`
       : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><p>还没有对话<br>点击上方新建一个吧</p>`;
     list.appendChild(empty);
     return;
@@ -3441,12 +3446,15 @@ function renderSessionList() {
   function _applyTitleContent(titleEl, s) {
     if (_sessionFilter && s.title.toLowerCase().includes(_sessionFilter)) {
       const idx = s.title.toLowerCase().indexOf(_sessionFilter);
+      const before = s.title.slice(0, idx);
+      const match = s.title.slice(idx, idx + _sessionFilter.length);
+      const after = s.title.slice(idx + _sessionFilter.length);
       titleEl.innerHTML =
-        s.title.slice(0, idx) +
+        esc(before) +
         `<mark style="background:rgba(var(--accent-rgb),.2);border-radius:2px;padding:0 1px">` +
-        s.title.slice(idx, idx + _sessionFilter.length) +
+        esc(match) +
         `</mark>` +
-        s.title.slice(idx + _sessionFilter.length);
+        esc(after);
     } else {
       titleEl.textContent = s.title;
     }
