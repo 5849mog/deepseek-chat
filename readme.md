@@ -59,6 +59,8 @@ DeepSeek Chat UI 是一个经过精心工程化的生产级聊天界面，以单
 - **mhchem 扩展**（`katex/contrib/mhchem`）支持化学方程式渲染（`\ce{H2O}`、反应箭头、同位素标注）
 - **copy-tex 扩展**（`katex/contrib/copy-tex`）——点击任意已渲染公式即可将其 LaTeX 源码复制到剪贴板
 - **266 个自定义 KaTeX 宏**，覆盖：常用数集（ℝ、ℂ、ℕ、ℤ、ℚ）、算子（argmax、argmin、tr、rank、diag、span、prox、sign）、微积分（∂、∇、Laplacian）、线性代数（转置 `\T`、内积、外积、范数 `\norm{}`）、概率论（𝔼、Var、Cov、KL 散度 `\KL{}{}`）、渐进复杂度（`\bigO`、`\bigOmega`、`\bigTheta`）以及 SI 单位
+- **浏览器内代码沙箱** 支持 HTML / JavaScript / Python 一键运行，Python 基于 Pyodide 按需加载第三方包
+- **增强版 Python 执行能力**：支持 `input()` 交互、自动回显最后一个表达式、优先渲染 `DataFrame` 等 `_repr_html_()` 富结果，并补充更多常见科学计算 / 数据处理包映射
 - **延迟排版调度**：`scheduleTypeset()` 将数学渲染批量化，避免阻塞流式 token 写入循环
 - **`\pm` 符号冲突修复**——SI 皮米别名已重命名为 `\pm_unit`，防止覆盖 KaTeX 原生 `±` 运算符
 - 代码块复制按钮附带 ✓ 确认闪烁反馈，语言标签大写等宽字体展示

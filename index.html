@@ -5419,6 +5419,9 @@ except Exception:
           'regex':      'regex',
           'xxhash':     'xxhash',
           'cffi':       'cffi',
+          'requests':   'requests',
+          'plotly':     'plotly',
+          'openpyxl':   'openpyxl',
         };
 
         // 其他别名（micropip 安装）
@@ -5435,6 +5438,9 @@ except Exception:
           'arrow':   'arrow',
           'emoji':   'emoji',
           'click':   'click',
+          'faker':   'faker',
+          'jinja2':  'jinja2',
+          'tenacity':'tenacity',
         };
 
         // 提取真正的 import 语句（跳过注释行）
@@ -5574,18 +5580,64 @@ except Exception:
         // • await 在 async 函数里天然合法
         // • if __name__ == '__main__' 通过 __name__ 变量注入正常触发
         // • stdout/stderr 在函数外捕获，内部 print 照常被拦截
-        const indented = codeToRun.split('\n').map(l => '    ' + l).join('\n');
         // 包装脚本前缀（用户代码开始前的行数，用于修正 traceback 行号）
-        const PREAMBLE = `import sys, io as _io, traceback as _tb
+        const PREAMBLE = `import sys, io as _io, traceback as _tb, builtins as _builtins, ast as _ast
+from js import prompt as _js_prompt
 _out_buf = _io.StringIO()
 _err_buf = _io.StringIO()
 _old_out, _old_err = sys.stdout, sys.stderr
+_old_input = _builtins.input
+_old_displayhook = sys.displayhook
 sys.stdout = _out_buf; sys.stderr = _err_buf
+_last_value = None
+_last_html = None
 _run_error = None
+
+def _input_proxy(prompt=''):
+    msg = '' if prompt is None else str(prompt)
+    value = _js_prompt(msg)
+    if value is None:
+        raise EOFError('用户取消了输入')
+    return str(value)
+
+def _displayhook(value):
+    global _last_value, _last_html
+    if value is None:
+        return
+    _last_value = repr(value)
+    _last_html = None
+    try:
+        if hasattr(value, '_repr_html_'):
+            html = value._repr_html_()
+            if html:
+                _last_html = str(html)
+    except Exception:
+        pass
+    _builtins._ = value
+
+_builtins.input = _input_proxy
+sys.displayhook = _displayhook
+
+def _rewrite_last_expr(source):
+    try:
+        mod = _ast.parse(source, mode='exec')
+    except SyntaxError:
+        return source
+    if not mod.body or not isinstance(mod.body[-1], _ast.Expr):
+        return source
+    expr_src = _ast.unparse(mod.body[-1].value)
+    body_src = [_ast.unparse(node) for node in mod.body[:-1]]
+    body_src.append(f'_displayhook({expr_src})')
+    return '\n'.join(part for part in body_src if part and part.strip())
+
 async def _user_main():
     __name__ = '__main__'
 `;
         const WRAPPER_OFFSET = PREAMBLE.split('\n').length; // 动态计算，精确偏移
+        const rewrittenCode = py.runPython(PREAMBLE + `
+_rewritten = _rewrite_last_expr(` + JSON.stringify(codeToRun) + `)
+_rewritten`);
+        const indented = rewrittenCode.split('\n').map(l => '    ' + l).join('\n');
         const pyScript = PREAMBLE + indented + `
 try:
     await _user_main()
@@ -5593,6 +5645,8 @@ except Exception:
     _run_error = _tb.format_exc()
 finally:
     sys.stdout = _old_out; sys.stderr = _old_err
+    _builtins.input = _old_input
+    sys.displayhook = _old_displayhook
 try: del _user_main
 except: pass`;
 
@@ -5608,10 +5662,12 @@ except: pass`;
           reset(); return;
         }
 
-        const stdout  = py.runPython('_out_buf.getvalue()');
-        const stderr  = py.runPython('_err_buf.getvalue()');
-        const pyError = py.runPython('_run_error');
-        try { py.runPython('del _out_buf, _err_buf, _old_out, _old_err, _run_error'); } catch {}
+        const stdout   = py.runPython('_out_buf.getvalue()');
+        const stderr   = py.runPython('_err_buf.getvalue()');
+        const pyError  = py.runPython('_run_error');
+        const lastValue = py.runPython('_last_value if _last_value is not None else ""');
+        const lastHtml  = py.runPython('_last_html if _last_html is not None else ""');
+        try { py.runPython('del _out_buf, _err_buf, _old_out, _old_err, _old_input, _old_displayhook, _last_value, _last_html, _run_error, _rewrite_last_expr'); } catch {}
 
         if (pyError) {
           // 过滤内部框架行，用动态计算的偏移修正行号
@@ -5641,7 +5697,10 @@ except: pass`;
           return true;
         }).join('\n').trim() : '';
 
-        const combined = (stdout + (cleanStderr ? '\n[stderr]\n' + cleanStderr : '')).trim();
+        const combined = [stdout.trim(), lastValue.trim(), cleanStderr ? '[stderr]\n' + cleanStderr : '']
+          .filter(Boolean)
+          .join('\n')
+          .trim();
 
         // ── Step 4: 检查 matplotlib 图表 ──────────────────────────────────
         const hasPlot = /matplotlib|import\s+pyplot|plt\.show|plt\.savefig/.test(code);
@@ -5683,9 +5742,23 @@ _b64.b64encode(_buf2.read()).decode('utf-8')
           }
         }
 
-        // ── Step 5: 纯文本输出 ────────────────────────────────────────────
+        // ── Step 5: 富文本 / 纯文本输出 ─────────────────────────────────────
         out.className = 'sandbox-output';
-        out.textContent = combined || '✓ 执行完成（无输出）';
+        if (lastHtml) {
+          out.innerHTML = '';
+          if (stdout.trim() || cleanStderr) {
+            const pre = document.createElement('pre');
+            pre.style.cssText = 'margin:0 0 8px;padding:6px 10px;font-size:12px;color:var(--text2);background:var(--bg3);border-radius:6px;white-space:pre-wrap';
+            pre.textContent = [stdout.trim(), cleanStderr ? '[stderr]\n' + cleanStderr : ''].filter(Boolean).join('\n');
+            out.appendChild(pre);
+          }
+          const htmlWrap = document.createElement('div');
+          htmlWrap.style.cssText = 'overflow:auto;max-width:100%';
+          htmlWrap.innerHTML = lastHtml;
+          out.appendChild(htmlWrap);
+        } else {
+          out.textContent = combined || '✓ 执行完成（无输出）';
+        }
 
       } catch (e) {
         out.className = 'sandbox-output error';
